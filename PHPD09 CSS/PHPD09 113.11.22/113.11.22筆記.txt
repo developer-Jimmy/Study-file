@@ -1,0 +1,25 @@
+external CSS/link rel = stylesheet href=/head裡面
+
+internal CSS/<style></style>/head裡面
+
+inline CSS/body元素裡面屬性/body裡面 優先權較高
+
+標籤選擇器 範例:h1 id選擇器 範例:#id名稱
+
+類別選擇器 範例:.class名稱 較標籤選擇器優先權高
+
+元素屬性不能同時出現
+
+影響套用樣式:1.CSS順序,優先權
+
+background-color: red !important擁有最高優先權，使用時機為做實驗的時候
+
+>(子選擇器) 範例: div>h1 選擇父元素div的子元素h1
+
+space(子孫選擇器) 範例: div h1 會選擇父元素裡面所有的h1
+
++兄弟選擇器(同層元素) 範例: div+h1 選擇div元素的下一個h1元素 註:如果下一個不是h1則失效
+
+~全體兄弟選擇器 範例: div~h1 選擇div元素後面的所有h1元素
+
+透過虛擬類別與使用者作簡單的互動或替代simple selectors進行選取

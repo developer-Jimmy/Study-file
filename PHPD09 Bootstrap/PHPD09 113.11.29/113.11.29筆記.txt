@@ -1,0 +1,109 @@
+
+.container會調整尺寸跟寬度及兩側留白效果
+.container-{斷點 | fluid}  |是或者的意思
+
+.row
+.row-cols-{數字 1~6}
+.col
+.col-{數字 1~12}
+.col-{斷點}-{數字 1~12}
+
+md ==> 畫面寬度>=768px
+col-3 ==>元素分配3等分
+.col-md-3 ==>當畫面寬度>=768px，元素分配3等分
+
+----------------------------------------------------前面是複習
+
+https://dummyimage.com生成不同尺寸的素材
+
+picture
+	source media="(min-width:XXXpx)" srset="https:XXX (當畫面寬度 >=XXXpx 顯示XXX網址的圖)
+
+img class="img-fluid"(不超過父元素寬度)
+
+圖片群組類別:figure img(img-fluid figure-img) figcaption(figure-caption)
+
+bootstrap表格樣式table:thead(scope=col)+tbody(scope=row)
+table table-striped(條紋)/table table-striped-columns對任意column做條紋效果
+table table-hover鼠標靠近會有條紋效果
+
+--bs(意思是bootstrap定義好的變數) var(--bs-XXX)取得函式中的值
+
+.table
+
+.table-{顏色}
+.text-{顏色}
+.bg-{顏色}
+.text-bg-{顏色}
+
+text-start/text-center/text-end (區塊元素寬度由父元素決定/行內元素寬度由內容決定)
+
+text-md-start
+md ==>畫面寬度>=768px
+text-md-start ==>當畫面寬度>=768px，元素 靠左對齊
+
+overflow(visible hidden scroll(垂直與水平方向溢出都有卷軸效果) auto
+
+text-sm-end/text-md-end/text-lg-end/text-xl-end(當視窗寬度到一定值時對齊至右邊)
+text-truncate(溢出時用...表示)
+
+text-lowercase/text-uppercase/text-capitalize單字第一個字大寫
+
+.fs-1~6(沒有定義其他值) |  .fw-bold粗體字  | .fst-italic斜體字
+.fs ==>font-size大小
+.fw ==> font-weight粗細
+.fst ==> font-style樣式
+
+{w} - {25 | 50 | 75 | 100 | auto} 寬度設定 範例:80沒有效果，因為沒有定義
+{h} - {25 | 50 | 75 | 100 | auto} .d-inline block=.d-flex元素排成一行
+{p} - {t | b | s | e | x | y | 沒有值}-{0~5 | auto}
+{m} - {t | b | s | e | x | y | 沒有值}-{0~5 | auto}
+mt=margin top pt=padding top b=bottom s=start e=end x=left and right y=top and bottom
+blank=不設定(上右下左同時調整) 0 1(0.25rem) 2(0.5rem) 3(1rem) 4(1.5rem) 5(3rem) auto(僅margin)
+範例.px-5(padding-left:3rem and padding-right:3rem ;
+ .mt-3(margin-top:1rem);
+ .py-1(padding-top:0.25rem and padding-bottom:0.25rem;
+.ms-auto(margin-left:auto;
+
+{property}{sides}-{breakpoint}-{size}
+範例:p-md-5;md ==>畫面寬度>=768px;p-5 ==>padding:3rem;p-md-5 ==>當畫面寬度>=768px，
+元素padding:3rem
+
+margin崩塌(沒有與父元素產生距離)--父層與子層都是區塊元素，又對第一個子元素設定margin-top
+可以父元素用padding-top修正或父元素加入border或讓子元素換成inline-block
+父子都是區塊元素且最後一個子元素設定margin-bottom也會發生崩塌
+推薦直接對父元素用padding-top，來避免崩塌問題
+
+.border
+.border-{top | bottom | start | end}
+.border-{顏色}
+.border-{1~5}數字越大越寬
+
+(注意:沒有設定好寬或高，沒有內容都無法顯示)
+子元素div(區塊元素)沒有設定父元素div(區塊元素)的高度，(h-100)的設定(無效)
+行內元素寬高由內容決定 因此要先改成inline-block設定寬高
+
+rounded-top/bottom/start/end/circle/pill
+
+d-flex的前後文無法排成一列
+d-inline-flex的前後文可以排成一列
+
+d-flex flex-nowrap子元素超過父元素範圍不換行
+d-flex flex-wrap子元素超過父元素範圍會換行
+
+flex-grow-1參與分配父元素空間
+flex-grow-0不參與分配父元素空間
+
+order-XXX數字越小排在越前面(父元素d-flex)
+
+預設值flex-row
+父元素設定d-flex flex-row-reverse(右到左排序)
+父元素設定d-flex flex-column-reverse(下到上排序)
+
+d-flex的子元素可以單獨設定me-auto或ms-auto達到分開
+
+justify-content(需要先建立d-flex)
+justify-content-斷點-center 水平方向
+align-items 垂直方向
+align-self(針對子元素)垂直方向
+align-content 一定要寫flex-wrap

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* 10. 改變滑鼠經過 radio 的樣式 */
+        input[type="radio"] {
+            cursor:pointer;
+        }
+        
+
+        /* 20. :valid 驗證通過時的樣式設定 */
+        /* input[type="email"]:valid,
+        input[type="text"]:valid,
+        input[type="tel"]:valid {
+            background-color: lightgreen;
+        } */
+
+        
+
+        /* 21. :invalid 驗證不通過時的樣式設定 */
+        /* input[type="email"]:invalid,
+        input[type="text"]:invalid,
+        input[type="tel"]:invalid {
+            background-color: pink; 
+        } */
+
+          
+
+        /* 30. 驗證通過時 輸入框後面顯示 ✓ */
+        /* input[type="email"]:valid+span::after,
+        input[type="text"]:valid+span::after, 
+        input[type="tel"]:valid+span::after {
+            content: "✓";
+            color:green;
+        } */
+    
+        
+
+        /* 31. 驗證不通過時 輸入框後面顯示 ✖ */
+        /* input[type="email"]:invalid+span::after,
+        input[type="text"]:invalid+span::after,
+        input[type="tel"]:invalid+span::after {
+            content: "✖";
+            color: red;
+        }         */
+       
+
+        
+        /* 40. 設定取得焦點的背景顏色greenyellow */
+        input.point:focus {
+            background-color: greenyellow;
+        }
+        
+        
+
+        /* 41. 設定勾選時 label 顏色 blue */
+        #check:checked+label {
+            color:blue;
+            text-decoration: line-through;
+        }
+
+        
+
+    </style>
+</head>
+
+<body>
+    <p><a href="https://www.w3schools.com/cssref/trysel.asp">Try CSS Selector</a></p>
+    <p><a href="https://caniuse.com/">Can I use..</a></p>
+    <p><a href="https://flukeout.github.io/">CSS Diner (選擇器的小遊戲)</a></p>
+    <hr>
+    
+    <form>
+        <!-- 照上方CSS設定 -->
+        <!-- 10. 產生 單選按鈕元素 -->
+         <input type="radio">
+         <br><br>
+        
+
+        <!-- 20. 產生 email 輸入框 以及 -->
+        <!--     產生 文字輸入框，並限制只能輸入大小寫英文 以及 -->
+        <!--     產生 電話的輸入框，並限制為台灣手機號碼格式 以及 -->
+        <!--     產生 文字輸入框，並限制輸入身分證字號格式 -->
+        email: <input type="email"> 
+        <span></span>
+        <br><br>
+
+        text: <input type="text" pattern="[A-Z a-z]{3,5}">
+        <span></span>
+        <br><br>
+
+        phone: <input type="tel" pattern="[0-9]{4}-[0-9]{3}-[0-9]{3}" placeholder="####-###-###">
+        <span></span>
+        <br><br>
+
+        id: <input type="text" pattern="[A-Z]{1}[0-9]{9}">
+        <span></span>
+        <br><br>
+
+        焦點: <input class="point" type="text">
+        <br><br>
+
+        <input type="checkbox" id="check"><label for="check">選我</label>
+    </form>
+</body>
+
+</html>

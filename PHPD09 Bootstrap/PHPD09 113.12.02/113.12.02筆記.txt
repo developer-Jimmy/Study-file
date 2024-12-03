@@ -1,0 +1,50 @@
+z-index:數值越大覆蓋在越上面
+fixed-top始終黏在上面
+sticky-top一開始沒有黏在上面，往下捲動才黏在上面
+
+float-end飄到右邊(順序越前面越早在右邊) float-start飄到左邊
+float會影響後面元素的位置
+clearfix清除float效果
+
+carousel輪播圖 data-bs-ride="carousel"
+carousel-indicators*3(三個圖片位置指標)
+div carousel-inner(包裹裡面item和按鈕等元素)
+div carousel-item active第一個 div carousel-item*2第二個跟第三個(圖片尺寸需一致)
+button*2(上一個或下一個圖片)
+
+data-bs-interval(調整播放速度)注意:bs是指bootstrap的定義Javascript 第三版和第四版沒有bs
+
+btn類別可以套用在超連結上(a href=# class="btn")
+lg sm等等放在btn是調大小，跟畫面斷點沒關係 text-XXX改變按鈕文字顏色
+父元素加d-grid改變排列方式讓使用者好點擊gap-X產生間隙
+
+popover(按鈕按下後有文字說明)
+data-bs-placement="XX"文字顯示的位置(內容太多還是會改變位置)
+不想改變位置，就將按鈕距離調整至右邊
+
+display:none;visible:hidden;
+
+顯示或隱藏效果
+data-bs-toogle=決定顯示或隱藏 data-bs-target=目標元素
+或一個超連結指定目標元素跟data-bs-toggle
+
+對話框加入show d-block才有內容(如果是按按鈕出現對話框則不用)
+
+按鈕使用data-bs-toggle=modal data-bs-target=目標對話框的id
+
+如果要設定無法透過點擊背景就關閉modal 使用data-bs-backdrop=static在對話框開頭
+
+card本體 header body(圖片位置跟card-title/card-text) footer
+讓元素靠在右邊使用float-end或父元素d-flex子元素ms-auto或父元素text-end
+stretched-link擴大可點擊範圍
+
+按鈕(toast本體外面) toast本體(已設定d-flex/要+id讓javascript取得元素) 
+header(包含X按鈕) body + javascript程式  (toast本體外面可以在加容器調整位置)
+
+導覽列(連結)
+ul(nav-fill/nav-pills)flex-column flex-md-row>li(nav-item)>a(nav-link)
+tab-pane不會顯示(讓導覽列的超連結連上)超連結要加上data-bs-toggle=pill
+
+導覽列(會隨寬度簡化)
+要讓新複製出的清單向右靠(直接複製一份ul並第一個ul有me-auto即可)
+

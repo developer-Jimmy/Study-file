@@ -1,0 +1,48 @@
+練習類別選擇器 子孫選擇器
+
+屬性選擇器([])與虛擬類別(:)與類別選擇器(.class) 權重一樣
+
+虛擬元素(::)與id選擇器 權重一樣
+
+
+:first-child 
+:last-child 
+:not(:first-child) 
+:nth-child
+
+p:nth-child(1) {} :符合子元素的第一個且為p
+p:nth-of-type(1) {} :符合第一個子元素且為p
+
+::before or ::after 一定要加content
+
+a[href^="http"] 指定以href=http開頭的a元素
+
+rem=依照根元素來放大倍率
+
+a[href*="pseudo"] 指定包含pseudo的a元素
+
+a[href$="selectors.asp"] 指定以selectors.asp結尾的a元素
+
+input[type=XXX]{}改變使用者互動後的樣式
+
+text: <input type="text" pattern="[A-Z a-z]{3,5}" 限制輸入框中輸入的內容
+
+:valid+span::after驗證通過可以添加文字
+
+@import引入CSS檔案(也可在CSS檔案引入其他CSS檔案)
+
+google fonts引用字型
+
+@font-face 設定字型(src/font-family一定兩個都要)
+
+子元素會繼承父元素的樣式(不是所有於樣式都能繼承)
+
+border: inherit;(繼承父元素設定)(所有元素都可以用inherit)
+
+color: initial;(顏色初始化)(所有元素都可以用initial)
+
+html{--變數:green}在html建立變數並放入數值(CSS存放變數):root = html元素
+
+h5{color:var(--apple)}取得變數中的數值
+
+calc函式可以做四則運算 border-width可以同時設定下右下左四個邊

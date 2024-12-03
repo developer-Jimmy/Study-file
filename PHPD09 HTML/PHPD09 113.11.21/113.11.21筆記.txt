@@ -1,0 +1,52 @@
+會員系統是一種表單，將客戶端資料傳到伺服器
+
+form創建表單 label作為標題 input為輸入框
+
+勾選框用input type 單選框或複選框用input 拖曳分數也是用input
+
+textarea為多行輸入框 label for 可以輸入select id綁再一起
+
+select創建選單，選項用option -- (下拉選單)
+
+select name、option value為傳給伺服器的資料 
+
+範例: select name = phone_name 
+      option value = i14 
+      server收到 phone_name = i14
+
+option selected為預設選項
+
+optgroup label設定組別名稱
+
+datalist + option (option不需要結束標籤且輸入名稱至value)
+
+input list = datalist id (讓選單可以下拉)
+
+input有一個屬性value 
+
+選單的選項(option value)放到input value
+
+fieldset(群組標籤)搭配legend給予說明
+
+label for可以設計讓使用者點選標籤自動選擇input(要有id)中的單選框
+
+input name製作單選框或多選框的分組
+
+cirl + d + d可以編輯相同名字的地方
+
+input type = date(日期) input type = number min max(數字上限與下限)
+
+input type = tel 手機會自動帶入手機輸入框/email 手機帶入英文鍵盤/number 手機帶入數字鍵盤
+
+input placeholder 輸入框提示 required 必填欄位 input password 輸入的東西會自動隱藏
+
+input checkbox checked 預設勾選狀態
+
+select option value 選項的值給server
+
+datalist option value 選項的值給客戶端看
+
+ol li value 選項的值是編號
+
+語義元素 header頁首 nav導覽 section區塊 aside側邊攔 footer
+ 

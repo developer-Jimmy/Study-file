@@ -1,0 +1,49 @@
+html第五版:增加語意化元素、多媒體元素
+
+hTML(超文本標記語言):定義網頁內容
+CSS(階層樣式表):定義網頁外觀
+JavaScript(程式語言):網頁與使用者互動
+
+標籤=角括號+標號(可能包含屬性)+角括號
+元素=開始標籤+內容+結束標籤
+
+下載VS code套件+調整字型與縮排
+cirl+s(存檔)
+cirl+/(註解)
+shift+alt+上或下鍵(複製)
+alt+上或下鍵(調整位置)
+shift+alt+f(縮排)
+
+id:識別元素(獨一無二)
+元素可以使用多個屬性
+元素使用不支援屬性，無法達到效果
+
+
+元素事件屬性 範例:onclick 
+在script元素中放入函式 (由onclick執行script中的函式)
+
+html文件結構:宣告、html元素(標示網頁範圍--根元素)、head(引用CSS)、body(內容)
+(宣告不是標籤且沒有區分大小寫)
+
+語言-字體-國家代碼(lang)
+
+文件相關資訊 範例:{meta charset、name=description(網頁介紹)、name=keywords(google不影響排名)、name=author、name=viewport(響應式設計需要)}
+文件標題(title)、文件圖示(link)、引用CSS檔案(link)
+
+選擇器{屬性名稱:屬性值;} 分號一定要加
+
+嵌入CSS(style標籤)
+
+br換行 hr底線 &nbsp空格 角括號需要用特殊字符(&lt &gt)
+
+b、i、s、u是風格  strong、em、del、ins是語氣--瀏覽器會判斷
+
+pre標籤會保留內容格式
+div標籤會在前後換行-自帶br的效果(block level)
+
+inline不會換行 block會換行
+
+改變顏色(html方式):<span style='color: red;'>(換行會自動空白)
+
+
+

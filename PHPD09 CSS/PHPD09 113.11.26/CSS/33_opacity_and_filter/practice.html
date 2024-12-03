@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    
+    <style>
+        
+        img {
+            width: 200px;
+        }
+
+        img:has(~#myOpacity:checked) {
+            filter: opacity(0.5);
+        }
+        img:has(~#myBlur:checked) {
+            filter: blur(5px);
+        }
+        img:has(~#myBrightness:checked) {
+            filter: brightness(200%);
+        }
+        /* #myOpacity:checked~img {
+            filter: opacity(0.5);
+        }
+        #myBlur:checked~img {
+            filter: blur(5px);
+        }
+        #myBrightness:checked~img {
+            filter: brightness(200%);
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- 建立單選框input、單選框後面的文字label、圖片 -->
+    <img src="../img/sunny.jpg">
+    <br>
+    <input type="radio" id="myOpacity" name="myFilter">
+    <label for="myOpacity">opacity(0.5)</label>
+    <br>
+    <input type="radio" id="myBlur" name="myFilter">
+    <label for="myBlur">blur(5px)</label>
+    <br>
+    <input type="radio" id="myBrightness" name="myFilter">
+    <label for="myBrightness">brightness(200%)</label>
+    <!-- <img src="../img/sunny.jpg"> -->
+   
+</body>
+
+</html>

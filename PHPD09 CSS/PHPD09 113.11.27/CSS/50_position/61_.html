@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* 參照 60_image_hover_desc.png，
+           請試著加入 css，讓文字在滑鼠經過時才顯示  */
+        figure {
+            /* border: 5px solid red; */
+            width: 500px;
+            position: relative;
+        }
+        img {
+            width: 100%;
+        }
+        .desc {
+            /* border: 5px solid green; */
+            background-color: rgba(255, 255, 255, 0.5);
+            font-size: 48px;          
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            /* width: 100%;
+            padding: 20px;
+            box-sizing: border-box; */
+            visibility: hidden;
+        }
+        figure:hover>.desc {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+
+    <figure>
+        <img src="../img/sunny.JPG">
+        <figcaption class="desc">千陽號海上行</figcaption>
+    </figure>
+
+</body>
+
+</html>

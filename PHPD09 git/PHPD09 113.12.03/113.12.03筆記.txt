@@ -1,0 +1,68 @@
+git:追蹤程式碼的變更、追蹤誰在哪個時間點編輯那些地方、比對程式碼的差異
+
+(平常)
+原本檔案先複製一份(第一版)>第一次修改在備份(第二版)>再修改等等...
+
+github:程式碼代管服務平台、提供專案的數據庫列管檔案、有助於共同開發專案
+
+建立github數據庫repository/複製github數據庫至本機裡面(git clone)
+
+工作目錄(編輯檔案)git add .>暫存區(git commit -m "XXX")>本機倉庫
+走完流程算是新增一次版本 注意:金鑰和密碼、測試和實驗用的檔案、系統自動產生的檔案 
+不會提交/放到暫存區
+
+編輯的檔案再次編輯的話，需要再放入暫存區(1.可以讓git得知差異
+2.可以選擇特定部分提交到倉庫)
+
+cls:清除畫面上的指令
+
+git commit -a直接從工作目錄提交到本機倉庫(沒有寫好的東西也會提交到倉庫)
+
+git status觀察工作目錄跟暫存區狀況:紅色代表有異動還沒放到暫存區 綠色代表已放在暫存區內
+
+git rm --cached <檔案> (移除暫存區)
+
+git log提交成功後看版本紀錄 commit 00662d35d9d42eac9ee4111fd3a851e3837798c7雜湊值ID 
+(HEAD -> main)>查看在哪一個分支 
+
+git log --oneline >>>>>00662d3 (HEAD -> main) 新增皮卡丘
+
+git push 數據庫位址 分支名稱 (git push origin main)
+
+git push(從哪裡下載就上傳至哪裡)
+
+git remote -v 查看origin的數據庫
+
+git remote add 自訂的簡稱 數據庫位址(設定數據庫簡稱)
+
+git push後查詢>>>>>00662d3 (HEAD -> main, origin/main) 新增皮卡丘
+origin/main是指最新版本
+
+流程:在github頁面建立數據庫>開啟cmd>git clone指令將數據庫複製到桌面資料夾
+>編輯好的檔案準備推送>使用VS code開啟資料夾>將檔案git add .放到暫存區>git commit -m "XXX"
+提交>git push推送到github數據庫 
+
+git diff --cached比較暫存區和目前版本差異
+
+git revert -n 目前版本雜湊值 > git commit -m "捨棄" > 提交 > push
+
+git branch cat 建立分支 > git branch查看分支 > git checkout cat 切換至分支
+> git branch 查看分支 > 編輯檔案 > 暫存區 > 提交 > git checkout main切回main分支
+> git branch 查看分支 > git merge cat > git push
+
+git checkout -b 分支名稱 (建立分支並切換)
+
+git branch -d 分支名稱  (刪除分支)
+
+git pull(已有複製一份至本機，用該指令)
+
+git舊版本無法覆蓋新版本(無法git push，因此使用git pull)>輸入i進入編輯模式>esc退出
+>輸入:wq存檔並離開>git push
+
+另一種情境:兩台電腦編輯同一個檔案(解決衝突)
+
+
+
+
+
+

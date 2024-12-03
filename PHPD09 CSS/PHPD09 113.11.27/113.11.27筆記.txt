@@ -1,0 +1,52 @@
+a標籤要放在父元素位置才可以連結
+position: relative(相對原本位置);不設定會呈現出跟static一樣
+position: absolute(找position非預設的元素或找到body-網頁起始點);會影響其他元素
+
+opacity的透明度針對整個元素 rgba的透明度針對背景
+
+display:none不會保留原有空間 visibility 會保留原有空間
+
+height:80vh(以視窗高度為準) 
+weight:80vw(以視窗寬度為準)
+還有另一種以網頁高度為準(卷軸最上面到最下面)
+
+RWD響應式網頁設計meta name="viewport"<style>@media</style>
+@media screen and (max-width: 600px)小於等於600px
+@media screen and (max-width: 600px) and (min-width: 300px)大於300px小於600px
+
+載入大型CSS animate and loading檔案
+使用class套用想要的動畫
+
+@keyframes建立動畫 from to 或者 0% 25% 50% 75% 100%做設定
+animation-name套用剛建立的動畫
+animation-duration持續時間
+animation-iteration-count持續次數
+
+------------------------------------BOOTSTRAP------------------------------------
+
+引用bootstrap要加meta viewport/link指定檔案 引用js檔案放在body最後面
+
+bootstrap沒有網址為第三版 bootstrap4為第四版 bootstrap5為第五版
+
+CDN方式--網址來源引用(要複製官方文件的程式碼到檔案裡) 另一種透過本地檔案引用
+
+boostrap引用需要按照順序 範例:popper在boostrap的前面
+
+CSS失效原因:1.大小寫或打錯字2.語法錯誤3.路徑錯誤4.優先權|權重
+
+bootstrap本身自帶權重，因此使用CSS要先優先使用類別選擇器
+bootstrap引用在後面，CSS也會失效(順序)
+
+bootstrap不同版本可能會刪除類別或新增類別或改名
+
+第四版有text-left跟text-right第五版改成text-start跟text-end
+
+icon與bootstrap是不同專案，可以直接使用標籤選擇器，不用擔心權重問題
+
+breakpoints(none sm md>=768px lg xl xxl)
+
+.container(容器)當視窗寬度達到某一px時，總寬度(內容+padding)會是XXXpx(可以建立兩側留白效果)
+
+grid system 水平空間總和為12(一定要有class = row因為父元素要有display:flex) 
+平均分配(class = col)
+

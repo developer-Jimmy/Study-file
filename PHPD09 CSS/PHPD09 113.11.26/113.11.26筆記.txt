@@ -1,0 +1,57 @@
+border-width:設定邊界寬度
+border-style:設定邊界樣式
+border-radius:設定邊界弧度
+
+background-attachment: fixed; 讓背景圖固定不動
+background-position: right top; 讓背景貼在右上角
+
+background-clip: border-box(邊框的位置可以填滿效果)
+background-clip: padding-box(只有padding範圍才有效果)
+background-clip: content-box(只有內容範圍有才有效果)
+
+width: 50%相對值 width: 477px絕對值
+
+img style="object-fit: fill 預設值 會變形
+img style="object-fit: cover 等比例縮小 放不進去會捨棄掉
+img style="object-fit: contain 會一直縮小
+img style="object-fit: none 直接放入 放不進去會捨棄掉
+
+box model:content padding border 左右值設定auto=水平方向置中
+
+元素與元素之間用margin 內容與邊界之間用padding
+
+width:300px; 調整的只有content的大小
+
+border: 10px solid black
+box-sizing: border-box讓加了邊界大小的盒子跟原來的大小一致(同樣300px)
+
+box-shadow 水平 垂直(負數往上) 模糊 擴散
+-webkit-box-shadow: -webkit(前綴詞) --開頭為變數
+
+text-shadow 水平 垂直(負數往上) 模糊 擴散
+
+rem相對html元素 em相對父元素
+
+background(是一種簡寫)
+
+overflow(溢出)(需先設定元素的高跟寬) visible hidden scroll auto
+
+中文溢出會自動換行 英文跟數字不會(因為意思會改變)
+
+opacity透明度 filter: blur(5px)模糊度 filter:brightness(明亮度)
+
+div的display預設為區塊元素 display: inline-block讓區塊元素可以排一行 
+display: inline 寬高由內容決定
+
+display:none元素完全消失visibility:hidden元素消失但排版還在
+
+style="display:flex"可以排成一行 在設定style="flex:XXX"可以分配空間比例(父元素要先有flex)
+
+調整元素空間比例可以用inline-block或flex分配
+
+display: grid;(放在父元素)
+grid-template-columns:50px 100px 150px設定三欄的寬
+grid-template-rows: 50px 100px 150px設定三列的高
+
+調整元素的位置沒有效果，因為預設display: static;
+position: fixed會影響後面的元素
