@@ -1,0 +1,82 @@
+11月22 小專開始
+
+javascript優點可以在客戶端執行部分運算
+JavaScript功能關閉，若網頁有使用JavaScript的功能，將無法運作
+
+物件 = 屬性(特徵) + 方法(會動的)
+有小括號的是方法
+
+window/瀏覽器視窗物件 = 屬性(document、寬或高) + 方法(調整視窗大小)
+
+
+document.XXX("<a>這是範例</a>")
+
+物件.屬性
+物件.方法()
+物件.方法(資料)
+script可以同時做兩件事(引用js檔跟在裡面渲染)
+但引用會蓋掉渲染的東西
+
+---------------------------------------------
+console.log error warn
+console.clear()清除終端機訊息
+
+console.time();
+console.timeEnd()
+
+console.group()形成群組
+console.log
+...
+...
+consolegroupEnd()
+
+console.groupCollapsed預先收合的群組，其他同上
+
+不確定物件是什麼，可以用console.log() 注意:加引號會變成字串
+property(屬性) method(方法)
+
+console.log(document.body.h4) h4沒有定義
+
+console.log(document.getElementsByTagName('h4'));透過標籤名稱取得元素
+
+script寫在head(先執行) script寫在body(後執行)
+
+document.getElementsById('demo")取得id為demo的元素
+ 句點帶出屬性或方法
+.innerText="XXX" 將元素內的文字改成XXX
+如果script放在head會取得不到body裡面的元素
+
+可以直接在事件中加入js程式
+
+變數名稱、函式名稱、檔案名稱
+1.大小寫英文 | 底線(_) | 數字(0~9)
+2.不要以數字開頭
+3.不能出現減號
+4.避開保留字和關鍵字，分不清楚就在前面加上"my"
+
+frist-name(X)
+fristname(O)
+fristName(O)小駝峰
+FristName(O)小駝峰
+
+const變數宣告後不能給值
+
+var可以宣告一樣名字的變數
+let不可以宣告一樣名字的變數
+
+值沒宣告就使用是錯誤訊息
+宣告後沒給值是undefined
+
+先使用變數才宣告(var的特性Hoistins會先幫忙宣告)
+
+console.log("'C'") console.log('"C"') 兩者都可以分別印出'C' "C"
+一個斜線+後面一個字=(印出)其他意思
+兩個反斜線=(印出)一個斜線的意思
+
+` XX${變數}XX `樣板字串(可以讀取變數的字串值)
+
+:void (沒有回傳值的意思)
+
+方法名稱(描述參數A:參數A的型別, 描述參數B:參數B的型別): 回傳值的型別
+.indexOf() 找不到字會回傳-1
+.indexOf() 找到字會回傳 >= 0                                        
