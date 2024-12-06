@@ -59,7 +59,7 @@ fristname(O)
 fristName(O)小駝峰
 FristName(O)小駝峰
 
-const變數宣告後不能給值
+const變數宣告後不能再給值
 
 var可以宣告一樣名字的變數
 let不可以宣告一樣名字的變數

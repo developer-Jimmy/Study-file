@@ -1,0 +1,1 @@
+document.write("<h1>這是js檔案有加標籤的元素<h1>")

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <h4>JavaScript Objects</h4>
+    <p><a
+            href="https://www.w3schools.com/js/js_object_definition.asp">https://www.w3schools.com/js/js_object_definition.asp</a>
+    </p>
+
+    <script>
+        var apple = ""; // apple是字串
+        var apple = []; //apple是陣列
+        var apple = {}; //apple是物件
+
+
+        // 10. 使用 {} create object；object 可以包含屬性和方法
+        // { key1:value1, key2:value2.. }
+
+
+        var apple = {bee: "cat"};
+
+        // apple是物件
+        // apple物件裡面有一個bee屬性
+        // bee屬性的值是字串cat
+
+        //情境: 目標是記錄學生的姓名、國文成績、數學成績
+
+        //變數??
+        // var studentName = "皮卡丘";
+        // var chinese = 80;
+        // var math = 100;
+
+        //陣列??
+        var student = ["皮卡丘", 80, 90, 100];
+        console.log(student[3]); //100
+
+        //物件??
+        var student = {
+            name: "皮卡丘",
+            chinese: 80,
+            math: 100
+        };
+
+        console.log(student);
+        // 20. 透過 .  可以 取得 | 新增 object 的屬性
+        // 取得屬性值 ==> 物件.屬性
+        console.log(student.math); //100
+
+        //修改屬性值 ==> 物件.屬性 = 值
+        student.math = 95;
+        console.log(student);
+
+        // 新增屬性 ==> 物件.屬性 = 值
+        student.english = 60;
+        console.log(student); // {name: '皮卡丘',chinese}
+
+        // 30. 透過 [] 可以 取得 | 新增 object 的屬性
+
+        //取得屬性值 ==> 物件['屬性名稱']
+        console.log(student['chinese']); // 80
+        //修改屬性值 ==> 物件['屬性名稱'] = 值
+        student['chinese'] = 70;
+        console.log(student);
+
+        //新增屬性 ==> 物件['屬性名稱'] = 值
+        student['science'] = 90;
+        console.log(student);
+
+    </script>
+
+</body>
+
+</html>
