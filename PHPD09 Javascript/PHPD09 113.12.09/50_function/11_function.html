@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <h4>將功能獨立出來，提高程式的可用性</h4>
+    <p><a href="https://www.w3schools.com/js/js_functions.asp">https://www.w3schools.com/js/js_functions.asp</a></p>
+
+    <script>
+        apple();
+        // 10. 函式宣告（Function Declaration）
+        function apple() {
+            console.log('蘋果');
+        }
+        apple();
+
+        // 20. 需要資訊的函式 / 傳入參數的函式
+        //     呼叫需要資訊的函式時，要把資訊帶入
+        function bee(a, b) {
+            console.log(a);
+            console.log(b);
+        }
+        bee('皮卡丘', '胖丁', '小火龍'); // 實驗: 資料多給
+        bee();
+
+
+        // 30. 函式回傳值
+        function cat() {
+            console.log('貓咪');
+            return '喵喵';
+        }
+        var temp = cat();
+        console.log(temp);
+
+
+        // 40. 函式運算式（Function Expressions）
+        //     變數 存放 計畫的內容，但呼叫時要小心
+        var dog = function() {
+            console.log('小狗');
+        }
+        dog(); // 該行程式碼
+        // 搬到 dog = function() 的前面會出錯，因為只有var宣告被提升
+        // 要function提升才有以讓小括號執行
+
+
+        // 45. 函式運算式，也可以設計有參數的形式
+        var egg = function(a,b) {
+            return a * b;
+            console.log('hello'); // 不會執行該行程式碼
+        }
+        var temp2 = egg(2, 5);
+        console.log(temp2) // 10
+        // 補充: 箭頭函式
+        var x = () => {
+            console.log('hihi');
+        }
+        x();
+        var y = (a, b) => {
+            return a * b;
+        }
+        console.log(y(2, 5));
+
+        var z = (a, b) => a * b;
+        console.log(z(2, 5)); //10 
+    </script>
+</body>
+
+</html>

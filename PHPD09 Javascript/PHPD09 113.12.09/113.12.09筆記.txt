@@ -1,0 +1,90 @@
+handler(放函式)
+setInterval(apple(), 1000);
+執行函式有小括號 ==> 
+(函式執行一次就不見了，setInterval接下來沒有東西可以執行)
+
+elem.style.top 元素沒有定義屬性的話，拿到的是空的
+可以改成window.getComputedStyle(elem).getPropertyValue('top');
+拿到auto
+
+HTMLCollection():類陣列
+
+querySelector('.group1')只會拿到第一個元素
+querySelectorAll('.group1');才會拿到符合條件的全部元素
+
+CSS ==> font-size
+javascript ==> fontSize
+
+        if (apple) {
+            console.log('成立');
+        } else {
+            console.log('不成立');
+        }
+        console.clear();
+        // 30. 巢狀結構的處理 
+        if (score >= 90) {
+            console.log("甲上");
+        } else {
+            if (score >= 80) {
+                console.log("甲");
+            } else {
+                if (score >= 70) {
+                    console.log("乙");
+                } else {
+                    if (score >= 60) {
+                        console.log("丙");
+                    } else {
+                        console.log("丁");
+                    }
+                }
+            }
+        }
+        可以換成
+        if (score >= 90) {
+            console.log("甲上");
+        } else if (score >= 80) {
+            console.log("甲");
+        } else if (score >= 70) {
+            console.log("乙");
+        } else if (score >= 60) {
+            console.log("丙");
+        } else {
+            console.log("丁");
+        }
+
+        expression(要判斷的對像)
+        case(比較的對像)
+        沒有加break會直接執行後面的事情
+
+        switch(expression) {
+            case x:
+                // code block
+                break;
+            case y:
+                // code block
+                break;
+            default:
+                // code block
+        }
+
+        switch除了看值還會看資料型態
+
+        while會重複檢查條件，直到不成立後離開迴圈
+
+        變數只宣告一次 => 判斷條件 => console.log => i++ =>
+        判斷條件 => console.log => i++
+        for(var i = 0; i < 2; i++) {
+            console.log(i);
+        }
+
+        會員登入 == > 驗證身分
+        修改密碼 == > 驗證身分
+        function 驗證身分() { 驗證身分需要做的事情 }
+
+        function的宣告會往前提升
+
+        console.log(元素的id)
+        後面沒有提示
+        同名變數會覆蓋
+        
+
