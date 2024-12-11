@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id = "report"></div>
+    <script>
+        var result = 0;
+        for (let i = 1; i <= 10; i++ ) {
+            if(i == 4) {
+                continue; // jump #17
+            }
+            result = result + i;
+        }
+
+        // 小學生/守規矩寫法
+        // var i = 1; // 先宣告
+        // while (i <= 3) {
+        //     result = result + i;
+        //     i++;
+        // }
+
+        // 上班族寫法
+        // var i = 0; // 先歸零
+        // while (i <= 3) {
+        //     i++;
+        //     result = result + i;
+        // }
+
+        // result = result + 1; // 0 + 1
+        // result = result + 2; // 1 + 2
+        // result = result + 3; // 3(=1+2) + 3
+        report.innerText = result;
+    </script>
+</body>
+</html>
