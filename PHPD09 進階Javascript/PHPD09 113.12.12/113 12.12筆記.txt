@@ -1,0 +1,39 @@
+function可以設定預設值或內部計算完後傳回值
+
+var x = function() 代表執行函式並傳回一個值
+var x = function 代表指向函式記憶體的位址
+
+宣告一個變數接取箭頭函式的內容
+function 裡面加入 function 來避免外部的變數干擾
+
+var nextNumber = (function () {
+            var lastNumber = 0;
+            return function () {
+                lastNumber++;
+                return lastNumber;
+            }
+        })();
+
+用陣列收集要變換的數據 例如圖片或來源
+使用亂數可以隨機變換 在設置setTimeout執行下一次
+
+onclick= "某一段javascript"
+
+e是與瀏覽器溝通的橋樑，指onclick的事件
+function doAnimateHide(e) {
+    e.cancelBubble = true;
+}
+
+forEach 不會弄出一個新陣列
+.map 直接得到一個陣列(可以批次處理 如同時+1等等)
+for(let i in XXX) in index 顯示的是索引值
+for(let item of XXX) XXXItem 顯示的是變數中的資料
+
+filter過濾想要的item
+
+合併 [...陣列1, ...陣列2]
+
+解構賦值 [x,y] = [y,x];
+
+
+        
