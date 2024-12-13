@@ -1,0 +1,51 @@
+(範本 class) => new array 造出實體
+將實體物件存放至倉庫，需要時在參照
+
+根據類別製造的物件，自稱this.
+  class CAnimal {
+            _weight = 1;
+            makeSound(x, y, z) {
+                alert("Animal: ...")
+            }
+            set weight(weightValue) {
+                if(weightValue > 0) {
+                    this._weight = weightValue;
+                }
+            }
+            get weight() {
+                return this._weight;
+            }
+        }
+
+資料跟功能封成一個單元 => 閉包
+
+//物件生成後首先做的事 (不能被呼叫)
+  constructor(weightValue = 1) {
+                this.weight = weightValue;
+            }
+extends 繼承
+範例: class CDog extends CAnimal{
+            location = "unknown";
+            constructor(weightValue, locationValue) {
+                super(weightValue);
+                this.location = locationValue;
+            }
+            makeSound() {
+                super.makeSound();
+                alert("Dog: Won! Won!");
+            }
+}
+constructor中的super只能用小括號
+super被使用於通過函式存取父層
+
+"use strict"; 取消javascript自動設定全域變數
+
+JSON.stringify變成字串
+JSON.parse變回記憶體內容
+
+
+
+    
+
+
+        

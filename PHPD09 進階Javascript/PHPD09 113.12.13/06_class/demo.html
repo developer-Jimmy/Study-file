@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="debug"></div>
+
+    <script>
+        // [ ] , { } :  "
+
+
+        var objArray = [
+            { "firstName": "Derek", "lastName": "Jeter" },
+            { "firstName": "Jeremy", "lastName": "Lin" },
+            { "firstName": "Lionel", "lastName": "Messi" }
+        ];
+        // debug.innerText = JSON.stringify(objArray);
+
+        var fromServerString = '[{"firstName":"Derek","lastName":"Jeter"},{"firstName":"Jeremy","lastName":"Lin"},{"firstName":"Lionel","lastName":"Messi"}]'
+        var playerList = JSON.parse(fromServerString);
+        debug.innerText = playerList[1].firstName;
+
+        // var obj = {
+        //     firstName : "Jeremy",
+        //     lastName : "Lin"
+        // };
+        // obj.backNumber = 7;
+        // debug.innerText = obj.firstName;
+
+
+        // "use strict";
+        // var salary = 60000;
+        // sallary = 80000; //error
+        // debug.innerText = salary;
+
+
+    </script>
+
+</body>
+
+</html>

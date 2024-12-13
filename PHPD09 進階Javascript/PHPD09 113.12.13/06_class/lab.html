@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class CAnimal {
+            _weight = 1;
+
+            constructor(weightValue) {
+                this.weight = weightValue;
+            }
+
+            makeSound(x, y, z) {
+                alert("Animal: ...")
+            }
+            set weight(weightValue) {
+                if (weightValue > 0) {
+                    this._weight = weightValue;
+                }
+            }
+            get weight() {
+                return this._weight;
+            }
+        }
+
+        class CDog extends CAnimal {
+            location = "unknown";
+            constructor(weightValue, locationValue) {
+                super(weightValue);
+                this.location = locationValue;
+            }
+            makeSound() {
+                super.makeSound();
+                alert("Dog: Won! Won!");
+            }
+        }
+        var obj = new CDog(3, "TaiChung");
+    
+
+        // obj.constructor(); // 沒有new無法觸發
+        alert(obj.weight);
+        alert(obj.location);
+        // obj.makeSound();
+    </script>
+</body>
+
+</html>
