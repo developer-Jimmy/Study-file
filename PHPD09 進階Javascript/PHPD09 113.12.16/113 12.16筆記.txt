@@ -1,0 +1,25 @@
+function掛在誰身上就是this
+addEventLister 捕捉由外而內 發泡由內而外
+
+某些函式是掛在瀏覽器視窗上。因此this會指向window
+解法有用變數宣告或用箭頭函式宣告
+箭頭函式會指向外界
+
+use strict會限制，因此this就需要定義了
+bind定義whatIsThis
+showLocation = showLocation.bind(window);
+showLocation();
+
+export 加上 default 不用放在import{}裡面
+範例: import hello, {userName, data} from "./toolbox.js";
+hello();
+
+Promise.then會一直.then.then...
+async awit可以同步進行
+如果有秒數，可以等秒數跑完再awit
+
+
+    
+
+
+        
