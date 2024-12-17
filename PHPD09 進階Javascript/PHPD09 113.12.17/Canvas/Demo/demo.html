@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ 
+    <canvas id="surface" width="600" height="400"></canvas>
+    <script>
+        var keyFlag = "none";
+ 
+        var ball = {
+            x : 20,
+            y : 30,
+            r : 10,
+            vx : 2,
+            vy : 3,
+        }
+ 
+        var surfaceCanvas = document.getElementById("surface");
+        var ctx = surfaceCanvas.getContext('2d');
+ 
+        setInterval(
+            function() {
+                // update
+                if (ball.y + ball.r >= surfaceCanvas.height || keyFlag == "up") {  // hit bottom
+                    ball.vy = Math.abs(ball.vy) * -1;
+                }
+                if (ball.y - ball.r <= 0 || keyFlag == "down") {  // hit top
+                    ball.vy = Math.abs(ball.vy)
+                }
+                if (ball.x + ball.r >= surfaceCanvas.width  || keyFlag == "left") {  // hit right
+                    ball.vx = Math.abs(ball.vx) * -1;
+                }
+                if (ball.x - ball.r <= 0 || keyFlag == "right") {  // hit left
+                    ball.vx = Math.abs(ball.vx)
+                }
+                keyFlag = "none";
+ 
+                ball.x += ball.vx;
+                ball.y += ball.vy;
+ 
+                // draw
+                ctx.beginPath();
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, surfaceCanvas.width, surfaceCanvas.height)
+                ctx.strokeStyle="white";
+                ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+                ctx.stroke();
+            },
+            1000 / 50
+        );
+ 
+        document.onkeydown = function () {
+            const upKey = 38;
+            // console.log(event.keyCode);  37, 38, 39, 40  left, top, right, down
+            if (event.keyCode == upKey) {  // go up
+                // ball.vy = Math.abs(ball.vy) * -1;
+                keyFlag = "up";
+            }
+            if (event.keyCode == 40) {  // go down
+                // ball.vy = Math.abs(ball.vy);
+                keyFlag = "down";
+            }
+            if (event.keyCode == 37) {  // go left
+                // ball.vx = Math.abs(ball.vx) * -1;
+                keyFlag = "left";
+            }
+            if (event.keyCode == 39) {  // go right
+                // ball.vx = Math.abs(ball.vx)
+                keyFlag = "right";
+            }
+        }
+ 
+    </script>
+ 
+</body>
+</html>
+具有快顯功能表

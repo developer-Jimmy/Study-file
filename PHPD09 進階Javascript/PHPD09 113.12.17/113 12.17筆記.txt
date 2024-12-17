@@ -1,0 +1,4 @@
+解構賦值 變數名稱要正確 react會用到
+try catch防止程式故障
+local storage儲存資料 但當用戶使用無痕模式也會清除
+canvas畫圖
