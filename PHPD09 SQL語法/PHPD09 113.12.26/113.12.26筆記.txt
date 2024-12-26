@@ -1,0 +1,55 @@
+下載 XAMPP 開啟 apache mySQL
+
+網址輸入localhost/phpmyadmin/進入資料庫管理系統
+
+創建資料表 輸入欄位數目 進入欄位表進行設定
+
+(數值類型由小調大比較安全、datetime包含年月日時間
+字串char進去幾個字，出來固定的字數[包含空白]，varchar進去幾個字，出來幾個字
+
+沒把握用varchar，系統會用\0表示字串結尾-char varchar後端要檢查輸入內容[資訊安全]
+
+電話號碼[電信公司一律用INT，自動吃掉0] 電話號碼用INT型態則拆成4個欄位、國際碼、區域碼、
+分機號碼、電話號碼)
+
+資料表儲存後，新增的資料會自動轉換成SQL command(沒有主鍵無法編輯複製刪除，且主鍵欄位不能重複)
+
+資料庫資料要隨時備份(壞掉一次報銷) 關聯式資料庫規劃時間長 非關聯資料庫規劃時間短
+
+資料庫引擎(MySQL、Oracle)決定資料放在檔案哪個位置，資料庫管理系統(統一的話可以更好人員調度，
+像是toad或DBeaver、Azure Data Studio)則操控資料庫引擎
+
+SQL command大多一樣，操控資料庫管理系統
+
+關聯式資料庫都包含 實體=>資料表 屬性=>欄位 關聯性(看文件)
+
+關聯式資料庫(降低資料重複性的精神，可以降低儲存空間，資料維護容易[整數資料只能打數字])，
+一個資料表拆成兩個表就有關聯
+
+查詢軌跡:搜尋起點 => 關聯線 => 搜尋終點 (重複的話會一直找 不重複的話設定PK或不可重複索引)
+
+加上底線代表Primary Key
+
+被參考的欄位必須為主索引或不可重複索引
+
+ER圖(關聯圖)、資料字典
+
+select * from選取全部資料
+...SQL command(欄位名稱, from XXX where, <>, not不等於 like模糊查詢[效能最差]，要放百分比)
+資料有null要留意，不然會少撈到資料
+ifnull(XXX, '')轉換成空字串，否則null運算會錯誤
+下排序指令才會按照排序
+
+要查詢，先將關聯的欄位合併再查詢
+
+先select *
+from bill, phone, house
+where bill.tel = phone.tel and phone.hid = house.hid and fee > 700
+
+inner join(可以放在from或where後面)關聯線兩端都有的資料才會顯示，否則去掉
+改成left (outer) join(只能放在from後面)讓關聯線兩端不同的資料顯示
+終點到起點改成right (outer) join(只能放在from後面)
+看到所有，幾乎使用out join 
+cross join 交叉合併(少用到) 
+避免from 下到 cross join指令
+
