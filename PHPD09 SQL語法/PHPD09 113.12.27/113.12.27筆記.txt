@@ -1,0 +1,211 @@
+資料庫設計準則:遵守越多資料越破碎，越少資料重複性越高
+
+刻意將大檔案的資料切出去，減少後端壓力
+
+PK vs PK 一對一關係
+PK vs 非PK 一對多關係
+會員 vs 帳單 vs 商品 多對多關係(左邊的PK和右邊的PK出現在中間的資料表)
+
+至少遵守第一個正規化，實務上會遵守第二或第三
+
+資料表有主索引 => UNF
+欄位只能放一筆資料 => 第一正規化
+每個欄位必須與主索引完全有關 => 第二正規化
+非主鍵欄位不可彼此有關 => 第三正規化
+
+count(*)群組運算函數 sum(XXX)總和 avg(XXX)平均  stddev(XXX)標準差 max、min
+count(*) 可以用來檢查帳號密碼正不正確
+
+MySQL 群組運算後只抓第一個資料，因此語法上要嚴謹才會正確
+範例:select tel, sum(fee), address
+     from bill, house
+     where bill.hid = house.hid
+     group by tel, [[[[[[address(MySQL可加可不加，但加上address比較嚴謹)]]]]]]
+
+select cname, left(cname, 1), right(cname, 1), substring(cname, 1, 2)
+from userinfo
+where cname is not null and cname <> ''
+
+
+select a.uid as '帳號', cname as '姓名', address as '住址'
+from userinfo as a, live as b, house as c
+where a.uid = b.uid and live.hid = c.hid
+(欄位跟資料都可以換別名)
+
+
+select lastname, count(*)
+from (
+    select cname, left(cname, 1) as lastname  -- ,right(cname, 1), substring(cname, 1, 2)
+	from userinfo
+	where cname is not null and cname <> ''
+) as x 
+group by lastname
+巢狀查詢，先從裡面看到外面
+
+
+select concat(floor((
+    (select count(*) from house left JOIN live on house.hid = live.hid where live.uid is null)
+    / 
+    (select count(*) from house)
+) * 100), '%') as '空屋率'
+計算空屋率多少百分比
+
+create view vw_vacancy_rate as 創建一個檢視表
+select * from vw_vacancy_rate 檢視檢視表(執行比下指令速度更快、保密更佳)
+
+select * 
+from bill
+order by fee desc
+limit 1
+帳單金額最高的電話
+
+select *
+from bill
+where fee = (
+-- select max(fee) from bill
+    select fee from bill order by fee desc limit 1
+)
+找某個欄位的最大值
+
+
+select address, n from (
+    select hid, count(uid) as n from live
+    group by hid
+    ) as x, house
+where n = (
+    select max(n)
+    from (select hid, count(uid) as n from live
+          group by hid
+    ) as x
+) and x.hid = house.hid
+找有哪幾個住最多人的房子
+
+select Phone.tel, address, sum_fee
+from (
+   select tel, sum(fee) as sum_fee
+   from Bill
+   group by tel       
+) as x, Phone, House
+where x.tel = Phone.tel and Phone.hid = House.hid
+   and sum_fee = (
+       select sum(fee) as sum_fee from Bill
+       group by tel
+       order by sum_fee
+       limit 1       
+   )
+找哪個電話與地址的電話費總計最少的
+
+select distinct left(cname, 1)
+from userinfo 去掉重複的，只留一個
+
+select address 
+from house 
+where hid in (select distinct hid from live)
+有住人的房子
+
+
+select address
+from house
+where hid in (select distinct hid from live)
+union ALL
+select '苗栗縣'
+查詢結果在垂直最下面插入新資料
+
+
+select *,
+	CASE
+		when fee > 500 then fee * 0.8
+ 		when fee > 300 then fee * 0.9
+        	else fee
+    	END
+from bill
+費用超過500打八折，費用超過300打九折(有順序性)
+
+
+
+select * from (
+select tel, sum(fee) as sum_fee
+from bill
+group by tel
+) as x
+where sum_fee > 1000
+
+先在內部進行運算，才在運算結果外下條件(因為where要在from的後面)
+
+select tel, sum(fee) as sum_fee
+from bill
+group by tel
+having sum_fee > 1000
+可以在group by的後面(having)
+
+
+insert into
+插入一筆資料到資料表insert into userinfo values('B01','David',NULL,NULL,NULL)
+欄位會更新資料的話用insert into userinfo(uid, cname)values('B02', 'Tom')
+
+update userinfo set cname = null(沒下where更新資料表中所有資料)
+update userinfo set cname = '孫小毛', uid = 'Z01' where uid = 'A03'
+
+delete from bill 或 truncate table bill (沒下where刪除所有資料表中資料)
+delete from userinfo where uid = 'Z01'
+
+
+-- MySQL專屬
+create table new_table select * from userinfo (B資料表不存在)
+insert info new_table(uid, cname) select uid, cname from userinfo(B資料表存在時)
+
+select json_object(
+'uid', uid,
+'cname', cname
+)
+from userinfo
+轉換成字串
+
+select 
+group_concat(json_object(
+	'uid', uid,
+    'cname', cname
+    ))
+from userinfo
+轉換成只有一個欄位的json字串
+
+select concat('[',
+group_concat(json_object(
+'uid', uid,
+'cname', cname
+)),
+']') as json
+from userinfo
+合併每一列資料
+
+json字串
+[
+   { 
+	"name": "David",
+        "age": 30,
+	"children": [
+	    {
+	     "name": "Tom",
+	     "sex": "M"
+	    },
+	    {
+ 	     "name": "Mei",
+	     "sex": "F"
+	    }
+        ],
+	"tel": {
+	    "mobile": "1111",
+	    "home": "2222"
+	},
+	"a": true,
+	"b": flase,
+	"c": null
+   },
+   {
+	"name": "Betty",
+        "age": 28
+   }
+]
+兩個object
+
+
