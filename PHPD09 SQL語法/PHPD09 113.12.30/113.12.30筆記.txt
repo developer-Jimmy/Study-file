@@ -1,0 +1,348 @@
+select now()現在時間
+select adddate(now(), -3)現在時間減掉三天
+select adddate(now(), interval 7 hour)現在時間加七個小時
+select datediff(now(), '2024/1/1 0:0:0')兩個時間差距多久
+select timestampdiff(month, '2024/1/1 0:0:0', now())差距幾個月
+select date_format(now(), '西元%Y')顯示目前西元幾年(格式表的輸出一律字串型態)
+select year(now())
+select concat('西元', year(now()), '年')
+select week(now())今年的第幾週
+select weekday(now())今天是星期幾
+
+select *, floor(datediff(now(), birthday) / 365.25) as age
+from userinfo顯示年齡欄位
+
+select *,floor(
+	case
+    	when month(birthday)= month(now()) then billing * 0.8 		
+	else billing 
+        end) as total
+from (
+    select *, floor(datediff(now(), birthday) / 365.25) as age,1000 as billing
+    from userinfo) as tmp
+當月生日的billing打八折
+
+
+
+select quarter(dd) as q, sum(fee)
+from bill
+where year(dd) = 2019
+group by quarter(dd)
+每季帳單金額總和
+
+select quarter(dd) as q, sum(fee)
+from bill
+where year(dd) = 2019
+group by quarter(dd)
+union all 
+select 3, 0
+第三季補零
+
+select q, sum(sum_fee) as sum_fee
+from(
+select quarter(dd) as q, sum(fee) as sum_fee
+from bill
+where year(dd) = 2024
+group by quarter(dd)
+union all select 1, 0
+union all select 2, 0
+union all select 3, 0
+union all select 4, 0
+) as tmp
+group by q
+全季自動補零
+
+方法一:
+select 
+	case
+    	when q in (1,2) then '上半年'
+        when q in (3,4) then '下半年'
+    end as 半年,
+    sum(sum_fee) as 總金額
+from(
+    select q, sum(sum_fee) as sum_fee
+    from( 
+    	select quarter(dd) as q, sum(fee) as sum_fee
+    	from bill
+	where year(dd) = 2019
+	group by quarter(dd)
+	union all select 1, 0
+	union all select 2, 0
+	union all select 3, 0
+	union all select 4, 0
+     ) as tmp
+     group by q
+) as half
+group by 半年;
+方法二:
+select *, floor(month(dd) / 7.0) as 半年
+	-- case 
+    	-- when month(dd) < 7 then '上半年'
+   	    -- else '下半年'
+    -- end as halfyear
+from bill
+where year(dd) = 2019
+
+2019年上半年與下半年帳單金額總和(除了case when還有除法的方法)
+
+強型別語言，資料型態要一致
+弱型別語言，可以在分母或分子其中一項加上.0
+
+select q, sum(sum_fee) as sum_fee
+from(
+    select quarter(dd) as q, sum(fee) as sum_fee
+    from bill
+    -- where year(dd) = 2024(速度慢到爆) 
+    where dd between '2024/1/1' and '2024/12/31 23:59:59.999'(速度超快，因為吃索引)
+    group by quarter(dd)
+    union all select 1, 0
+    union all select 2, 0
+    union all select 3, 0
+    union all select 4, 0
+)as temp
+group by q
+
+
+select now();
+select utc_timestamp()[世界協調時間]
+
+insert into bill (tel, fee, dd, hid) values ('1111', 2000, '2024/7/30 13:10:0', 1)
+-- ISO8601
+insert into bill (tel, fee, dd, hid) values ('1111', 2000, '2024-07-30 13:10:00', 1)[一定要補零]
+MySQL不吃時區資訊 範例:2024/7/30 13:10:0 +0800
+SQL Server 會自動拿掉時區資訊
+MongoDB 自動算成UTC時間
+
+資料庫紀錄時間，開發團隊就要講清楚
+資料庫還要多一個欄位紀錄時區資訊
+now()是本地時間，必須弄回UTC時間(時區資訊null) 處理時區資訊用dateadd()
+
+select unix_timestamp(); 一般來說，開INT型態抓資料扣除時區，使用unix_timestamp();
+select from_unixtime() 自動加上時區資訊，變成本地時間
+
+--unix time或稱為-- epoch time
+
+
+DROP TRIGGER IF EXISTS userinfo_insert;
+DELIMITER $$
+
+CREATE TRIGGER userinfo_insert AFTER INSERT
+ON userinfo
+FOR EACH ROW
+BEGIN
+    set @uid = new.uid;
+    set @cname = ifnull(new.cname, 'noname');
+    set @body = CONCAT('將', @uid,', ',@cname, '插入到userinfo資料表');
+    insert into log (body) values (@body);
+END $$
+DELIMITER ;
+創建一個trigger
+
+insert into userinfo (uid, cname) values ('B01', 'David');
+select * from userinfo;
+select * from log;
+
+
+DROP TRIGGER IF EXISTS userinfo_update_block;
+DELIMITER $$
+
+CREATE TRIGGER userinfo_update_block before update
+ON userinfo
+FOR EACH ROW
+BEGIN
+	if @count is null THEN
+    	set @count = 1;
+    ELSE
+    	set @count = @count + 1;
+    end if;
+    if @count > 1(and not (old.password <=> new.password -- 當password改到兩筆以上資料才會觸發) THEN
+    	signal sqlstate '45000' set message_text = '更新兩筆以上資料';
+    end if;
+END $$
+DELIMITER ;
+更新兩筆以上資料會拒絕的trigger  註解:<=>(space sheet)
+
+trigger插入userinfo(實際上本該是log)形成直接迴圈
+
+trigger在A、B、C資料表形成迴圈(間接迴圈)
+
+沒有傳回值的叫 procedure 有傳回值叫function
+預存程序 stored procedure
+
+
+drop procedure if exists test;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE test()
+BEGIN
+	select * from userinfo;
+end $$
+DELIMITER ;
+
+call test()使用程序
+
+
+drop procedure if exists test;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE test(myuid varchar(20))
+BEGIN
+	select * from userinfo where uid = myuid;
+end $$
+DELIMITER ;
+
+call test('A01')
+
+
+drop procedure if exists login;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE login(myuid varchar(20), mypwd varchar(20))
+BEGIN
+	select count(*) as status from userinfo where uid = myuid and password = mypwd;
+	(只能用一個select，不能用兩個)
+end $$
+DELIMITER ;
+檢查登入狀態的程序
+
+--------------------------------------這個地方錯誤，不能使用@n :不然會一次丟出兩個值
+drop procedure if exists register;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE register(myuid varchar(20), mycname varchar(50), myaddress varchar(100))
+BEGIN
+	select @n := count(*) from userinfo where uid = myuid;
+    if @n = 1 then
+ 		select 'false' as STATUS;
+    else
+    	insert into userinfo(uid, cname) values (myuid, mycname);
+        select 'true' as status;
+    end if;
+end $$
+DELIMITER ;
+
+--------------------------------------正確使用into
+drop procedure if exists register;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE register(myuid varchar(20), mycname varchar(50), myaddress varchar(100))
+BEGIN
+	select count(*) into @n from userinfo where uid = myuid;
+    if @n = 1 then
+ 		select 'false' as STATUS;
+    else
+    	insert into userinfo (uid, cname) values (myuid, mycname);
+        select 'true' as status;
+    end if;
+end $$
+DELIMITER ;
+
+call register('A01', 'Tom', '花蓮市...路')
+
+--------------------------------------
+drop PROCEDURE if EXISTS register;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE register(myuid varchar(20), mycname varchar(50), myaddress varchar(100))
+begin
+   select count(*) into @n from UserInfo where uid = myuid;
+   if @n = 1 then
+       select 'false' as status;
+   else
+       insert into UserInfo (uid, cname) values (myuid, mycname);
+       select hid into @hid from House where address = myaddress;
+       if @hid is null then
+           insert into House (address) values (myaddress);
+       end if;
+
+
+       select hid into @hid from House where address = myaddress;
+       insert into Live (uid, hid) values (myuid, @hid);
+       select 'OK' as status;       
+   end if;
+end $$
+DELIMITER ;
+
+--------------------------------------@n @hid改成宣告區域變數
+
+drop PROCEDURE if EXISTS register;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE register(myuid varchar(20), mycname varchar(50), myaddress varchar(100))
+begin
+	declare n int;
+    declare myhid int;
+   select count(*) into n from UserInfo where uid = myuid;
+   if n = 1 then
+       select 'false' as status;
+   else
+       insert into UserInfo (uid, cname) values (myuid, mycname);
+       select hid into myhid from House where address = myaddress;
+       if myhid is null then
+           insert into House (address) values (myaddress);
+       end if;
+
+
+       select hid into myhid from House where address = myaddress;
+       insert into Live (uid, hid) values (myuid, myhid);
+       select 'OK' as status;       
+   end if;
+end $$
+DELIMITER ;
+
+--------------------------------------迴圈插入資料
+drop PROCEDURE if EXISTS test;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE test()
+begin
+	declare n int default 1000;
+    while n > 0 DO
+    	insert into userinfo (uid, cname) values (concat('X',n), concat('X',n));
+    	set n = n - 1;
+    end while;
+end $$
+DELIMITER ;
+
+---------------------------------------用leave 迴圈名字 離開迴圈
+drop PROCEDURE if EXISTS test;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE test()
+begin
+	declare n int default 10;
+    aaa:  while n > 0 DO
+    	if n = 3 THEN
+        	leave aaa;
+       	end if;
+    	insert into userinfo (uid, cname) values (concat('Y',n), concat('Y',n));
+    	set n = n - 1;
+    end while;
+end $$
+DELIMITER ;
+
+call test();
+select * from userinfo where uid like 'Y%';
+
+-------------------------------------------用 iterate 迴圈名字 跳過
+drop PROCEDURE if EXISTS test;
+DELIMITER $$
+-- 預存程序 stored procedure
+create PROCEDURE test()
+begin
+	declare n int default 10;
+    aaa:  while n > 0 DO
+    	if n = 3 THEN
+        	set n = n - 1;
+            iterate aaa;
+       	end if;
+    	insert into userinfo (uid, cname) values (concat('Z',n), concat('Z',n));
+    	set n = n - 1;
+    end while;
+end $$
+DELIMITER ;
+select * from userinfo where uid like 'Z%';
+
+
+
+
