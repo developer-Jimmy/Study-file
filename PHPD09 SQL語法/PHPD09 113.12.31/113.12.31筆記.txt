@@ -1,0 +1,372 @@
+-- in: call-by-value 傳值呼叫 (裡面變不影響外面)
+-- inout: call-by-adress 傳址呼叫 (裡面變外面就變)
+DROP PROCEDURE IF EXISTS test;
+DELIMITER $$
+
+CREATE PROCEDURE test(inout n int)
+BEGIN
+    SET n = n + 1;
+END $$
+
+DELIMITER ;
+
+set @n = 10;
+call test(@n);
+select @n;
+
+--------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS test;
+DELIMITER $$
+
+CREATE PROCEDURE test(a double, b double, inout error int)
+BEGIN
+	set error = 0;
+	if b = 0 THEN
+    	set error = 1;
+    ELSE
+    	select a / b as result;
+    end if;
+END $$
+
+DELIMITER ;
+
+正式系統會將錯誤訊息集中在一個資料表(多個語系)
+
+-------------------------------------------------------------
+
+DROP function IF EXISTS myadd;
+DELIMITER $$
+
+CREATE function myadd(a double, b double) returns double
+BEGIN
+	return a + b;
+END $$
+
+DELIMITER ;
+
+select myadd(5, 3) as result
+
+-------------------------------------------------------------
+
+eof(end of file)文件結束標誌 
+cursor無關的變數先在前面宣告
+錯誤處理放在最後面
+
+
+DROP procedure IF EXISTS test1;
+DELIMITER $$
+
+CREATE procedure test1() 
+BEGIN
+	declare eof bool default false;
+    declare n int;
+    declare total int default 0;
+    
+	declare c cursor for select fee from bill;
+    declare continue handler for not found set eof = true;
+    
+    open c;
+    	fetch c into n;
+    while ! eof DO
+    	set total = total + n;
+    	fetch c into n;
+    end while;
+    select total as result;
+    close c;
+    
+END $$
+DELIMITER ;
+
+select sum(fee) from bill;
+call test1()
+
+-----------------------------------------------------------
+
+select sum(newfee) as result
+from(
+select fee,
+	CASE
+    when fee >= 700 then fee * 0.8
+    else fee
+    end as newfee
+from bill
+-- where year(dd) = 2024
+) as tmp
+-- call test1()
+
+cursor的部分-----------------------------------------------
+
+DROP procedure IF EXISTS test1;
+DELIMITER $$
+
+CREATE procedure test1() 
+BEGIN
+	declare eof bool default false;
+    declare n int;
+    declare total int default 0;
+    
+	declare c cursor for select fee from bill -- where year(dd) = 2024;
+    declare continue handler for not found set eof = true;
+    
+    open c;
+    	fetch c into n;
+    while ! eof DO
+    	if n >= 700 then
+    	set total = total + n * 0.8;
+    ELSE
+    	set total = total + n;
+    end if;
+    	fetch c into n;
+    end while;
+    select total as result;
+    close c;
+    
+END $$
+DELIMITER ;
+
+-----------------------------------------------------------
+into可以帶兩個欄位以上的值
+
+DROP procedure IF EXISTS test1;
+DELIMITER $$
+
+CREATE procedure test1() 
+BEGIN
+	declare eof bool default false;
+    declare n int;
+    declare d date;
+    declare total int default 0;
+    
+	declare c cursor for select fee, dd from bill;
+    declare continue handler for not found set eof = true;
+    
+    open c;
+    	fetch c into n, d;
+    while ! eof DO
+    	if year(d) = 2024 then
+    	if n >= 700 then
+    	set total = total + n * 0.8;
+    ELSE
+    	set total = total + n;
+    	end if;
+    end if;
+    	fetch c into n, d;
+    end while;
+    select total as result;
+    close c;
+    
+END $$
+DELIMITER ;
+
+---------------------------------------------------------
+密碼按照uid設置前兩碼，生日月日設置為後四碼
+
+DROP procedure IF EXISTS initpassword;
+DELIMITER $$
+
+CREATE procedure initpassword() 
+BEGIN
+	declare eof bool default false;
+    declare myuid varchar(20);
+    declare mybirthday date;
+    declare mypassword varchar(20);
+ 
+    declare c cursor for select uid, birthday from userinfo where password is null;
+    declare continue handler for not found set eof = true;
+    
+    open c;
+    	fetch c into myuid, mybirthday;
+    while ! eof DO
+    	set mypassword = concat(right(myuid, 2), date_format(mybirthday, '%m%d'));
+        update userinfo set password  = mypassword where uid = myuid;
+    	fetch c into myuid, mybirthday;
+    end while;
+    select 'OK' as result;
+    close c;
+    
+END $$
+DELIMITER ;
+
+call initpassword();
+select * from userinfo;
+
+--------------------------------------------------
+start transaction;
+DELETE from userinfo;
+delete from house;
+ROLLBACK;
+-- commit;
+select * from userinfo;
+
+-------------------------------------------------
+drop procedure if EXISTS test;
+delimiter $$
+create procedure test()
+begin
+start transaction;
+	set @err = 0;
+    
+	update userinfo set cname = '1234' where uid = 'C01';
+    set @err = @err + @@error_count;
+    
+	insert into userinfo (uid) values ('A01');
+    set @err = @err + @@error_count;
+    
+    if @err = 0 THEN
+    	commit;
+    ELSE
+    	rollback;
+    end if;
+end $$
+DELIMITER ;
+select * from userinfo
+
+---------------------------------------------------
+交易未完成，如有其他指令與動到的指令相同，會等待
+---------------------------------------------------鎖
+下了查詢指令的一筆資料，可以下一次鎖
+也可以對一個資料表下鎖
+所有動作先上鎖在動作
+
+為了確保讀得是新的資料，需要等待解鎖
+mySQL讀資料不上鎖，因此可以查詢
+
+------------------------------------------01
+start TRANSACTION;
+    update userinfo set password = null
+    where uid  = 'A01';
+
+    -- commit;
+    -- rollback;
+------------------------------------------02
+-- delete from userinfo where uid = 'A01';
+select * from userinfo;
+------------------------------------------查看鎖的狀態
+select * from information_schema.innodb_locks;
+select * from information_schema.innodb_lock_waits;
+-------------------------------------------------買票程序
+update Ticket SET quantity = 1 where tid = 1;
+drop procedure if exists buy;
+create procedure buy()
+BEGIN
+    DECLARE n int;
+    select quantity into n from ticket where tid = 1;
+    if n > 0 then 
+        set n = n - 1;
+        update ticket set quantity = quantity - 1 where tid = 1;
+        select '買走一張票' as status;
+    else 
+        select '賣完了' as status;
+    END IF;
+end;
+
+CALL buy();
+SELECT * FROM ticket; 
+-------------------------------------------------------
+delimiter $$ => 看到$$才會送到資料庫引擎執行
+delimiter ; => 還原成分號結尾送到資料庫引擎執行
+-------------------------------------------------------模擬超賣(先取出=>檢查=>異動
+update Ticket SET quantity = 1 where tid = 1;
+drop procedure if exists buy;
+create procedure buy()
+BEGIN
+    DECLARE n int;
+    -- query 
+    select quantity into n from ticket where tid = 1;
+    -- do sleep(10);
+    -- check
+    if n > 0 then 
+        --update
+        set n = n - 1;
+        update ticket set quantity = quantity - 1 where tid = 1;(update的這行上X鎖，且自動commit)
+        select '買走一張票' as status;
+    else 
+        select '賣完了' as status;
+    END IF;
+end;
+
+CALL buy();
+SELECT * FROM ticket; (兩個同時執行模擬超賣)
+----------------------------------------------------解決超賣問題(用交易方式 異動先在取出=>檢查)
+update Ticket SET quantity = 1 where tid = 1;
+drop procedure if exists buy1;
+create procedure buy1()
+BEGIN
+    DECLARE n int;
+    start TRANSACTION;
+    --update
+    update ticket set quantity = quantity - 1 where tid = 1;(start transaction裡面沒有自動commit)
+    do sleep(10);
+
+    -- query 
+    select quantity into n from ticket where tid = 1;
+   
+    -- check
+    if n >= 0 then 
+        commit;
+        select '買走一張票' as status;
+    else
+        rollback;
+        select '賣完了' as status;
+    END IF;
+end;
+
+CALL buy1();
+SELECT * FROM ticket; (兩個同時執行)
+
+交易需滿足
+A:原子性
+C:一致性
+I:隔離性
+D:持久性
+
+----------------------------交易未完成，就算其他異動刪掉資料，資料仍是之前讀取的資料(注意隔離等級)
+start TRANSACTION;
+    SELECT *, 'r1' from userinfo where uid = 'A01';
+    do sleep(10);
+    SELECT *, 'r2' from userinfo where uid = 'A01';
+    commit;
+---------------其他異動
+update userinfo 
+set password = '4444'
+where uid = 'A01';
+select * from userinfo
+where uid = 'A01';
+--------------------------------------------一個是null另一個是異動後的資料
+update userinfo set password = null where uid = 'A01';
+set TRANSACTION ISOLATION LEVEL read COMMITTED;
+
+start TRANSACTION;
+    SELECT *, 'r1' from userinfo where uid = 'A01';
+    do sleep(10);
+    SELECT *, 'r2' from userinfo where uid = 'A01';
+    commit;
+
+-----------------------------------------------預設隔離等級 兩個讀取都是null
+update userinfo set password = null where uid = 'A01';
+set TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+start TRANSACTION;
+    SELECT *, 'r1' from userinfo where uid = 'A01';
+    do sleep(10);
+    SELECT *, 'r2' from userinfo where uid = 'A01';
+    commit;
+------------------------------------------------髒讀取(a不是持久性資料，rollback資料有問題)
+update userinfo set password = null where uid = 'A01';
+set TRANSACTION ISOLATION LEVEL read UNCOMMITTED;
+
+start TRANSACTION;
+    SELECT *, 'r1' from userinfo where uid = 'A01';
+    do sleep(10);
+    SELECT *, 'r2' from userinfo where uid = 'A01';
+    do sleep(10);
+    select *, 'r3' from userinfo where uid = 'A01';
+    commit;
+
+
+start TRANSACTION;
+update userinfo set password = 'a';
+do sleep(10);
+rollback;
+select * from userinfo
