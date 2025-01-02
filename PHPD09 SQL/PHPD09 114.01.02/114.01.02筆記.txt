@@ -1,0 +1,181 @@
+repeatable read 第一次跟第二次獨到的一樣
+read committed 第一次跟第二次讀到的資料不一樣
+read uncommitted 讀到的是不確定的資料
+serializable 讀寫不會交錯 讀資料也會上S鎖
+
+
+start transaction;
+update userinfo set password = '1'
+where uid = 'A01
+-- do sleep(20);
+rollback;
+select 'dont';
+-----------------------------------
+start transaction;
+select * from userinfo 
+where uid = 'A01' for update;  -- lock in share mode(上S鎖，交易完成才解鎖)
+do sleep(10);
+commit;
+select 'done';
+------------------------------------
+最底層row A01 A02(S) A03 A04(X) A05
+IS IX (table紀錄再往上database還有紀錄) (加快資料庫效能)
+-------------------------------------
+drop procedure if exists buy2;
+update Ticket SET quantity = 1 where tid = 1;
+create procedure buy2()
+BEGIN
+    DECLARE n int;
+    start transaction
+    -- query 
+    select quantity into n from ticket where tid = 1 for update(上X鎖);
+    -- do sleep(10);
+    -- check
+    if n > 0 then 
+        --update
+        update ticket set quantity = quantity - 1 where tid = 1;(update的這行上X鎖，且自動commit)
+        select '買走一張票' as status;
+    else 
+        select '賣完了' as status;
+    END IF;
+    commit;
+end;
+----------------------------------------
+call buy2();
+select * from ticket; 模擬賣票情況
+-----------------------------------------模擬死結狀況(兩個交易永遠無法完成，提示錯誤訊息)
+update ticket set quantity = 1 where tid = 1;
+set transaction isolation level serializable;
+start transaction;
+	select * from ticket where tid = 1;
+	do sleep(10);
+	update ticket set quantity = quantity -1 where tid = 1;
+	commit;
+select * from ticket where tid = 1;
+----------------------------------------
+show processlist可以查看指令狀態
+kill id
+----------------------------------------製造超多資料
+drop procedure if exists test;
+create procedure test()
+BEGIN
+    declare n int DEFAULT 100000;
+    declare m int default 10000;
+    while n > 0 do 
+        insert into userinfo (uid, cname) values (concat('Z', n), concat('Z', n));
+        set n = n - 1;
+    end while;
+
+     while m > 0 do 
+        insert into house (address) values (concat('address', m));
+        set m = m-1;
+    end while;
+end;
+ 
+call test();
+select 'done';
+-------------------------------------------查看時間
+set @time = now();
+select * from userinfo where uid = 'A01';
+select TIMESTAMPDIFF(microsecond, @time, now());
+---------------------------------------------
+查詢建了索引速度是logn 沒有的話是線性倍增
+
+作為查詢條件的欄位要建索引(where後面的東西)
+
+關連線兩端的欄位(uid, hid)要建索引 
+
+(左邊有索引，右邊沒索引，從左邊找資料快，從右邊找資料慢)
+
+作為排序的欄位可建可不建
+----------------------------------------------
+參考索引對效能沒幫助
+
+每個資料表最多一個叢集索引(PK)
+
+二級索引可以建到資料表中的資料最大上限
+
+叢集索引控制資料(除了索引欄位的其他所有欄位)在硬碟中的順序(只有一種)
+
+二級索引的查詢需要找多次(超過節點裡面的資料，要去其他資料找)，叢集索引不用(只找一次)
+二級索引不要select後面放*
+
+某些資料庫可以在一般索引裡面建欄位(不用做二次查詢)
+
+查詢時叢集索引會自動用PK的順序(如果沒有建立順序)
+---------------------------------------------------查看有沒有吃到索引
+EXPLAIN
+select uid, cname, birthday
+from userinfo
+where uid = 'Z5000';
+(ALL和index最慢)
+-------------------------------------------------
+獨一;找到就不找了
+---------------------------------------------
+查詢用like，第一個字用百分比超慢
+等號左邊用函數也超慢
+---------------------------------------
+EXPLAIN
+SELECT *
+from userinfo
+-- where cname is null or cname = ''
+where ifnull(cname, '') = '';
+-------------------------------------
+explain 
+select * 
+from bill
+where year(dd) = 2024
+-- where dd between '2024/1/1' and '2024/12/31 23:59:59.999'
+----------------------------------------建立複合欄位(索引是建立一棵二元樹，建越多硬碟消耗越多)
+搜尋條件有主要欄位就可以吃到索引
+---------------------------------------逆向排序(顯示using filesort=>沒有吃到索引)
+explain 
+SELECT * 
+from userinfo
+where uid like 'Z0%'
+order by cname desc
+--------------------------------------順向排序
+explain 
+SELECT * 
+from userinfo
+where uid like 'Z0%'
+order by uid, cname
+---------------------------------------註解裡面的情況都可以吃到索引
+explain 
+select * 
+from userinfo 
+where uid like 'Z0%'
+order by uid, cname DESC
+
+/*
+uid(+), cname(+), pwd(+)
+uid(+), cname(+)
+uid(+)
+uid(-), cname(-)
+uid(-), cname(-), pwd(-)
+*/
+------------------------------------
+分成查詢或複合欄位的排序吃不吃得到索引
+------------------------------------指定使用哪一個索引，也可以用index()=>什麼索引都不用
+EXPLAIN
+select *
+from userinfo use index (uid)
+where uid = 'A01'
+--------------------------------------
+新增與刪除(索引建越多，效能越慢) truncate不維護索引，效能超快
+
+當資料庫用久了，使用最佳化索引(索引重建) 資料大量異動的時候使用
+----------------------------------------新增使用者帳號
+權限設定(資料表設置addressbook 資料設置select 結構show view或execute[只能用預存程序] 管理)
+-----------------------------------------
+有建立預存程序不能用匯出
+完整的備份要下指令C:\xampp\mysql\bin\mysqldump -u root  -B AddressBook -R -r backup.sql
+匯入備份的檔案
+
+2025/01/03
+上午 一組一個資料庫 伺服器名稱是對方的IP(連線別人的資料庫)
+下午 簡報 
+每個人建立一個預存程序
+
+登入=>從暢銷商品選取=>購物車=>訂單=>暢銷排行改變
+

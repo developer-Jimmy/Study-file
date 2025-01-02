@@ -59,7 +59,7 @@ DELIMITER $$
 
 CREATE procedure test1() 
 BEGIN
-	declare eof bool default false;
+    	declare eof bool default false;
     declare n int;
     declare total int default 0;
     
@@ -267,8 +267,8 @@ SELECT * FROM ticket;
 delimiter $$ => 看到$$才會送到資料庫引擎執行
 delimiter ; => 還原成分號結尾送到資料庫引擎執行
 -------------------------------------------------------模擬超賣(先取出=>檢查=>異動
-update Ticket SET quantity = 1 where tid = 1;
 drop procedure if exists buy;
+update Ticket SET quantity = 1 where tid = 1;
 create procedure buy()
 BEGIN
     DECLARE n int;
@@ -289,8 +289,8 @@ end;
 CALL buy();
 SELECT * FROM ticket; (兩個同時執行模擬超賣)
 ----------------------------------------------------解決超賣問題(用交易方式 異動先在取出=>檢查)
-update Ticket SET quantity = 1 where tid = 1;
 drop procedure if exists buy1;
+update Ticket SET quantity = 1 where tid = 1;
 create procedure buy1()
 BEGIN
     DECLARE n int;
