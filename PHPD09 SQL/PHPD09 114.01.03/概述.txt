@@ -1,0 +1,68 @@
+使用者資料表:PK帳號varchar(20), 密碼varchar(40), 姓名varchar(45)
+訂單:PK訂單編號int(10), 帳號varchar(20), 訂單總價格int(5), 訂單狀態
+訂單商品關聯表:PK商品編號int(10), 訂單編號int(10), 購買數量int(2), 商品總價格int(5)
+商品表:PK商品編號int(10), 商品圖片mediumblob, 商品數量int(2), 商品單價int(5)
+暢銷排行:PK暢銷編號int(2), 商品編號int(10), 銷售量
+購物車:PK帳號varchar(20), 商品編號int(10), 購物車總價格int(5), 商品單價int(5), 購買數量int(2)
+
+CREATE TABLE 使用者資料表 (
+    帳號 VARCHAR(20) PRIMARY KEY,
+    密碼 VARCHAR(40),
+    姓名 VARCHAR(45)
+);
+
+CREATE TABLE 訂單 (
+    訂單編號 INT(10) PRIMARY KEY,
+    帳號 VARCHAR(20),
+    訂單總價格 INT(5),
+    訂單狀態 VARCHAR(20),
+    FOREIGN KEY (帳號) REFERENCES 使用者資料表(帳號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE 訂單商品關聯表 (
+    商品編號 INT(10),
+    訂單編號 INT(10),
+    購買數量 INT(2),
+    商品總價格 INT(5),
+    PRIMARY KEY (商品編號, 訂單編號),
+    FOREIGN KEY (商品編號) REFERENCES 商品表(商品編號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (訂單編號) REFERENCES 訂單(訂單編號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE 商品表 (
+    商品編號 INT(10) PRIMARY KEY,
+    商品圖片 MEDIUMBLOB,
+    商品數量 INT(2),
+    商品單價 INT(5)
+);
+
+
+CREATE TABLE 暢銷排行 (
+    暢銷編號 INT(2) PRIMARY KEY AUTO_INCREMENT,
+    商品編號 INT(10),
+    銷售量 INT,
+    FOREIGN KEY (商品編號) REFERENCES 商品表(商品編號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE 購物車 (
+    帳號 VARCHAR(20),
+    商品編號 INT(10),
+    購物車總價格 INT(5),
+    商品單價 INT(5),
+    購買數量 INT(2),
+    PRIMARY KEY (帳號, 商品編號),
+    FOREIGN KEY (帳號) REFERENCES 使用者資料表(帳號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (商品編號) REFERENCES 商品表(商品編號)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
