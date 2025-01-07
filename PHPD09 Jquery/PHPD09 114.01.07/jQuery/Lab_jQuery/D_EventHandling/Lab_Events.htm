@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+
+        function console(obj)
+        {
+            $("#report").append(obj + "<br>");
+        }
+
+        $(document).ready(function () {
+            // 在這裏寫程式
+        
+            // A
+
+            // B
+            // $("#report").on(
+            //     "click",
+            //     function () { 
+            //         $("#report").html("Report:<br>");  
+            //     }  
+            // );
+            
+            
+            
+        });
+
+
+    </script>
+</head>
+<body>
+
+<img id="panda" src="panda1.jpg">
+
+<div id="report">Report:<br></div>
+<hr>
+<form action="" method="put" onsubmit="return false;">
+  <button type="button" id="btnTry">Try</button>
+  <button type="button" id="btnOff">Off</button>
+</form>
+<script>
+    // $('#btnTry').click(function() {
+    //     console('btnTry clicked');
+    // })
+
+    // $('selector').action();
+    // action:
+    //        text(), html(), append(), css(), addClass()
+    //        on('eventName', fn() )
+    //        off('eventName')
+
+    $('#btnTry').on('click', function() {
+        console('btnTry clicked var 2.0');
+    })
+    
+    $('#panda').on('mouseenter', function() {
+        console('panda mouse enter');
+        $("#panda").prop('src', 'panda2.jpg');
+    })
+
+    $('#panda').on('mouseleave', function() {
+        console('panda mouse leave');
+        $("#panda").prop('src', 'panda1.jpg');
+    })
+    $('#btnOff').on('click', function() {
+        console('off events');
+        $('#panda').off('mouseenter');
+        $('#panda').off('mouseleave');
+    })
+
+
+</script>
+</body>
+</html>

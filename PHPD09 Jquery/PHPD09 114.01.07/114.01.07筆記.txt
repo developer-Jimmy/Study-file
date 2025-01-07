@@ -1,0 +1,76 @@
+用陣列刪除並插入
+
+程式一行行檢查
+
+迴圈方法
+for (let i = 0; i < 5; i++) {
+    var newsItem = newsList[i];
+    var liText = `<li class="list-group-item">${newsItem.title} [${newsItem.ymd}]</li>`;
+    $("#latestNews").append(liText);
+}
+
+迴圈方法，但用字串長度來設定
+for (let i = 0; i < newsList.length; i++) {
+    var liTemplate = `
+        <li class="list-group-item">
+            ${newsList[i].title} [${newsList[i].ymd}]
+        </li>`;
+    $("#latestNews").append(liTemplate);
+}
+
+
+陣列forEach方法 
+newsList.forEach(function (item) {
+    var liTemplate = `
+        <li class="list-group-item">
+            ${item.title} [${item.ymd}]
+        </li>`;
+    $("#latestNews").append(liTemplate);
+})
+
+jquery的陣列each方法
+$.each(newsList, function(index, item) {
+                var liTemplate = `
+                <li class = "list-group-item">
+                        ${item.title} [${item.ymd}]
+                </li>`;
+                $('#latestNews').append(liTemplate);
+            })
+
+	    製造一個新的東西
+ 	    // $('selector').action();
+            // $(reference).action();
+            // $("<li></li>")
+            var liItem = $("<li>.</li>");
+            liItem.text("Lab Test");
+            liItem.addClass("list-group-item");
+            $("#latestNews").append(liItem);
+
+	    移除東西
+            // $("#latestNews").empty();(移除元素底下所有文字內容及子元素)
+            $("#latestNews li").remove();(除了empty原有行為，指定的selector也會移除)
+            $.each(newsList, function(index, item) {
+                var liTemplate = `
+                <li class = "list-group-item">
+                        ${item.title} [${item.ymd}]
+                </li>`;
+                $('#latestNews').append(liTemplate);
+            })
+
+            $("#latestNews").on("dblclick", function () {
+                // let liItem = $(this).remove();
+                let liItem = $(this).detach(); (連原本綁定裡面的事件一併移除)
+                // $("#latestNews").append(liItem);
+                liItem.appendTo("#latestNews");
+            })
+
+下載express
+預設profile裡面換成CMD
+app.js裡面的port從80換成3000
+
+get post or jquery的方法
+
+AJAX 非同步 javascript and xml或json與server做資料交換
+也可以用axios做資料交換
+            
+          
