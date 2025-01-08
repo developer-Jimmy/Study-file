@@ -1,0 +1,250 @@
+Jquery UI是plugin in
+
+<script>
+    var todoTable = [
+        {todoTableId: 1, title: "Job XXX", isComplete: 1},
+        {todoTableId: 2, title: "Job YYY", isComplete: 0},
+        {todoTableId: 3, title: "Job ZZZ", isComplete: 1}
+    ];
+    $("#jobList tbody").empty();
+    $.each(todoTable, function (index, item) {
+        var trHtml = `
+            <tr>
+                <td>
+                    ${item.title}
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled"
+                        type="checkbox" ${ (item.isComplete) ? "checked" : "" } />
+                </td>
+                <td>
+                    <span class="float-right">
+                        <a href="edit.html" class="btn btn-outline-primary btn-sm">編輯</a> |
+                        <a href="delete.html" class="btn btn-outline-danger btn-sm">刪除</a>
+                    </span>
+                </td>
+            </tr>
+        `;
+        $("#jobList").append(trHtml);
+    })
+</script>    
+-------------------------------------------------------------------
+<script>
+ 
+    var todoTable = [
+        {todoTableId: 1, title: "Job XXX", isComplete: 1},
+        {todoTableId: 2, title: "Job YYY", isComplete: 0},
+        {todoTableId: 3, title: "Job ZZZ", isComplete: 1}
+    ];
+    $.get("http://localhost:3000/todo/list", function (e) {
+        todoTable = e;
+        $("#jobList tbody").empty();
+        $.each(todoTable, function (index, item) {
+            var trHtml = `
+                <tr>
+                    <td>
+                        ${item.title}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled"
+                            type="checkbox" ${ (item.isComplete) ? "checked" : "" } />
+                    </td>
+                    <td>
+                        <span class="float-right">
+                            <a href="edit.html" class="btn btn-outline-primary btn-sm">編輯</a> |
+                            <a href="delete.html" class="btn btn-outline-danger btn-sm">刪除</a>
+                        </span>
+                    </td>
+                </tr>
+            `;
+            $("#jobList").append(trHtml);
+        }) //end of $.each
+    })
+</script>    
+
+字串零長度是1，仍會判定True
+所以要用JSON轉換
+----------------------------------------------------------------
+<script>
+    $("#okButton").on("click", async function () {
+        var dataToServer = {
+            title: $("#Name").prop("value"),
+            isComplete: ($("#IsComplete").prop("checked")) ? 1 : 0
+        }
+        // console.log(dataToServer);
+ 
+        await $.ajax({
+            type: "post",
+            url: "http://localhost:3000/todo/create",
+            contentType: "application/json",
+            data: JSON.stringify(dataToServer)
+        });
+ 
+        window.location = "/index.html";
+    })
+</script>
+---------------------------------------------------------------
+<script>
+    var todoTable = [
+        {todoTableId: 1, title: "Job XXX", isComplete: 1},
+        {todoTableId: 2, title: "Job YYY", isComplete: 0},
+        {todoTableId: 3, title: "Job ZZZ", isComplete: 1}
+    ];
+ 
+    $.get("http://localhost:3000/todo/list", function (e) {
+        todoTable = e;
+        $("#jobList tbody").empty();
+        $.each(todoTable, function (index, item) {
+            var trHtml = `
+                <tr>
+                    <td>
+                        ${item.title}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled"
+                            type="checkbox" ${ (item.isComplete) ? "checked" : "" } />
+                    </td>
+                    <td>
+                        <span class="float-right">
+                            <a href="edit.html" onclick="doEdit(${item.todoTableId})" class="btn btn-outline-primary btn-sm">編輯</a> |
+                            <a href="delete.html" class="btn btn-outline-danger btn-sm">刪除</a>
+                        </span>
+                    </td>
+                </tr>
+            `;
+            $("#jobList").append(trHtml);
+        }) //end of $.each
+    })
+    function doEdit(id) {
+        sessionStorage.setItem("todoTableId", id);
+    }
+</script>    
+----------------------------------------------------------
+
+<script>
+    var id = sessionStorage.getItem("todoTableId");
+    var url = `http://localhost:3000/todo/item/${id}`;
+    $.get(url, function (e) {
+        console.log(e)
+    })
+</script>
+----------------------------------------------------------
+<script>
+    var id = sessionStorage.getItem("todoTableId");
+    var url = `http://localhost:3000/todo/item/${id}`;
+    // {"todoTableId":1736307967371,"title":"Job X","isComplete":0}
+    $.get(url, function (e) {
+        $("#Name").prop("value", e.title);
+        $("#IsComplete").prop("checked", e.isComplete);
+        // if (e.isComplete) {
+        //     $("#IsComplete").prop("checked", true);
+        // }
+        // else {
+        //     $("#IsComplete").prop("checked", false);
+        // }
+    })
+</script>
+
+點一下讓使用者輸入資料，再把資料送出去
+
+<script>
+    var id = sessionStorage.getItem("todoTableId");
+    var url = `http://localhost:3000/todo/item/${id}`;
+    // {"todoTableId":1736307967371,"title":"Job X","isComplete":0}
+    $.get(url, function (e) {
+        $("#Name").prop("value", e.title);
+        $("#IsComplete").prop("checked", e.isComplete);
+        // if (e.isComplete) {
+        //     $("#IsComplete").prop("checked", true);
+        // }
+        // else {
+        //     $("#IsComplete").prop("checked", false);
+        // }
+    })
+ 
+    $("#okButton").on("click", async function () {
+        var dataToServer = {
+            todoTableId: id,
+            title: $("#Name").prop("value"),
+            isComplete: ($("#IsComplete").prop("checked")) ? 1 : 0
+        }
+       
+        await $.ajax({
+            type: "put",
+            url: "http://localhost:3000/todo/item",
+            contentType: "application/json",
+            data: JSON.stringify(dataToServer)
+        })
+ 
+        window.location = "/index.html";
+    })
+   
+</script>
+------------------------------------------------------
+<script>
+ 
+    var todoTable = [
+        {todoTableId: 1, title: "Job XXX", isComplete: 1},
+        {todoTableId: 2, title: "Job YYY", isComplete: 0},
+        {todoTableId: 3, title: "Job ZZZ", isComplete: 1}
+    ];
+ 
+    $.get("http://localhost:3000/todo/list", function (e) {
+        todoTable = e;
+ 
+        $("#jobList tbody").empty();
+ 
+        $.each(todoTable, function (index, item) {
+ 
+            var trHtml = `
+                <tr>
+                    <td>
+                        ${item.title}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled"
+                            type="checkbox" ${ (item.isComplete) ? "checked" : "" } />
+                    </td>
+                    <td>
+                        <span class="float-right">
+                            <a href="edit.html" onclick="doEdit(${item.todoTableId})" class="btn btn-outline-primary btn-sm">編輯</a> |
+                            <a href="delete.html" onclick="doDelete(${item.todoTableId})" class="btn btn-outline-danger btn-sm">刪除</a>
+                        </span>
+                    </td>
+                </tr>
+            `;
+ 
+            $("#jobList").append(trHtml);
+ 
+        }) //end of $.each
+ 
+    })
+    function doEdit(id) {
+        sessionStorage.setItem("todoTableId", id);
+    }
+   
+    function doDelete(id) {
+        sessionStorage.setItem("todoTableId", id);
+    }
+ 
+</script>  
+
+MySQL
+Web API Server(JS PHP ASP.NET):5000 
+get/todo/list get/todo/item/1 post/todo/create put/todo/edit delete/todo/delete/1
+Web Server:3000(HTML CSS JS)
+Browser(HTML CSS JS)
+CSR(Client side render)
+
+SSR(在伺服器那邊結合資料與畫面)
+
+總複習: 安裝(JQuery函式庫) => $('#item').css('a', 1).css('b', 2) [定位後採取動作)
+var item = $("<li></li>")
+item.text('xxx')
+item.addClass('')
+
+$('selector')
+$(referenece)
+$("<div></div>"
+
+html() text() append() prepend() prop('value', 'data') attr

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .task-description,
+        .list-group {
+            font-size: 1.25em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>AJAX Lab</h2>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#conceptTab">Concept</a></li>
+            <li><a href="#getTab">GET</a></li>
+            <li><a href="#postTab">POST</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div id="conceptTab" class="tab-pane fade in active">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="textinput">Your name:</label>
+                        <div class="col-md-4">
+                            <input name="txtTest" id="txtTest" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="textinput">Other data:</label>
+                        <div class="col-md-4">
+                            <input name="txtOther" id="txtOther" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="button1id" name="button1id" class="btn btn-danger"
+                                onclick='MakeRequestSync()'>Hello</button>
+                            <button type="button" id="button2id" name="button2id" class="btn btn-success"
+                                onclick='MakeRequestAsync()'>Hello (AJAX)</button> &nbsp;
+                            <span id='ResponseDiv'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of conceptTab -->
+
+            <div id="getTab" class="tab-pane fade">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="nameTextBox">Your name:</label>
+                        <div class="col-md-4">
+                            <input name="nameTextBox" id="nameTextBox" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="otherTextBox">Other data:</label>
+                        <div class="col-md-4">
+                            <input name="otherTextBox" id="otherTextBox" type="text" class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="getButton" name="getButton" class="btn btn-success">Hello --
+                                $.get()</button> &nbsp;
+                            <span id='reportSpan'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of getTab -->
+
+            <div id="postTab" class="tab-pane fade">
+                <h1></h1>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="firstNameTextBox">FirstName:</label>
+                        <div class="col-md-4">
+                            <input name="firstNameTextBox" id="firstNameTextBox" type="text"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="lastNameTextBox">LastName:</label>
+                        <div class="col-md-4">
+                            <input name="lastNameTextBox" id="lastNameTextBox" type="text"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="button1id"></label>
+                        <div class="col-md-8">
+                            <button type="button" id="postButton" name="postButton" class="btn btn-success">Hello --
+                                $.post(), $.ajax()</button> &nbsp;
+                            <span id='resultSpan'></span>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <!-- end of postTab -->
+
+        </div>
+    </div>
+
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script type='text/javascript' src='js/ajax_concept.js'></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $(".nav-tabs a").click(function () {
+                $(this).tab('show');
+            });
+
+
+
+            // $("#getButton").on("click", function () {
+            //     // var s = $("nameTextBox").val();
+            //     var s = $("#nameTextBox").prop("value");
+
+            //     var url = `http://localhost:3000/hello/${s}`;
+
+            //     $.get(url, function (dataFromServer) {
+            //         // var newsList = JSON.parse(dataFromServer);
+            //         $("#reportSpan").text(dataFromServer);
+            //     })               
+            // })
+
+            $("#getButton").on("click", async function () {
+                // 取得文本框中的值，並將其儲存在變數 `s` 中
+                var s = $("#nameTextBox").prop("value");
+                // 建立請求的 URL，使用變數 `s` 動態插入文本框中的值
+                var url = `http://localhost:3000/hello/${s})`;
+
+                // $.get(url, function (dataToServer) {
+                // 當請求成功完成後，這個函數會被呼叫，並且會把伺服器回傳的資料傳入參數 dataToServer
+                // console.log(dataToServer); // 打印伺服器返回的資料
+
+                // 將伺服器返回的資料顯示在頁面上的 #reportSpan 元素中
+                $("#reportSpan").text(dataToServer + "-- ver 3.2");
+                // 使用 Axios 發送 GET 請求，並等待伺服器返回結果
+                var result = await axios.get(url);
+                // console.log(result);
+
+                // 將伺服器回傳的資料顯示到頁面上的 `#reportSpan` 元素中，並附加版本號
+                $("#reportSpan").text(result.data + "-- ver 3.2");
+            })
+
+
+            // prop寫法
+            // $("#postButton").on("click", async function () {
+            //     var dataToServer = {
+            //         firstName: $("#firstNameTextBox").val(),
+            //         lastName: $("#lastNameTextBox").prop("value")
+            //     }
+            //     $.post("/test", dataToServer,
+            //         function(e) {
+            //             $("#resultSpan").text(e);
+            //         }
+            //     )
+            // })
+
+            // 當用戶點擊 #postButton 按鈕時，觸發這個事件處理器
+            $("#postButton").on("click", async function () {
+                 // 從頁面上的文本框取得使用者輸入的資料並建立 dataToServer 物件
+                var dataToServer = {
+                    firstName: $("#firstNameTextBox").val(), // 取得名字文本框的值
+                    lastName: $("#lastNameTextBox").val() // 取得姓氏文本框的值
+                }
+                 // 使用 axios 發送 POST 請求
+                var p =
+                    axios.post("http://localhost:3000/test2", // 請求的 URL
+                        JSON.stringify(dataToServer), // 將資料轉換為 JSON 字串發送給伺服器
+                        {
+                            headers: { // 設定 HTTP 請求的標頭
+                                "Content-type": "application/json", // 設置資料格式為 JSON
+                                "prefix": "Teacher"  // 自訂的請求標頭，用來標識這是「教師」的資料
+                            }
+                        }
+                    )
+                // 假設這裡可以根據需要進一步處理 p，例如使用 p.then() 或 await 來處理回應
+                // var p2 = axios.post("anotherUrl", ...)
+                // 設定一個變數 result 來儲存伺服器回應資料
+                var result
+                $("#resultSpan").text(result.data + " -- ver 3.3");
+                // firstName=Jermy&lastName=Lin&zip=404&salary=80000&teams=...
+                // { ..., "zip": "404", "salary": 80000, "teams": [...] }
+                // 使用 jQuery 的 $.ajax 方法發送另一個 POST 請求
+                var result = await $.ajax({
+                    type: "post", //post, get, put, delete
+                    url: "http://localhost:3000/test2",
+                    // contentType: "application/json",
+                    headers: {
+                        "prefix": "Mr.", // 自訂的請求標頭，用來標識這是「先生」的資料
+                        "content-type": "application/json" // 設置資料格式為 JSON
+                    },
+                    data: JSON.stringify(dataToServer),  // 將資料轉換為 JSON 字串發送
+
+                });
+                // 當第二個 POST 請求完成後，將伺服器返回的資料顯示在 #resultSpan 元素中
+                // 這裡假設伺服器回應的是一個簡單的資料，直接將結果顯示
+                $("#resultSpan").text(result + " -- ver 2.6"); // 顯示伺服器返回的資料並附加版本號
+
+                // $.pos("http://localhost:3000/test", dataToServer,
+                //     function (e) {
+                //         $("#resultSpan").text(e);
+                //     }
+                // )
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
