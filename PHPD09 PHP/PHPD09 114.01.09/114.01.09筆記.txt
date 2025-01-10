@@ -1,0 +1,33 @@
+cline(browser) html css JS request(輸入資訊url產生?與name的值發送請求) => web server (apache) 
+			   <= response (傳遞的是原始碼[不包含檔名])
+form的 action 可以指派要處理value的地方
+mysqld(伺服器端)
+
+httpd => d是daemon(背景程式)看不到卻有運作
+
+config第一個是組態檔
+
+directoryindex 會依序找檔案(index) 沒有找到會跑出預設首頁
+
+php.ini裡面可以更改 display_error on 或 off決定顯不顯示錯誤訊息
+
+進入htdocs裡面寫code
+
+(document)都是字串
+
+php變數嚴格區分大小寫
+
+php不能用+來代表字串相加，而是用.(小數點) 數學運算仍是用+ 關鍵是運算符號
+
+""雙引號會自動將變數的賦值顯示
+''單引號只會輸入什麼顯示什麼
+
+雙引與單引可以控制跳脫字元 (\n) 分成瀏覽器畫面與原始碼
+
+字串裡面寫變數可以大括號(與其他字串連在一起不造成錯誤)
+
+method可以改掉url的傳遞方式 post的話，再另外一邊的程式也要改成$_POST
+
+下載Talend API外掛程式
+GET查詢 POST新增 PUT修改 DELETE刪除
+傳遞方法 url headers body
