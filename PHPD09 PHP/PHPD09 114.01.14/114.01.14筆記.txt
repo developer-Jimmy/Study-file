@@ -1,0 +1,51 @@
+可讀 可寫 可執行 rwx 改名或刪掉是由資料夾權限管理
+
+網頁上傳資料夾 w權限即可
+
+resource(3) of type (stream) => 串流 
+
+PHP <======> 目標檔案(串流)
+
+'r'指標在檔案的一開始處
+'r-'
+'w' 會把原來的資料砍光光在寫，檔案不存在會企圖建立
+'w-'可讀可寫
+'a' 唯寫，補在後面，檔案在會企圖建立
+'a-'
+
+private關鍵字(封裝)
+extends(繼承)觀念
+protected讓子類別也能存取
+
+cd c:\xampp\mysql\bin
+mysql -u root (省略localhost) -p
+
+一句話去 一句話回來是通訊協定(CMD)
+
+show databases;
+
+create database iii;
+
+show databases;
+
+use iii;
+
+create table t1 (id int, f1 varchar(100));
+
+show tables;
+
+desc t1;
+
+INSERT INTO t1 (id, f1) VALUES (1, 'Jimmy');
+
+SELECT * FROM t1;
+----------------------
+
+public 類似 var
+
+class預設類別(extends Object)--標準類別
+------------------------------------------
+
+敘述句加上? 防止隱碼攻擊，在prepare傳到一個變數，再用變數資料去綁定參數並執行。
+
+後端處理查詢就好，不要處理數據
