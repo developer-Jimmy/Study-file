@@ -1,0 +1,40 @@
+講義密碼:php5347
+下載composer
+php.ini 擴充zip開啟
+
+
+Mac / UNIX 需要修改專案下特定檔案具可寫入權限
+– sudo chown -R daemon storage bootstrap/cache database
+
+X網址進入Xcontroller由路由決定(routed/web.php)
+
+name?資料型態可以放null => nullable
+{$name='World'}預設為World
+
+路由可以包含所有MVC，但通常不會這樣做
+---------------------------------------
+開啟 routes/web.php
+Route::get('/hello', function() {
+ return 'Hello, Laravel!'
+})
+網址輸入
+– http://localhost/[專案名稱]/public/hello
+
+----------------------------------------------------加減法
+Route::get('/{op}/{a}/{b}', function($op, $a, $b) {
+    if($op == 'add'){
+        return $a + $b;
+    }
+    if($op == 'sub') {
+        return $a - $b;
+    }
+});
+
+Route::view('/compute', 'compute', ['a'=>'', 'b'=>'', 'result'=>'']);一開始設定空值
+並免抓不到參數引發錯誤
+
+php artisan make:controller ComputeController建立
+
+可以建立資料庫的路由(查詢)
+
+return redirect::route('/querynew/' . $uid);路由轉向
