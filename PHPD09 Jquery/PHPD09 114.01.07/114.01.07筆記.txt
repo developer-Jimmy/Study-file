@@ -68,9 +68,6 @@ $.each(newsList, function(index, item) {
 預設profile裡面換成CMD
 app.js裡面的port從80換成3000
 
-<<<<<<< HEAD
-get post or jquery的方法
-=======
 		 get的方法
 	 	  $("#getButton").on("click", function() {
                  var s = $("#nameTextBox").val();
@@ -109,7 +106,6 @@ get post or jquery的方法
                  })
             	 })
 
->>>>>>> 09050ca4683c8ed786d59fe90d2512a72fe2e89f
 
 AJAX 非同步 javascript and xml或json與server做資料交換
 也可以用axios做資料交換
