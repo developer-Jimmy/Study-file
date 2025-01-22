@@ -68,7 +68,48 @@ $.each(newsList, function(index, item) {
 預設profile裡面換成CMD
 app.js裡面的port從80換成3000
 
+<<<<<<< HEAD
 get post or jquery的方法
+=======
+		 get的方法
+	 	  $("#getButton").on("click", function() {
+                 var s = $("#nameTextBox").val();
+                 $.get("/hello/" + s, function(e) {
+                     $("#reportSpan").text(e);
+                 })
+            	 })
+
+		 post的方法
+		   $("#postButton").on("click", function() {
+                 var dataToServer = {
+                     firstName: $("#firstNameTextBox").val(),
+                     lastName: $("#lastNameTextBox").val()
+                 }
+                 $.post("/test", dataToServer,
+                     function(e) {
+                         $("#resultSpan").text(e);
+                     }
+                 )
+            	 })
+		 
+		 ajax方法
+		     $("#postButton").on("click", function() {
+                 var dataToServer = {
+                     firstName: $("#firstNameTextBox").val(),
+                     lastName: $("#lastNameTextBox").val()
+                 }
+                 $.ajax({
+                     type: "post",
+                     url: "/test",
+                     data: JSON.stringify(dataToServer),
+                     contentType: "application/json",
+                     success: function(e) {
+                         $("#resultSpan").text(e);
+                     }
+                 })
+            	 })
+
+>>>>>>> 09050ca4683c8ed786d59fe90d2512a72fe2e89f
 
 AJAX 非同步 javascript and xml或json與server做資料交換
 也可以用axios做資料交換

@@ -1,0 +1,62 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function search(){
+        // 取得輸入框中的 Order ID 並組成 URL
+        let url = 'Jimmy52.php?orderId=' + $('#orderId').val();
+        // 使用 jQuery 的 get 方法發送請求，並處理回應
+        $.get(url,function(data,status){
+            // 如果請求成功
+            if (status == 'success'){
+                // 輸出回應資料到控制台，便於除錯
+                console.log(data);
+                // 檢查回應中的 error 是否為 0（表示查詢成功）
+                if (data.error == 0){
+                    // 填充員工 ID 和姓名
+                    $('#eid').html(data.eid);
+                    $('#ename').html(data.ename);
+                    // 填充客戶 ID 和名稱
+                    $('#cid').html(data.cid);
+                    $('#cname').html(data.cname);
+                    // 填充訂單日期
+                    $('#date').html(data.date);
+                    // 清空表格內容
+                    $('#table').empty();
+                    // 使用 each 遍歷詳細資料（data.detail）
+                    $(data.detail).each(function(i, row){
+                        // 為每一行資料創建一個表格行並填充資料
+                        $('#table').append(
+                            '<tr>' +
+                            '<td>' + (i+1) + '</td>' +
+                            '<td>' + row.pname + '</td>' +
+                            '<td>' + row.price + '</td>' +
+                            '<td>' + row.qty + '</td>' +
+                            '<td>' + row.sum + '</td>' +
+                            '<tr>'
+                        );
+                    });
+                }else{
+                    // 如果查詢返回錯誤，則清空表格
+                    $('#table').empty();
+                }
+
+            }
+        });
+    }
+
+</script>
+<meta charset="UTF-8" />
+<h1>Jimmy Company</h1>
+<hr />
+<!-- 用來輸入訂單 ID 的輸入框 -->
+Order ID: <input id="orderId" />
+<!-- 用來觸發查詢的按鈕 -->
+<input type="button" onclick="search()" value="Search" />
+<hr />
+<!-- 顯示員工 ID 和姓名 -->
+Employee ID: <span id="eid"></span> <span id="ename"></span><br />
+<!-- 顯示客戶 ID 和名稱 -->
+Customer ID: <span id="cid"></span> <span id="cname"></span><br />
+<!-- 顯示訂單日期 -->
+Order Date: <span id="date"></span><br />
+<!-- 顯示訂單詳細資料的表格 -->
+<table id="table" width="100%" border="1"></table>

@@ -1,0 +1,11 @@
+介面 對應 相應規格
+
+疊代器 (一個一個抓出來)
+
+fetch object
+fetch_array(處理欄位名稱name-ok)
+
+prepare(結合前端)
+
+$().load用在一個元件身上
+$.get $.post $.ajax用在很多東西

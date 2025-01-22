@@ -1,0 +1,24 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    function checkAccount() {
+        url = 'checkAccount.php?account=' + $('#account').val();
+        $('#mesg').load(url);
+    }
+    function checkForm() {
+
+        return true;
+    }
+</script>
+<meta charset="UTF-8">
+<h1>Register Page</h1>
+<hr>
+<form action="Jimmy43.php" method="post" 
+    enctype="multipart/form-data"
+    onsubmit="return checkForm();">
+    Account:  <input name="account" id="account" onblur="checkAccount()"><br>
+    <span id="mesg"></span><br>
+    Password: <input type="password" name="passwd"><br>
+    Realname: <input name="realname"><br>
+    Icon: <input type="file" name="icon"><br>
+    <input type="submit" value="Register">
+</form>

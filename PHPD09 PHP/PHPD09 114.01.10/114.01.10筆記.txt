@@ -1,0 +1,75 @@
+發出請求到後端之前更新url在送到後端 後端回應請求再傳回值
+
+<?php
+    $x = $y = $r = $op = ''; (預設值為空白)
+    if (isset($_GET['x'])) {
+        $x = $_GET['x'];
+        $y = $_GET['y'];
+        $op = $_GET['op'];       
+        switch($op){
+            case '1' : $r = $x + $y; break;
+            case '2' : $r = $x - $y; break;
+            case '3' : $r = $x * $y; break;
+            case '4' : $r = 
+		$r1 = (int)($x / $y);
+		$r2 = $x %y;
+		$r = "{%r1} ...... {$r2}";
+ 		break;
+        }
+    }      
+?>
+
+<form action = "Jimmy04.php" method="get">
+    <input name = "x" value='<?php echo $x; ?>'>
+    <select name = "op" value='<?php echo $op ; ?>'>
+        <option value="1" <?php echo $op == '1'?'selected':'';?>>+</option>
+        <option value="2" <?php echo $op == '2'?'selected':'';?>>-</option>
+        <option value="3" <?php echo $op == '3'?'selected':'';?>>x</option>
+        <option value="4" <?php echo $op == '4'?'selected':'';?>>/</option>
+    </select>
+    <input name = "y" value='<?php echo $y; ?>' >
+    <input type="submit" value = "=">
+    <span><?php echo $r; ?></span>
+</form>
+
+---------------------------------------------------程式不是越短越好
+
+<?php
+    $year = 2025;
+   
+
+    if($year % 400 ==0 || ($year % 4 == 0 && $year % 100 != 0)){
+        $isLeap = true;
+    }else{
+        $isLeap = false;
+    }
+
+    if($year % 4 ==0){ (因為大部分都是非閏年，因此快速篩選掉)
+        if ($year % 100 == 0){
+            if ($year % 400 == 0){
+                $isLeap = true;
+            }else {
+                $isLeap = false;
+            }
+            }else {
+                $isLeap = true;
+            }
+        }else{
+            $isLeap = false;
+        }
+    $mesg = $isLeap?'潤':'平';
+    echo "{$year} 是 ${mesg} 年";
+?>
+---------------------------------------------------
+for不只是迴圈
+第一步: 進入for裡面執行第一個敘述
+第二步: 進入第二個敘述判斷條件
+第三步: 條件true執行中括號裡面的東西，false直接跳出去
+第四步: 執行第三個敘述
+第五步: 進入第二個敘述判斷條件
+
+電腦處理記憶體只有線性的放式，沒有空間的概念 (array陣列不等於matrix矩陣)
+
+php的陣列(鞋櫃可以放碗) 陣列包含矩陣 陣列可以用樹狀圖呈現維度
+
+洗牌可以先 與最後一個交換，再抽出去最後一個

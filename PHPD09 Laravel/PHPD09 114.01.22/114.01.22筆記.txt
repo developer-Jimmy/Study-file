@@ -1,0 +1,117 @@
+DB_CONNECTION=mariadb
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=AddressBook
+DB_USERNAME=root
+DB_PASSWORD=
+
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=file
+
+CACHE_STORE=file
+CACHE_PREFIX=
+.env設定(orm專案)
+---------------------query builder
+Route::get('/', function () {
+    $users = DB::table('userinfo')
+        ->leftJoin('Live', 'userinfo.uid', '=', 'Live.uid')
+        ->leftJoin('House', 'Live.hid', '=', 'house.hid')
+        ->where('userinfo.uid', 'A06')
+        ->orderBy('userinfo.uid', 'desc')
+        ->get();
+    print('<pre>');
+    print_r($users);
+    print('</pre>');
+    // foreach($users as $user) {
+        // print($user->cname . '<br>');
+    // }
+});
+------------除錯用
+->dump(); 列出更詳細
+->dd();
+-------------------
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class userinfo extends Model
+{
+    protected $table = 'userinfo';
+    protected $primaryKey = 'uid'; (單一欄位主索引)
+    protected $keyType = 'string';
+    public $timestamps = false;  (預設是true) 這邊因為時間少兩個欄位->false
+}
+------------------------------因為之前有設PK，因此內部會處理掉 XXX.uid = live.uid等等
+function lives(): BelongsToMany {
+        return $this->belongsToMany(
+            'Live',
+            'uid', // Live.uid
+            'hid'  // Live.hid
+        );
+    }
+--------------------------
+HasManyThrough 用在三個資料表關聯(需注意順序)
+ Bill::class,
+        Phone::class,
+        'hid', // phone.hid 
+        'tel', // bill.tel  
+        'hid', // house.hid 
+        'tel'  // phone.tel 
+-----------------------------下載api
+php artisan install:api
+----------------------------更新資料
+Route::post('/update', function(Request $request){
+    
+});
+一定用post(用postman進行測試)
+---------------
+前端fetch api 拿到1或0判斷是否修改成功
+
+-------------------------------------------驗證
+創建request->建立表單->產生controller->設定路由->錯誤處理
+表單值設定old防止數據洗掉
+
+可以在request內部設定錯誤後的路由切換地點
+
+-------------------------------------------密碼驗證(focus帳號->密碼 fetch檢查帳號是否重複)
+ public function rules(): array 
+    {
+        return [
+            'uid' => 'required|min:3|max:5|unique:userinfo,uid',
+            'password' => [
+                'required', 
+                'confirmed', 
+                Password::min(4)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
+            ]
+        ];
+    }
+----------------------------檔案儲存(檔案不放在資料庫，放到storage)資料庫可以存影片的
+hashName或originalName
+class FormController extends Controller
+{
+    function __invoke(Request $request) {
+        // $uid  =$request->uid;
+        // print($uid);
+        if ($request->hasFile('photo')) {
+            $photo = $request->photo;
+            // $photo->store('documents');  --會有資安問題 例如作業系統會當機的特殊符號
+            $photo->storeAs('documents', $photo->hasName()); --會有hashName雜湊值
+            print('done');				
+        }else {
+            print('no file upload');
+        }
+    }
+}
