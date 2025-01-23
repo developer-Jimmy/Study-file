@@ -1,0 +1,57 @@
+laravel new login建立專案
+
+建立購物車(登入才可以進入)
+
+migration可以創建一個新增欄位至資料庫的指令
+
+models->user.php(設定$fillable變數)
+resources->views->profile->update-profile-///(新增電話號碼的輸入框)
+
+fillable及驗證(讓資料自動流入資料庫)
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;打開這個會寄信到email進行驗證
+
+profile->edit設定要include哪些組件
+
+controller->profileController 控制update
+
+----------------------
+驗證直接通過，會把資料庫的大頭照洗掉
+
+所以，要改成動態驗證
+
+鍵盤上打出來的叫做string 打不出來的叫做binary(256->base64)
+img吃base64 因此資料庫存base64很方便
+
+-----------------------------------設定後即可寄信(要記得去user.php開啟寄信)
+MAIL_MAILER=smtp(mail.php裡面的設定)
+MAIL_SCHEME=null
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=g12347825@gmail.com
+MAIL_PASSWORD=rrhshevdckbpuhna
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="g12347825@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+---------------------------session
+session_lifetime 設定-1永久有效
+---------------------------cookie
+(web.php)routes
+use Illuminate\Support\Facades\Cookie;
+
+Route::get('/setcookie', function() {
+    Cookie::queue('name', 'David', 1);
+});
+-------------------------------設定多國語系
+php artisan lang:publish
+
+Route::get('/locale', function() {
+    return __('locale.button');
+});
+----------------------------json
+tw.json/en.json建立兩個檔案
+Route::get('/locale/{locale?}', function($locale='en') {
+    App::setLocale($locale);
+    return __('hello');
+});
+
