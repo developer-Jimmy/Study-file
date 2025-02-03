@@ -1,0 +1,43 @@
+class Ball{
+    $x, $y, $r, $c, $vx, $vy, calc(), paint()
+}
+for (i = 1 to 50) {
+    $obi = new Ball();
+    ballList.push($obj);
+}
+
+50 times/second:
+    for( i = 1 to 50) {
+        each_ball.calc();
+        each_ball.paint();
+    }
+重用>重寫
+繼承當重用來用有極限
+組合來代替繼承
+
+doc 
+    javascript_json
+    (如何以javascript存取json資料)
+
+#javascript
+#json
+
+keyword: javascript json
+----------------------------
+prod.php (insert into Cart/redirect cart.php)
+cart.php 
+batchShop.php(insert into Cart x3/ redirect to cart.php)
+----------------------------
+下載starUML
+class與class之間除了繼承還有互動關係
+interface介面
+arrgegation聚合(會影響生命週期) composition組合
+dependency依賴 generalization普遍化
+----------------------------
+物件定義屬性才不會報錯，($obj->place = "Taichung")
+__construct建造物件 
+__destruct如果值不存在或為空則摧毀物件
+----------------------------
+值不存在會落入__set __get
+本來有設定值->construct去掉->__set->__get
+
