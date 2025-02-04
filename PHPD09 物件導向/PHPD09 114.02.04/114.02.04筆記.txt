@@ -1,0 +1,32 @@
+用物件導向製作MVC架構
+(網址上製作一個http:物件名稱/物件方法/參數的架構)
+(member/login或忘記密碼等等)
+
+controller接收使用者資料
+->controller傳給model去資料庫確認是否正確
+->view正確或錯誤的畫面傳給使用者
+--------------------------------
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+^開始$結尾 .世界上所有的字元 *任意數量(0以上)
+找不到的檔案交給index處理
+--------------------------------
+require_once相當於貼上，因此不用../
+// A include B
+// B include C 
+--------------------------------
+先進行抽象設定，在設定類別，在開始new物件->方法
+先用函式製作方法->implements->new物件測試
+--------------------------------try catch
+A方法 用try在裡面包if扔出$err，再由catch接收$err傳回訊息
+如果try結束，沒有錯誤傳回yes。
+B方法 在迴圈內用if檢查
+--------------------------------
+方法一(不建議)
+表單送資料(GET request)->isset(okbutton)->OK
+
+方法二(建議)
+或者session儲存post資料並執行動作，換下一頁
+(post自己比較方便，不用再傳回去)
