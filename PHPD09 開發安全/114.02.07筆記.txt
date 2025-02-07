@@ -1,0 +1,50 @@
+記得資料備份 外接硬碟備份
+// $id = "derek";
+	// $id = "derek' --" 提前結束，後續架空
+	// select * from member where id = 'derek' --' and password = '%s'
+	//									$id
+
+// select ProductID, ProductName, UnitPrice from Products where UnitPrice
+	// between 10 and 20; update ...; -- order by UnitPrice
+	// 				  20
+	// 				  20; update ...; -- 參數另外帶入指令(像是挾持高官進橋)
+
+隱碼攻擊原因 (union嘗試隱碼漏洞)
+1.沒有限制查詢欄位長度
+2.沒有檢查輸入欄位的內容與格式
+3.採用動態組合字串的程式寫法
+4.錯誤訊息洩漏資料庫結構與程式內容(google的帳號錯誤會說明沒有此帳號)
+可以設置異常狀況檢查->錯誤登入好幾次
+5.連線資料庫的帳號權限過高
+
+加密與解密
+
+const METHOD = 'aes-256-ctr';
+類別名稱::encrypt(參數)  ->加密
+
+只掛入需要的Extension模組
+檢視並且設定資料夾與檔案的夠用且最低存取權限
+運算資源管控與DoS(有點像餐廳最低消費)
+停用危險的PHP函數
+
+date.timezone=Asia/Taipei
+exoise_php關掉，否則php版本被看光
+display_error = on
+error_reporting = E_ALL
+設定error_log目錄
+安裝並啟用XDebug
+進行單元測試 整合測試 壓力測試 紀錄與檢討效能指標
+產品真正執行環境display_errors=Off
+
+Same-origin Policy(SOP同源政策)
+最底層是XmlHttpRequest 從一號伺服器拿東西，不會從二號伺服器拿東西
+伺服器名稱不同視為跨域
+範例:http//127.0.0.1/Lab/Demo_SameOriginPolicy/getTime.php
+	http//localhost不會允許
+header("Access-Control-Allow-Origin: $origin");放綠燈就會通行
+
+Origin:domainA.com ->伺服器->access-control-allow-origin
+
+API請求常常發生
+
+準備資安事件的報告
