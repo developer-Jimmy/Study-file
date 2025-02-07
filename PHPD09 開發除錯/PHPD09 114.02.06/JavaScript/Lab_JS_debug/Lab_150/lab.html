@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="report"></div>
+    <script>
+        var x = 100;
+        var y = x;
+        x = 200;
+        
+        var x = {
+            data: 100
+        }
+        var y = x;
+        x.data = 200;
+        report.innerText = y.data;
+    </script>
+    
+</body>
+</html>

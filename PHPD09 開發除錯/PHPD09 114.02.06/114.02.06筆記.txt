@@ -1,0 +1,81 @@
+console.log檢查程式錯誤在哪裡
+如果程式出錯
+範例:
+if(result == 45) {
+                debugger;
+            }
+這個是設置中斷點，可以觀察到出錯情況
+
+另外一種方法:
+for (i = 1; i < upperValue; i++) {
+            result = result + i;
+            console.assert(
+                result != 45,  
+                "when i = " + i + ", we got wrong value.");
+        }
+-------------------------------------
+ctx.drawImage(imgRabbit, 0, 0);圖片還沒加載完成，因此沒有看到圖片
+window.onload = init;使用這段和function包裹程式
+-------------------------------------
+var data = [0, 10, 20, 30, 40, 50, 60];如果用splice
+刪掉第一個0，索引1會變成20，再來40以及60
+因此要倒過來刪掉
+-------------------------------------
+var report = "1 + 2 + 3 + ... + 10 = " + sum1ToN(n);
+    // 改成answer
+    
+    report.innerHTML = report;
+變數名稱重複，改成answer
+let不可能重複變數
+-------------------------------------建置環境
+vscode下載php debug
+至https://xdebug.org/wizard 將php.info內的訊息 ctrl+a ctrl+c
+至框框內，接著下載檔案貼至php ext 內部將檔名改成php_xdebug.dll
+接著到php.ini裡面於最底部貼上
+[Xdebug]
+zend_extension = "C:\xampp\php\ext\php_xdebug.dll"
+;zend_extension = xdebug
+xdebug.mode = debug
+xdebug.start_with_request = yes
+
+vscode點選run and debug 進入php檔案(listen for Xdebug)
+完成後即可開啟
+-------------------------------------
+<?php
+$a = 20;
+function myfunction($b) {
+	//print "a=$a<br>";
+	$a = 30;
+	//print "a=$a<br>";
+	global $a, $c;
+	//print "a=$a<br>";
+	return $c = ($b + $a);
+}
+print myfunction(40) + $c;
+
+?> 答案是120
+-------------------------------------
+網頁結束後，物件即消滅(session 也可能被清過很多次)
+session_start();必須在require_once之後，因為要先知道類別的結構
+-------------------------------------
+<?php
+  $x = 3;
+  if ($x >= 10 && foo()) 沒有執行foo()
+    echo "yes";
+  else
+    echo "no";
+    
+  echo "<hr>";
+
+  $x = 3;
+  if ($x >= 10 & foo()) 有執行foo()
+    echo "yes";
+  else
+    echo "no";
+    
+function foo()
+{
+   echo "foo() is running.<br>";
+}
+
+?>
