@@ -1,0 +1,56 @@
+hosts檔案 用系統管理員權限新增兩個網域 (入侵工具想改hosts檔案)
+如果有開綠燈，即可連上新網域
+
+駭客 -> 檢查軟體版本 -> 檢查是否付費版本
+<?php
+header("Access-Control-Allow-Origin: *"); 
+
+if(!) { // JMP *** ，通常它的目的是檢查某個條件。條件不成立時（如 !），
+就會退出腳本執行。
+exit; 表示如果條件不符合，就會停止 PHP 腳本的執行，防止後續代碼繼續運行。
+JMP 很可能是用來標識或是標註該位置，
+這可能是攻擊者在寫入漏洞或是插入某種跳轉機制
+（如程式跳過某些檢查或繞過防範措施）-比如威力導演的大門認證
+}
+***
+第一招換成 127.0.0.1 www.a.com.tw
+-----------------------------------
+XSS
+<meta http-equiv="refresh" content="1;URL=page2.php">
+輸入後網頁會插入這段程式碼 -> 會換頁
+
+<script></script>
+如果瀏覽器送出&lt -- 將腳本失效
+-----------------------------------
+JSONP的運作
+將json資料傳回
+-----------------------------------
+CSRF (像是文章中留下轉帳程式)
+使用者登入後，伺服器傳回憑證(且沒有登出)
+惡意駭客的文件(php假要求)輸入進受害使用者的電腦，開始進行轉帳
+-----------------------------------
+<body>
+    // 誘導頁
+	<canvas id="canvas" width="400" height="500">
+    </canvas>
+    // 受害頁
+<!-- <iframe id="invisibleFrame" sandbox="allow-same-origin" -->
+<iframe id="invisibleFrame" 
+    src="login.php" 
+    width="400" 
+    height="300">
+</iframe>
+</body>
+->防禦的方法只要寫一段程式碼(如果最上層不是login，最上層網址改成login)
+<script>
+    if (top != self) {
+        top.location.replace(self.location.href);
+    }
+</script>
+-----------------------------------
+webcam(載入資源，讓攝像頭可以看)
+canvas -> 攝像頭 -> okButton -> 用繪圖引擎寫出圖片
+-----------------------------------
+PHP 使用 cURL 存取動態網頁
+-----------------------------------
+canvas畫圖

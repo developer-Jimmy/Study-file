@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+ 
+    <canvas width="400px"
+        height="300px" id="myCanvas"
+        style="border:1px solid #000000;">
+    </canvas>
+ 
+ 
+    <script>
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        ctx.strokeStyle = "#0000FF";
+        ctx.strokeRect(0, 0, 200, 50);
+ 
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 35, 200, 15);
+ 
+        ctx.font = "24px Arial italic";
+        ctx.textBaseline = "top";
+        ctx.textAlign = "center";
+        ctx.fillText("Signin Seal", 100, 5);
+        // 在黑底區塊描出黑底白字文字
+        ctx.font="8px Arial italic";
+        ctx.textBaseline = "top";
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText("Powered by HTML5", 100, 35);
+ 
+        // 400
+        // 300
+        ctx.moveTo(200, 0);
+        ctx.lineTo(200, 300);
+        ctx.stroke();
+        ctx.moveTo(0, 150);
+        ctx.lineTo(400, 150);
+        ctx.stroke();
+        // 中心: 200, 150
+        //ctx.strokeStyle = "black";
+        // ctx.fillStyle = "black";
+        var grd = ctx.createLinearGradient(200, 150, 200, 150 + 64);
+        grd.addColorStop(0, "white");
+        grd.addColorStop(1, "#0000EE");
+        ctx.fillStyle = grd;
+        ctx.font = "64px Arial";
+        ctx.textBaseline = "top";  // top, middle, bottom
+        ctx.textAlign = "left";  // left, center, right
+        ctx.fillText("Hello", 200, 150);
+        // ctx.strokeText("Hello", 200, 150);
+ 
+        // source  --> dest.
+        ctx.globalCompositeOperation = "destination-over";
+        var grd = ctx.createLinearGradient(0, 0, 0, 50);
+        grd.addColorStop(0, "white");
+        grd.addColorStop(1, "#0000EE");
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, 200, 50);
+ 
+ 
+    </script>
+   
+</body>
+</html>
