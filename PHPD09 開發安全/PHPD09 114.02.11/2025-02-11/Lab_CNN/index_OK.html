@@ -1,0 +1,231 @@
+﻿<html>
+<head>
+    <title>Lab</title>
+    <!-- Bootstrap：加入樣式與功能支援 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!-- TensorFlow.js：用於建立與訓練模型 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.0"></script>
+
+    <!-- MNIST 資料處理相關檔案 -->
+    <script src="data.js"></script>
+
+    <style>
+        /* 預測結果的畫布樣式 */
+        .prediction-canvas {
+            width: 100px;
+            margin: 20px;
+        }
+
+        /* 預測結果的區塊樣式 */
+        .prediction-div {
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 主頁容器 -->
+    <div class="container" style="padding-top: 20px">
+        <div class="card">
+            <div class="card-header">
+                <strong>TensorFlow.js Demo - 手寫數字辨識</strong>
+            </div>
+            <div class="card-body">
+                <!-- 顯示日誌輸出 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">日誌輸出：</h5>
+                        <div id="log"></div>
+                    </div>
+                </div>
+
+                <!-- 預測功能區 -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">進行預測</h5>
+                        <!-- 按鈕：隨機選取測試資料並進行預測 -->
+                        <button type="button" class="btn btn-primary" id="selectTestDataButton" disabled>模型載入中，請稍候...</button>
+                        <div id="predictionResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 建立日誌輸出的函數
+        function createLogEntry(entry) {
+            document.getElementById('log').innerHTML += '<br>' + entry;
+        }
+
+        // 主程序
+        main();
+
+        async function main() {
+            createModel(); // 建立模型
+            await load();  // 載入資料
+            await train(); // 訓練模型
+            // 啟用按鈕並更改按鈕文字
+            document.getElementById('selectTestDataButton').disabled = false;
+            document.getElementById('selectTestDataButton').innerText = "隨機選取測試資料並進行預測";
+        }
+
+        var model; // 定義全域變數：模型
+
+        // 建立模型
+        function createModel() {
+            createLogEntry('正在建立模型...');
+            model = tf.sequential(); // 使用順序模型
+            createLogEntry('模型已建立');
+
+            // 3.1 新增卷積層
+            createLogEntry('新增層...');
+            model.add(tf.layers.conv2d({
+                inputShape: [28, 28, 1],  // 輸入形狀：28x28 單色圖片
+                kernelSize: 5,           // 卷積核大小
+                filters: 8,              // 濾波器數量
+                strides: 1,              // 步長
+                activation: 'relu',      // 激活函數
+                kernelInitializer: 'VarianceScaling' // 初始化方法
+            }));
+
+            // 3.2 新增池化層
+            model.add(tf.layers.maxPooling2d({
+                poolSize: [2, 2], // 池化大小
+                strides: [2, 2]   // 步長
+            }));
+
+            // 3.3 新增第二個卷積層
+            model.add(tf.layers.conv2d({
+                kernelSize: 5,
+                filters: 16,
+                strides: 1,
+                activation: 'relu',
+                kernelInitializer: 'VarianceScaling'
+            }));
+
+            // 3.4 新增第二個池化層
+            model.add(tf.layers.maxPooling2d({
+                poolSize: [2, 2],
+                strides: [2, 2]
+            }));
+
+            // 3.5 展平層
+            model.add(tf.layers.flatten());
+
+            // 3.6 全連接層
+            model.add(tf.layers.dense({
+                units: 10,                // 輸出單元數（10類數字）
+                kernelInitializer: 'VarianceScaling',
+                activation: 'softmax'    // 使用 softmax 激活函數
+            }));
+
+            createLogEntry('層已新增');
+
+            // 編譯模型
+            createLogEntry('正在編譯模型...');
+            model.compile({
+                optimizer: tf.train.sgd(0.15), // 使用隨機梯度下降優化器
+                loss: 'categoricalCrossentropy' // 使用交叉熵作為損失函數
+            });
+            createLogEntry('模型已編譯');
+        }
+
+        var data; // 定義全域變數：資料
+
+        // 載入 MNIST 資料集
+        async function load() {
+            createLogEntry('正在載入 MNIST 資料...');
+            data = new MnistData(); // 使用 MNIST 資料類
+            await data.load(); // 非同步載入資料
+            createLogEntry('資料載入完成');
+        }
+
+        const BATCH_SIZE = 64;      // 每批訓練資料大小
+        const TRAIN_BATCHES = 150; // 訓練批次數量
+
+        // 訓練模型
+        async function train() {
+            createLogEntry('開始訓練...');
+            for (let i = 0; i < TRAIN_BATCHES; i++) {
+                const batch = tf.tidy(() => {
+                    const batch = data.nextTrainBatch(BATCH_SIZE); // 取得下一批訓練資料
+                    batch.xs = batch.xs.reshape([BATCH_SIZE, 28, 28, 1]); // 調整形狀
+                    return batch;
+                });
+
+                // 訓練模型
+                await model.fit(
+                    batch.xs, batch.labels, { batchSize: BATCH_SIZE, epochs: 1 }
+                );
+
+                tf.dispose(batch); // 釋放記憶體
+                await tf.nextFrame(); // 下一幀
+            }
+            createLogEntry('訓練完成');
+        }
+
+        // 進行預測
+        async function predict(batch) {
+            tf.tidy(() => {
+                const input_value = Array.from(batch.labels.argMax(1).dataSync()); // 原始標籤
+
+                const div = document.createElement('div'); // 建立顯示結果的容器
+                div.className = 'prediction-div';
+
+                const output = model.predict(batch.xs.reshape([-1, 28, 28, 1])); // 模型預測
+
+                const prediction_value = Array.from(output.argMax(1).dataSync()); // 預測結果
+                const image = batch.xs.slice([0, 0], [1, batch.xs.shape[1]]); // 預測圖像
+
+                const canvas = document.createElement('canvas'); // 畫布顯示圖像
+                canvas.className = 'prediction-canvas';
+                draw(image.flatten(), canvas);
+
+                const label = document.createElement('div'); // 顯示標籤
+                label.innerHTML = '原始值：' + input_value;
+                label.innerHTML += '<br>預測值：' + prediction_value;
+
+                if (prediction_value - input_value == 0) {
+                    label.innerHTML += '<br>辨識成功';
+                } else {
+                    label.innerHTML += '<br>辨識失敗！';
+                }
+
+                div.appendChild(canvas);
+                div.appendChild(label);
+                document.getElementById('predictionResult').appendChild(div); // 新增到結果區域
+            });
+        }
+
+        // 繪製圖像
+        function draw(image, canvas) {
+            const [width, height] = [28, 28];
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            const imageData = new ImageData(width, height);
+            const data = image.dataSync();
+            for (let i = 0; i < height * width; ++i) {
+                const j = i * 4;
+                imageData.data[j + 0] = data[i] * 255; // 紅色通道
+                imageData.data[j + 1] = data[i] * 255; // 綠色通道
+                imageData.data[j + 2] = data[i] * 255; // 藍色通道
+                imageData.data[j + 3] = 255;           // 透明度
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // 綁定按鈕事件
+        document.getElementById('selectTestDataButton').addEventListener('click', async (el, ev) => {
+            const batch = data.nextTestBatch(1); // 隨機選取一筆測試資料
+            await predict(batch); // 預測該資料
+        });
+    </script>
+</body>
+</html>
