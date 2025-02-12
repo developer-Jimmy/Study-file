@@ -1,0 +1,12 @@
+process models
+漸進式開發/敏捷開發
+Design Thinking Process 1.同理心 2.定義問題 3.創意發想 4.雛形模型 5.測試
+
+MSF process model  
+計畫階段 > 1.情節 2.模組 3.實作
+願景階段 > 1.如何組織專案成員 2.問題描述與需求定義 3.定義需求
+定義網站的願景與範圍 > 需求分析 以SMART描述願景(specific, measurable, achievable, relevant, time-based)
+conceptual design(故事/情節) > 1.research調查 2.analysis分析 3.optimization最佳化
+資料蒐集 > 資料蒐集方法 > 未來使用情境 > 事務導向的動線設計
+
+評估使用者看不看得懂，像是畫面縮小看不到圖示名稱

@@ -1,0 +1,45 @@
+資訊安全
+-------------
+新增北風資料 > SQL終端機 > 新增使用者與密碼 > 登入 > 
+
+mysql -uroot -p
+
+show variables like 'sql_mode';
+
+set sql_mode = 'traditional';
+
+show variables like 'sql_mode';
+
+-------------
+flush privileges;
+-------------
+show variables like 'char%';
+set names 'big5';
+set names 'utf8';
+-------------資安報告
+
+哪些信息比較值錢(大部分以為是密碼，但是實際上是信用卡等資訊)
+
+deepseek
+
+中山大學
+
+社交工程
+
+充電器問題
+
+對於台灣的DDos攻擊
+
+利用連結chatgpt包裝成惡意app
+
+紅隊演練跟搶旗
+
+apache漏洞(將檔案路徑../ > 往前推)
+
+美國資安問題
+
+零時差攻擊
+
+--------------
+
+$p = 'test' 很方便，但駭客可以呼叫
