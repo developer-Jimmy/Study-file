@@ -1,0 +1,30 @@
+出現兩個同一資料的情境
+
+use test;
+ 
+create table t1 (id int, data int);
+insert into t1 (id, data) values (1, 100);
+insert into t1 (id, data) values (2, 200);
+select * from t1;
+ 
+insert into t1 (id, data) values (1, 100);
+select * from t1;
+ 
+alter table t1 add tempId int auto_increment primary key;
+select * from t1;
+ 
+delete from t1 where tempId = 3;
+select * from t1;
+------------------------------------
+一對多 : A資料表PK叫aid，B資料表PK叫BID。多的資料表多一個外鍵欄位(例如多AID欄位)
+多對多 : 轉換成兩組一對多
+------------------------------------
+描繪ER圖 -> 關聯式資料庫結構檢查 -> 資料庫設計研討
+------------------------------------
+每個欄位都符合該資料表的主旨
+------------------------------------
+版本控制系統
+練習，版本衝突、reset等等
+------------------------------------
+控制台 | 使用者帳戶 | 管理 Windows 認證
+ 
