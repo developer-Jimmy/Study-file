@@ -1,0 +1,59 @@
+HTML        ->   文本標記語言 ->  <img>
+CSS         ->       ?       -> 
+JavaScript  ->       ?       ->
+SQL         ->       ?       ->  select  update  insert  delete
+PHP         ->       ?       ->
+
+
+程式語言 -> 可以宣告變數 可以進行邏輯處理等等
+
+Restful API -> (X)程式語言 (O)風格/架構
+            -> 使用 HTTP方法 進行 後端 資源 取得 放在畫面上
+
+(人類) 穿搭風格 -> 衣服 褲子 飾品
+--------------------------------------------------------
+(工程師) 拿資源風格 -> HTML JavaScript jQuery PHP ...
+(工程師) 寫網頁風格 -> 
+    <div>導覽列</div>     <header>導覽列</header>
+    <div>內容</div>       <main>內容</main>
+    <div>頁尾</div>       <footer>頁尾</footer>
+
+(工程師) 命名風格 
+    let x = {                let student = {
+        y: "皮卡丘",              name: "皮卡丘",
+        z: "台中"                 city: "台中"
+    }                        }
+ 
+程式語言        程式內容物      描述程式內容物
+  HTML        id class href    屬性 attribute
+  HTML        h1  div  img     標籤 tag | element
+  CSS         #    .           選擇器 selector
+  CSS          :   ::          偽元素 | 偽類 | 虛擬元素 | 虛擬類 pseudo-element ()
+JavaScript         .           12.34  document.body
+JavaScript    var let const    宣告變數 declarations
+JavaScript    function         函式 | 方法 | 副程式 | method | function
+
+  PHP              $           宣告變數 declarations
+
+具象狀態傳輸(REST, Representational State Transfer)
+超文字標記語言HTML (Hypertext Markup Language)
+
+初學者可以先假設 REST API 是指能透過web相關的
+函式庫和工具來呼叫http服務
+
+提供介面來溝通，而不是直接存取資料
+
+專案|專題
+-> 資料
+-> 人工
+-> gpt
+-> 爬
+-> 以上皆非
+
+XMLHttpRequest -> 創建一個XMLHttpRequest物件
+-> 定義一個callback function -> send一個請求 
+
+Ajax -> 異動一小個區塊  (Asynchronous JavaScript and XML)
+Ajaj (Asynchronous JavaScript and JSON)
+
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="apple()">A</button>
+    <button id="bee">B</button>
+    <button id="cat">C</button>
+    <button id="dog">D</button>
+    <button id="egg">E</button>
+    <button id="apple">F</button>
+ 
+    <script src="../_js/jquery-3.6.0.js">
+    </script>
+        
+
+    <script>
+        function apple() {
+            console.log('成功A');
+        }
+        document.getElementById('bee').addEventListener('click', function() {
+            console.log('成功B');
+        })
+        document.getElementById('cat').onclick = function() {
+            console.log('成功C');
+        }
+        dog.onclick = function() {
+            console.log('成功D');
+        }
+        $('#egg').on('click', function() {
+            console.log('成功E');
+        })
+        document.getElementById('apple').addEventListener('mouseover', function() {
+            console.log('成功F');
+        })
+    </script>
+    
+</body>
+</html>

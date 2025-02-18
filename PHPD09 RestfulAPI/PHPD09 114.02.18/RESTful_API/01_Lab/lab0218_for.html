@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="../_js/jquery-3.6.0.js"></script>
+    <script>
+        // 目標: 我有一個陣列 -> 將內容放到主控台顯示 -> console.log
+        let items = ['蘋果11', '香蕉11', '皮卡丘11'];
+
+        // console.log( items[0] );
+        // console.log( items[1] );
+        // console.log( items[2] );
+
+        // v1:for迴圈 
+        // for (let i = 0; i < items.length; i++) {
+        //     console.log(items[i]);
+        // }
+
+        // v2:while
+        // let p = 0;
+        // while(k < items.length) {
+        //     console.log(items[k]);
+        //     p = p + 1;
+        // }
+
+        // v3:forEach遍歷
+        // x -> value or item or itemInarray or 以上皆非
+        // y -> index or idx or 以上皆非
+        // z -> self 
+        // items.forEach(function(value, idx, self) {
+        //     console.log(value); // 內容
+        //     console.log(idx); // 陣列的index
+        //     console.log(self); // 陣列本人
+        // })
+
+        // items.forEach(function(value) {
+        //     console.log(value);
+        // })
+        
+        // items.forEach((value) => {console.log(value)});
+
+        // () -> 如果參數|引數只有一個()
+        // {} -> 可以拿掉 -> 1.只做一件事情 2.return 但只在這邊實驗就好
+        // items.forEach(value=>{console.log(value)});
+
+        // v4:for in => 
+        // for(let x in items) {
+        //     // console.log(x);
+        //     console.log(items[x]);
+        // }
+        // v5:for of => 
+        // for(let y of items) {
+        //     console.log(y);
+        // }   
+        // v6:jQuery
+        $.each(items, function(index, y) {
+            console.log(y);
+        })
+
+
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <button id="btnGetFileT">讀取文字檔 async 參數設定為 true  </button>
+    <button id="btnGetFileF">讀取文字檔 async 參數設定為 false </button>
+    <hr>
+    <main>
+        <div id="divLeft"></div>
+        <div id="divRight"></div>
+    </main>
+
+
+    <script>
+        // 【目標】這裡先使用 XMLHttpRequest 讀取 本地端的文字檔
+        //      ( 稍後再使用 XMLHttpRequest 讀取 其他伺服器端的資料 )
+
+        //  #divLeft  顯示 ../_file/bigfile.txt   文字檔資料
+        //  #divRight 顯示 ../_file/smallfile.txt 文字檔資料
+
+        // 10. 先讀取 bigfile.txt ， 後讀取 smallfile.txt
+        //     測試 async 參數設定為 true 
+        // btnGetFileT.onclick = function () {}
+
+        // 20. 先讀取 bigfile.txt ， 後讀取 smallfile.txt
+        //     測試 async 參數設定為 false
+        // btnGetFileF.onclick = function () {}
+
+    </script>
+
+</body>
+
+</html>
