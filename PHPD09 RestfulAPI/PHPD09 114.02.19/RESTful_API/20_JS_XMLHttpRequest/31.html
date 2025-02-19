@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btnTest">測試</button>
+    <select id="cityList"></select>
+
+    <script>
+        function myclick() {
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener('load', function() {
+                // 確認2998行的XML資料有出現
+                // console.log(this.responseText);
+                // 因為是XML字串，所以需要DOMParser幫忙處理
+                let parser = new DOMParser();
+                let XMLDocument = parser.parseFromString(this.responseText, "text/xml");
+                console.log(XMLDocument);
+
+                // 缺: 在主控台查看縣市
+                let list = XMLDocument.getElementsByTagName('locationName');
+                // console.log(list);
+                // console.log(list[0].innerHTML);
+                // console.log(list[1].innerHTML);
+                // console.log(list[2].innerHTML);
+
+                for(let k = 0; k < list.length; k++) {
+                    console.log(list[k].innerHTML);
+
+                    // 缺: 把看到的縣市放到下拉選單
+                    // 目標: 畫面沒有元素(標籤) | 我想增加元素(標籤)
+
+                    // 方法A:
+                    let elem = document.createElement('option'); // <option></option>
+                    elem.innerText = list[k].innerHTML; // <option>台北市</option>
+                    elem.value = k; // <option value="0">台北市</option>
+                    cityList.append(elem);
+                    // 方法B: 你的成功
+                }
+
+                // 缺: 把看到的縣市放到下拉選單
+
+
+                // **這個檔案預計完成到把顯示放到下拉選單
+
+                // **這個檔案稍後會討論另一個議題: 程式碼的寫法
+
+
+            })
+            // 先取得我們自己的天氣檔案(日期會是昨天)
+            xhr.open('GET', '../_file/F-C0032-001_20250218.xml')
+            xhr.send();
+
+            // 縣市會重複 方法A:
+            // document.getElementById('btnTest').style.display = 'none';
+            
+            // 縣市會重複 方法B:
+            // document.getElementById('cityList').innerHTML = '';
+        }
+
+        // 綁定事件的五選一, 目前選擇 addEventListener
+        document.getElementById('btnTest').addEventListener('click', myclick);
+
+    </script>
+    
+</body>
+</html>
