@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <h4>一般天氣預報-今明36小時天氣預報</h4>
+    <p><a href='https://data.gov.tw/dataset/6069'>https://data.gov.tw/dataset/6069</a></p>
+    <h4>預報 XML 產品預報因子欄位中文說明表</h4>
+    <p><a href='https://opendata.cwa.gov.tw/opendatadoc/MFC/A0012-001.pdf'>https://opendata.cwa.gov.tw/opendatadoc/MFC/A0012-001.pdf</a></p>
+    <h4>下載今明36小時天氣預報資料（XML格式）</h4>
+    <p><a href="https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-C0032-001?Authorization=rdec-key-123-45678-011121314&format=XML">https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-C0032-001?Authorization=rdec-key-123-45678-011121314&format=XML</a></p>
+    
+    <button id="btnGetOpenData">取得天氣資料</button>
+    <hr>
+    <select id="cityList"></select>
+    <hr>
+    <div id="divResult"></div>
+
+    <script>
+        // 10. 點選按鈕時，透過 XMLHttpRequest 取得資料
+        
+        // function read() {
+        //     let xhr = new XMLHttpRequest();
+        //     xhr.open('GET', '../_file/F-C0032-001_20250218.xml', true);
+        //     xhr.onload = function() {
+        //         if(xhr.status === 200) {
+        //             let wetherData = xhr.responseText;
+        //             let xa = new DOMParser();
+        //             let xb = xa.parseFromString(wetherData, "text/xml");
+        //             console.log(xb);
+        //         } else {
+        //             console.error("無法獲取數據");
+        //         }
+        //     };
+        //     xhr.send();
+
+            
+        // }
+        // document.getElementById('btnGetOpenData').onclick = function () {
+        //     read();
+        // }
+        
+        // 20. 取得資料後，進行資料整理
+        //      a. 縣市資料
+        //      b. 縣市天氣
+        // 30. 帶出使用者所選擇縣市對應的天氣資料
+
+        // 紀錄天氣資料
+    
+        let superApple;
+        // 對應按鈕點擊事件
+        let btnClick = function() {
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener('load', xhrLoad);
+            xhr.open('GET', '../_file/F-C0032-001_20250218.xml');
+            xhr.send();
+        }
+        // 對應城市下拉選項改變的時候
+        let cityChange = function() {
+            
+            // 縣市對應的 value
+            let cat = document.getElementById('cityList').value;
+            // console.log(cat)
+
+            // 拿縣市對應的value 取得 縣市天氣資料
+            onsole.log(superApple);
+            console.log(superApple[0].childNodes[3].childNodes[1].innerHTML);
+            console.log(superApple[0].childNodes[3].childNodes[3].innerHTML);
+            console.log(superApple[0].childNodes[3].childNodes[5].childNodes[1].innerHTML);
+ 
+            console.log(superApple[0].childNodes[5].childNodes[1].innerHTML);
+            console.log(superApple[0].childNodes[5].childNodes[3].innerHTML);
+            console.log(superApple[0].childNodes[5].childNodes[5].childNodes[1].innerHTML);
+ 
+            console.log(superApple[0].childNodes[7].childNodes[1].innerHTML);
+            console.log(superApple[0].childNodes[7].childNodes[3].innerHTML);
+            console.log(superApple[0].childNodes[7].childNodes[5].childNodes[1].innerHTML);
+
+        }
+        // 對應資料載入的時候
+        let xhrLoad = function () {
+            console.log(this.responseText);
+            // 取得縣市資料放到畫面上
+            // ()縣市對應的天氣資料
+            let parser = new DOMParser();
+            let XMLDocument = parser.parseFromString(this.responseText, "text/xml");
+            
+            let clist = XMLDocument.getElementsByTagName('locationName');
+            // console.log(clist);
+            setCityElement(clist);
+            
+
+
+            let wlist = XMLDocument.querySelectorAll('locationName+weatherElement');
+            // console.log(wlist);
+            let superApple = wlist;
+        
+        }
+        // 我想把城市名稱放到下拉選單
+        let setCityElement = function (xa) {
+            // 確認城市名稱
+            // console.log(xa);
+            cityList.innerHTML = '';
+            let temp = Array.from(xa);
+            temp.forEach(function(xb, xc) {
+                // 在主控台看見城市名稱
+                console.log(xb.innerHTML);
+                let elem = document.createElement('option');
+                elem.innerText = xb.innerHTML;
+                elem.value = xc;
+                cityList.append(elem);
+            })
+        }
+               
+            
+        
+        // 綁定事件
+        document.getElementById('btnGetOpenData').addEventListener('click', btnClick);
+        document.getElementById('cityList').addEventListener('change', cityChange);
+    </script>
+</body>
+
+</html>

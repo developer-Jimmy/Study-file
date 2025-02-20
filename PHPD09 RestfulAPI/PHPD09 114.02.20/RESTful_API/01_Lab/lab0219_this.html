@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>this</h1>
+    <pre>
+        this 這個關鍵字代表什麼 取決於你在哪裡使用它
+    </pre>
+    <button onclick="apple(this)">測試A</button>
+    <script>
+        // window物件
+        console.log(this);
+        // button元素
+        function apple(xa) {
+            console.log(xa);
+        }
+
+        //
+        let student = {
+            chinese: 100,
+            math: 90,
+            getScore: function() {
+                // student物件
+                console.log(this);
+                // let tot = this.chinese + this.math;
+                // console.log('我的總成績是:' + tot);
+            }
+        }
+        student.getScore();
+    </script>
+    
+</body>
+</html>

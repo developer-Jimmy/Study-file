@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btnGetOpenData">取得天氣資料</button>
+    <hr>
+    <select id="cityList"></select>
+    <hr>
+    <div id="divResult"></div>
+    <script>
+        // 存放資料用的變數
+        let clist;
+        let wlist;
+
+        // 按鈕點擊事件
+        let btnClick = function() {
+            // console.log('btnClick');
+            
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener('load', xhrLoad);
+            xhr.open('GET', '../_file/F-C0032-001_20250218.xml');
+            xhr.send();
+
+            // -> fetch()
+            // -> $.ajax()
+            // -> axios()
+        }
+
+        // 資料載入事件 -> 把資料整理好放到變數 clist wlist
+        let xhrLoad = function() {
+            // console.log(this.responseText);
+            // 我看見XML -> DOMParser ->
+            let p = new DOMParser();
+            let XMLDocument = p.parseFromString(this.responseText, "application/xml");
+            // console.log(XMLDocument);
+
+            clist = XMLDocument.getElementsByTagName('locationName');
+            wlist = XMLDocument.querySelectorAll('locationName+weatherElement');
+            // console.log(clist);
+            // console.log(wlist);
+            addCityListOption();
+        }
+
+        // clist 放到畫面上的下拉選單
+        let addCityListOption = function() {
+            // console.log('addCityListOption');
+
+            // 先把縣市清空
+            document.getElementById('cityList').innerHTML = '';
+            for (let k = 0; k < clist.length; k++) {
+                // console.log(clist[k].innerHTML);
+
+                let opt = document.createElement('option');
+                opt.innerText = clist[k].innerHTML;
+                opt.value = k;
+                document.getElementById('cityList').append(opt);
+
+            }
+        }
+
+        // 選單改變事件
+        let selectChange = function() {
+            // 取得使用者選到的縣市的value
+            let idx = document.getElementById('cityList').value;
+            // console.log(idx);
+            // console.log(wlist[idx]);
+
+            // console.log(wlist[idx].childNodes[3].childNodes[1].innerHTML);
+            // console.log(wlist[idx].childNodes[3].childNodes[3].innerHTML);
+            // console.log(wlist[idx].childNodes[3].childNodes[5].childNodes[1].innerHTML);
+ 
+            // console.log(wlist[idx].childNodes[5].childNodes[1].innerHTML);
+            // console.log(wlist[idx].childNodes[5].childNodes[3].innerHTML);
+            // console.log(wlist[idx].childNodes[5].childNodes[5].childNodes[1].innerHTML);
+ 
+            // console.log(wlist[idx].childNodes[7].childNodes[1].innerHTML);
+            // console.log(wlist[idx].childNodes[7].childNodes[3].innerHTML);
+            // console.log(wlist[idx].childNodes[7].childNodes[5].childNodes[1].innerHTML);
+
+            document.getElementById('divResult').innerHTML = '';
+            let data = '';
+            for (let k = 3; k <= 7; k+=2) {
+                // console.log(wlist[idx].childNodes[k].childNodes[1].innerHTML)
+                // console.log(wlist[idx].childNodes[k].childNodes[3].innerHTML)
+                // console.log(wlist[idx].childNodes[k].childNodes[5].childNodes[1].innerHTML)
+                data += `<p>${wlist[idx].childNodes[k].childNodes[1].innerHTML}</p>`;
+                data += `<p>${wlist[idx].childNodes[k].childNodes[3].innerHTML}</p>`;
+                data += `<p>${wlist[idx].childNodes[k].childNodes[5].childNodes[1].innerHTML}</p>`;
+            }
+            document.getElementById('divResult').innerHTML = data;
+
+            
+        } 
+
+        // 綁定事件
+        document.getElementById('btnGetOpenData').addEventListener('click', btnClick);
+        document.getElementById('cityList').addEventListener('change', selectChange);
+    
+    
+    </script>
+   
+</body>
+</html>
