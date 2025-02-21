@@ -1,0 +1,222 @@
+HTML        ->   文本標記語言 ->  <img>
+CSS         ->       ?       -> 
+JavaScript  ->       ?       ->
+SQL         ->       ?       ->  select  update  insert  delete
+PHP         ->       ?       ->
+
+
+程式語言 -> 可以宣告變數 可以進行邏輯處理等等
+
+Restful API -> (X)程式語言 (O)風格/架構
+            -> 使用 HTTP方法 進行 後端 資源 取得 放在畫面上
+
+(人類) 穿搭風格 -> 衣服 褲子 飾品
+--------------------------------------------------------
+(工程師) 拿資源風格 -> HTML JavaScript jQuery PHP ...
+(工程師) 寫網頁風格 -> 
+    <div>導覽列</div>     <header>導覽列</header>
+    <div>內容</div>       <main>內容</main>
+    <div>頁尾</div>       <footer>頁尾</footer>
+
+(工程師) 命名風格 
+    let x = {                let student = {
+        y: "皮卡丘",              name: "皮卡丘",
+        z: "台中"                 city: "台中"
+    }                        }
+ 
+程式語言        程式內容物      描述程式內容物
+  HTML        id class href    屬性 attribute
+  HTML        h1  div  img     標籤 tag | element
+  CSS         #    .           選擇器 selector
+  CSS          :   ::          偽元素 | 偽類 | 虛擬元素 | 虛擬類 pseudo-element ()
+JavaScript         .           12.34  document.body
+JavaScript    var let const    宣告變數 declarations
+JavaScript    function         函式 | 方法 | 副程式 | method | function
+  PHP              $           宣告變數 declarations
+
+具象狀態傳輸(REST, Representational State Transfer)
+超文字標記語言HTML (Hypertext Markup Language)
+
+初學者可以先假設 REST API 是指能透過web相關的
+函式庫和工具來呼叫http服務
+
+提供介面來溝通，而不是直接存取資料
+
+專案|專題
+-> 資料
+-> 人工
+-> gpt
+-> 爬
+-> 以上皆非
+
+XMLHttpRequest -> 創建一個XMLHttpRequest物件
+-> 定義一個callback function -> send一個請求 
+
+Ajax (Asynchronous JavaScript and XML) 異動一個小區域
+Ajaj (Asynchronous JavaScript and JSON)
+-----------------------------------------
+XMLHttpRequest讀寫功能
+XML解析
+天氣資料抓取
+
+函式?
+  -> 有重複的程式碼
+  -> 程式碼寫了很多層
+
+1. 讀取 F-C0032-001_20250218.xml檔案
+2. 確認xml檔案裡面有縣市名稱
+    -> 檢查是不是有22個
+3. 看見22縣市按鈕點擊後，將縣市放在下拉選單中
+4. 下拉選單後生出當地天氣資訊
+5.
+-> 縣市會重複(如果按鈕點很多下的話)
+a. 按鈕消失
+b. 清空 select
+-> option 的 value 你們大的專題會想要放什麼?
+
+
+類陣列沒有forEach方法
+let temp = Array.from(xa) -> 讓類陣列變成純粹的陣列
+--------------------------------------------
+大專若會取得他人資料
+->先下載一份(避免突然改版)
+
+如果取得伺服器的資料格式為XML
+->需要釐清資料結構
+
+重新檢視草稿
+->取得資料後只用標籤呈現 ->上課樣子要花多久時間?
+
+->學長姐大專的樣子，大概花多久時間?
+
+->中央氣象局的樣子，大概花多久時間?
+--------------------------------------------點擊按鈕 -> 載入資料 -> 呈現資料 -> 綁定事件
+練習音樂資料 
+--------------------------------------------
+陣列可迭代(iterable)
+物件不可迭代(iterable)
+
+1. 透過API(URL)取得資料 -> 在log確認有看到
+2. 在log確認|檢查結構 
+  -> 使用者圖片在哪裡? 可以挑1~3個人檢查
+  -> 使用者email在哪裡? 可以挑1~3個人檢查
+
+3. 在log使用者圖片發現有一個數字規律在變化
+  -> 迴圈
+4. log看見以後才想辦法搬到畫面上
+  ->怎麼做可以達到四個一列?
+
+btnGetDataV2.onclick = function () {
+  // 1.
+  $.get('https://reqres.in/api/users?page=2', funcion(xb) {
+      console.log(xb);
+
+      // 2.
+      consoel.log(xb.data[0].avatar);
+      consoel.log(xb.data[0].email);
+
+      consoel.log(xb.data[1].avatar);
+      consoel.log(xb.data[1].email);
+
+      consoel.log(xb.data[2].avatar);
+      consoel.log(xb.data[2].email);
+      // 3.
+      for(let k = 0; k < xb.data.length; k++) {
+          consoel.log(xb.data[k].avatar);
+          consoel.log(xb.data[k].email);
+          // 請 ____ 產生一個元素給我
+          // 該元素要有class屬性 屬性值為 col-3  -> 之前用js生成<option>
+          // 該元素的裡面要有<img>跟<p>
+          // 在 ____ 把這個元素放上去            -> 之前放<option>到cityList
+          let elem = $('<div>');
+          elem.addClass('col-3');
+          elem.append(`<img src="${xb.data[k].avatar}">`);
+          elem.append(`<p>${xb.data[k].email}</p>`);
+
+          $('#userList .row').append(elem);
+      }
+
+      // 4.
+      content append
+  })
+}
+
+html (載入bootstrap資源) -> 
+<div class="container text-center">
+    <div class="row">
+        <div class="col-3">
+            <img src="">
+            <p>XXXemail</p>
+        </div>
+    </div>
+</div>
+
+
+--------------------------------------------
+
+GET -> select
+POST -> insert
+PUT -> update
+DELETE -> delete
+
+1. 取得資料想要使用: XMLHttpRequest | $.get() | $ajax()
+2. 檢查全部資料是否在 主控台可以看見?
+3. 確認資料的結構 + 嘗試取得資料
+4. 顯示到畫面上
+
+
+$.ajax({
+  url: 'https://jsonplaceholder.typicode.com',
+  method: "GET"
+}).done(function(xa) {
+  // 1. 代辦事項有200筆
+  console.log(xa);
+
+  // 2. 每一筆代辦事項有: 使用者id  代辦事項本人的id  事情  是否完成
+  // console.log(xa[1].userId);
+  // console.log(xa[1].id);
+  // console.log(xa[1].title);
+  // console.log(xa[1].completed);
+  for(let k = 0; k < xa.length; k++) {
+      // 試著將使用者編號為10號的代辦事項 顯示在主控台
+      // 試著將使用者編號為10號的代辦事項 顯示在網頁上
+      if (xa[k].userId == 10) {
+          console.log(xa[k].userId);
+          console.log(xa[k].id);
+          console.log(xa[k].title);
+          console.log(xa[k].completed);
+          $('#divResult').append(`<p>
+              ${xa[k].userId}
+              ${xa[k].id}
+              ${xa[k].completed}
+              ${xa[k].title}
+            </p>`)
+          $('#divResultV2').append(`
+          <h3 style="background-color: pink; padding: 10px;">
+              <input type="checkbox" ${ (xa[k].completed)? 'checked': ''}>
+              <span>${xa[k].id}-${xa[k].title}</span>
+          </h3>
+        )
+      }
+  }
+})
+--------------------------------------------
+創建一個school資料庫
+再用一個php檔案與資料庫溝通
+用一個網頁連上本機資料庫
+
+1. 取得資料想要使用: XMLHttpRequest | $.get() | $.ajax()
+2. 檢查全部資料是否在 主控台可以看見?
+3. 確認資料的結構+嘗試取得資料
+4. 顯示到畫面上
+
+前端和後端協商好message命名
+
+$student_name = $_POST['這邊可以隨便改']
+
+ 
+url: myApple,
+method: 'POST',
+data: {
+      student_name(這邊可以隨便改): $('#sName').val()
+}

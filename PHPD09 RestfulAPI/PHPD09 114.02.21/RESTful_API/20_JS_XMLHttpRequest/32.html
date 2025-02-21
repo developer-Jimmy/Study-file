@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <pre>
+        4. 當前目標: 下拉選單改變
+            -> 是哪一個事件?
+        5. 當前目標: 我想要知道被選到的是哪一個選項
+            -> 在這個例子，選到皮卡丘的時候，我想要獲得0
+            -> 在天氣例子，選到台北市的時候，我想要獲得0
+        6. 稍後會拿"數字"去存取"天氣"集合
+    </pre>
+    <select id="cityList">
+        <option value="0">第0</option>
+        <option value="1">第1</option>
+        <option value="2">第2</option>
+    </select>
+    <script>
+        // -> 延伸討論: 什麼是 this? 要看使用的地方
+        document.getElementById("cityList").addEventListener("change", function(){
+            let selectedValue = this.value;
+            console.log(this);
+            console.log("選擇的值是(A):" + selectedValue);
+
+            // 方法B: 不使用 this關鍵字
+            let selectedValue2 = document.getElementById("cityList").value;
+        });
+        
+    </script>
+    
+</body>
+</html>

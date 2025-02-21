@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="../_js/jquery-3.6.0.js"></script>
+    <style>
+        /* input:checked+span{
+            text-decoration: line-through;
+        } */
+    </style>
+</head>
+
+<body>
+
+    <h4>取得資料測試平台</h4>
+    <p><a href='https://jsonplaceholder.typicode.com/'>https://jsonplaceholder.typicode.com/</a></p>
+    <h4>jQuery.ajax()</h4>
+    <p><a href='https://api.jquery.com/jQuery.ajax/'>https://api.jquery.com/jQuery.ajax/</a></p>
+    <hr>
+
+    <button id="btnAjax">$.ajax()</button>
+    <button id="btnChangeColor">$.ajax() 增加一點點樣式</button>
+    <hr>
+
+    <p>按鈕點選後底下依序顯示 userid - id - completed - title</p>
+    <p>例如: 10 - 181 - false - ut cupiditate sequi aliquam fuga maiores</p>
+    <div id="divResult"> </div>
+    <hr>
+    <div id="divResultV2">
+        <!-- Q: 為什麼把CSS寫在這裡? A: 上課討論，所以CSS寫在這裡 -->
+        <!-- <h3 style="background-color: pink;">
+            <input type="checkbox" name="" id="">
+            <span></span>
+        </h3>
+        <h3 style="background-color: pink;">
+            <input type="checkbox" checked name="" id="">
+            <span></span>
+        </h3> -->
+    </div>
+
+    <script>
+        // 10. 按鈕點選後，讀取使用者待辦項目清單
+        btnAjax.onclick = function () {
+
+             // 20. 觀察資料結構 https://jsonplaceholder.typicode.com/todos
+            //     試著將 使用者編號為10號的待辦事項 顯示在網頁上
+            
+            // const url = 'https://jsonplaceholder.typicode.com/todos';
+            $.ajax({
+                method: "GET",
+                url: "https://jsonplaceholder.typicode.com/todos",
+            }).done(function(data) {
+                    data.forEach(function(item){
+                        if(item.userId === 10) {
+                            $('#divResult').append(
+                                `<input type="checkbox">
+                                <span>  
+                                        item.userId + "..." + 
+                                        item.id + "..." + 
+                                        item.completed + "..." + 
+                                        item.title <br>
+                                </span>`
+                        
+                            );
+                        }
+                    });
+                });
+        }
+        btnChangeColor.onclick = function () {
+            $('#divResult').css('background-color', 'pink');
+            $('input[type="checkbox"]').each(function(){
+                var span = $(this).next('span');
+                if ($(this).is(':checked')) {
+                    span.css('text-decoration', 'line-through');
+                } else {
+                    span.css('text-decoration', 'none');
+                }
+            });
+        }
+       
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <style>
+        
+            .member-img {
+                width: 300px;
+                height: 300px;
+                /* 剪裁 盡可能的填滿空間 多的剪掉 */
+                object-fit: cover;
+
+                /* 盡可能把自己縮小進去 */
+                /* object-fit: contain; */
+            }
+            talbe,
+            td,
+            tr {
+                border: 1px solid black;
+            }
+    </style>
+
+    <body>
+
+        <h4>獨立音樂</h4>
+        <p><a href='https://data.gov.tw/dataset/6006'>https://data.gov.tw/dataset/6006</a></p>
+        <hr>
+        <button id="btnGetOpenData">取得展覽資料(日期+標題)</button>
+        <button id="btnGetOpenDataV2">取得展覽資料(table+img)</button>
+        <hr>
+        <div id="divResult">
+            <!-- <table>
+                <tr>
+                    <td>time</td>
+                    <td>location</td>
+                    <td>locationName</td>
+                    <td>onSales</td>
+                    <td>price</td>
+                    <td>latitude</td>
+                    <td>lingitude</td>
+                    <td>endTime</td>
+                </tr>
+            </table> -->
+        </div>
+        
+        
+
+        <script src="../_js/jquery-3.6.0.js"></script>
+        <script>
+
+            // 10. 按鈕點選時，取得展覽資料
+            // 按鈕點擊事件
+            let btnClick = function() {
+                let xhr = new XMLHttpRequest();
+                xhr.addEventListener('load', xhrLoad);
+                xhr.open('GET', '../_file/music.json');
+                xhr.send();
+                $('#btnGetOpenData').prop('disabled', true);
+            }
+
+            // 資料載入事件 -> 把資料整理好放到變數 clist wlist
+            let xhrLoad = function() {
+
+                // 把字串整理成方便取用的樣子: JSON.parse()
+                let xa = JSON.parse(this.responseText);
+                // 觀察結構: 開始日期 結束日期 展覽名稱 -> 放在主控台查看
+                console.log(xa[0].title);
+                console.log(xa[0].startDate);
+                console.log(xa[0].endDate);
+
+                // 觀察結構: 開始日期 結束日期 展覽名稱 -> 放在畫面上
+                xa.forEach(function(xb){
+                    console.log(xb);
+                    document.getElementById("divResult").innerHTML += `<p>期間:${xb.startDate} ~ ${xb.endDate}</p>`
+                    document.getElementById("divResult").innerHTML += `<p>名稱:${xb.title}</p>`
+                    document.getElementById("divResult").innerHTML += `<hr>`
+                });
+
+            };
+             
+            //     並將 起訖日期、展覽名稱 顯示在畫面上
+
+            // 綁定按鈕事件
+            $(document).ready(function() {
+                $('#btnGetOpenData').on('click', btnClick);
+            });
+        
+        </script>
+        <script>
+                        // 10. 按鈕點選時，取得展覽資料
+            // 按鈕點擊事件
+            let btnClickV2 = function() {
+                let xhr = new XMLHttpRequest();
+                xhr.addEventListener('load', xhrLoadV2);
+                xhr.open('GET', '../_file/music.json');
+                xhr.send();
+                $('#btnGetOpenDataV2').prop('disabled', true);
+            }
+
+            // 資料載入事件 -> 把資料整理好放到變數 clist wlist
+            let xhrLoadV2 = function() {
+
+                // 把字串整理成方便取用的樣子: JSON.parse()
+                let xc = JSON.parse(this.responseText);
+                // 觀察結構: 開始日期 結束日期 展覽名稱 -> 放在主控台查看
+                console.log(xc);
+                let apple = '';
+
+                // 第一個迴圈: 展覽資訊五個
+                xc.forEach(function(bee) {
+                    apple += `<p>期間: ${bee.startDate} ~ ${bee.endDate}</p>`;
+                    apple += `<p>名稱: ${bee.title}</p>`;
+                    if(bee.imageUrl) {
+                        apple += `<p>圖片:</p><img class="member-img" src=${bee.imageUrl}>`;
+                    } else {
+                        apple += `<p>圖片:無資料來源</p>`;
+                    }
+                    // 想要放一個表格
+                    apple += `<table>`;
+                    // 第二個迴圈: 展覽資訊底下的showInfo
+
+                    bee.showInfo.forEach(function(cat) {
+                        apple += `<tr>`;
+                        // 方法一: 透過「句點」物件的 [key|屬性] 獲得值
+                        
+                        // 方法二: 不考慮使用者的觀感(因為全部資料都會在畫面上)
+                        for(const key in cat) {
+                            
+                            // console.log(cat[key]);
+                            apple += `<td>${key}:${cat[key]}</td>`;    
+                        }   
+                        apple += `</tr>`;
+                    })
+                    
+
+                    apple += `</table>`;
+                    apple += `<hr>`;
+
+                    // 第二個迴圈: 展覽資訊底下的showInfo
+                })
+
+
+
+                $('#divResult').html(apple);
+                
+
+                // 觀察結構: 開始日期 結束日期 展覽名稱 -> 放在畫面上
+                
+
+            };
+             
+            //     並將 起訖日期、展覽名稱 顯示在畫面上
+
+            // 綁定按鈕事件
+            $(document).ready(function() {
+                $('#btnGetOpenDataV2').on('click', btnClickV2);
+            });
+        </script>
+
+    </body>
+
+    </html>

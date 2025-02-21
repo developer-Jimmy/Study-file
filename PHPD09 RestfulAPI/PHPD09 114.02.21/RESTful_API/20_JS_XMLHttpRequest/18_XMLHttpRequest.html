@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <!--
+        async -> asynchronous -> 非同步 | 異步 -> 有差異(腳)步()
+        true  -> 小 大 -> 感覺程式碼做了一些奇怪的決定 -> 順
+        false -> 大 小 -> 這是我們實際寫程式的順序
+                 有: promise async await 
+    -->
+    <button id="btnGetFileT">A 讀取文字檔 async 參數設定為 true  </button>
+    <button id="btnGetFileF">B 讀取文字檔 async 參數設定為 false </button>
+    <hr>
+    <main>
+        <div id="divLeft"></div>
+        <div id="divRight"></div>
+    </main>
+
+
+    <script>
+        // 【目標】這裡先使用 XMLHttpRequest 讀取 本地端的文字檔
+        //      ( 稍後再使用 XMLHttpRequest 讀取 其他伺服器端的資料 )
+
+        //  #divLeft  顯示 ../_file/bigfile.txt   文字檔資料
+        //  #divRight 顯示 ../_file/smallfile.txt 文字檔資料
+
+        // 10. 先讀取 bigfile.txt ， 後讀取 smallfile.txt
+        //     測試 async 參數設定為 true 
+        //     -> 小的檔案先出現，然後才是大的檔案
+        //     -> 你沒有給的，都有"預設值"
+        // 這段程式碼可以不理會，請寫出自己知道的事件綁定
+        // btnGetFileT.onclick = function() {
+
+            // apple 是不恰當的命名，如果可以的話，請換成有意義的名稱
+            // 例如可以參照官方文件的 reqListener
+        //     function apple() {
+        //         // console.log(this.responseText)
+
+        //         // 目標: 把文字放在畫面上
+        //         // document.getElementById('divLeft').innerText = this.responseText;
+        //         // document.getElementById('divLeft').innerHTML = this.responseText;
+        //         // divLeft.innerText = this.responseText;
+        //         // divLeft.innerHTML = this.responseText;
+        //         // $('#divLeft').text(this.responseText);
+        //     }
+        //     let xa = new XMLHttpRequest();
+        //     xa.addEventListener('load', apple);
+        //     xa.open('GET','../_file/bigfile.txt', true);
+        //     xa.send();
+        // }
+        // btnGetFileF.onclick = function() {
+
+        // // apple 是不恰當的命名，如果可以的話，請換成有意義的名稱
+        // // 例如可以參照官方文件的 reqListener
+        //     function bee() {
+        //         // console.log(this.responseText)
+        //         divRight.innerText = this.responseText;
+        //     }
+        //     let xa = new XMLHttpRequest();
+        //     xb.addEventListener('load', apple);
+        //     xb.open('GET','../_file/smallfile.txt', true);
+        //     xb.send();
+        // }
+
+        // 20. 先讀取 bigfile.txt ， 後讀取 smallfile.txt
+        //     測試 async 參數設定為 false
+        //     ->請設計"讀檔案並且寫是在畫面上"這個函式
+
+        // 設計函式的時候 就要安排"參數|引數"的位置
+        // streamFile   readFile             loadFile
+        // getTextFile  getFileAndsetElement
+        function readWrite(filePath, elementID) {
+            let xa = new XMLHttpRequest();
+            xa.addEventListener('load', function(){
+                // console.log(this.responseText);
+                
+                // 方法A: 呼叫的時候傳進來的是字串ID
+                // document.getElementById(elementID).innerText = this.responseText
+                document.getElementById(elementID).innerText = this.responseText;
+                
+                // 方法B: 呼叫的時候傳進來的是元素本人
+                elementID.innerText = this.responseText;
+            });
+            xa.open('GET', filePath, false)
+            xa.send();
+        }
+
+        btnGetFileF.onclick = function () {
+            // 呼叫的時候 傳遞"資料|資訊"
+            readWrite('../_file/bigfile.txt', 'divLeft'); 
+            readWrite('../_file/smallfile.txt', 'divRight'); 
+        }
+
+    </script>
+
+</body>
+
+</html>
