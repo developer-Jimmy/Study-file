@@ -1,0 +1,103 @@
+桌上型 -> web -> app
+
+type="text/babel" -> 不用javascript引擎，而是用babel來翻譯
+因此html標籤不用雙引號
+
+兩種渲染方式
+1.ReactDOM.render(
+            <h1>Hello, world!</h1>,
+            document.getElementById('root')
+        );
+
+2. class App extends React.Component {
+            render() {
+                return <h1>Hello world!</h1>
+            }
+        }
+        ReactDOM.render(<App />, document.getElementById('root'))
+
+React負責輸出，工程師負責開發元件
+
+輸出App(寫成類別或function)到root裡面
+
+App分成多個路由(對應多個元件)
+------------------------------
+const 宣告一個element
+在將render中插入element
+------------------------------
+下載bootstrap@4.1.1
+import node_modules中的bootstrap的dist的CSS檔案
+html標籤用className使用bootstrap類別
+------------------------------
+要進行換行，使用JSX語法
+<br> 一定要加斜線 -> <br/>
+------------------------------
+return
+<span>
+</span>;
+javascript會讓return後面會自動加;因此span不執行
+
+可以使用
+return (
+    <span>
+    </span>
+);
+
+或
+return <span>
+</span>;
+------------------------------
+http://project/member/login
+        MemberLogin  return XML + {Data}
+http://project/member/loginCheck
+        MemberLoginCheck
+http://project/member/joinUs
+http://project/prod/edit/3
+        ProductEdit
+
+const element = (
+    <div className="col-4">
+        <h3>{formatName(dataItem)}</h3>
+        <img src={"images/" + dataItem.image}/>
+    </div>
+)
+(畫面+資料)
+------------------------------
+function displayTime() {
+            const element = (
+                <div>
+                    <h1>Hello, world!</h1>
+                    <h2>It is {new Date().toString()}.</h2>
+                </div>
+            );
+            ReactDOM.render(element, document.getElementById('root'));
+        }
+        displayTime();
+        
+        setInterval(displayTime, 1000);
+({new Date().toString()}這邊會一直刷新)
+------------------------------
+props(屬性值)
+類別要寫this function不用
+------------------------------
+clock建造物件時有date，而其他方法使用date(會一直改變)，
+this是指向window物件
+使用箭頭函式 => setState({}) (指向外面的clock)
+------------------------------
+mounting -> constructor                      -> render                    -> react updates DOM and refs -> componentDidMount
+updating(new props/setState()/forceUpdate()) -> render ->(只有useState()) -> react updates DOM and refs -> componentDidMount
+------------------------------
+state-full (狀態物件)
+var obj = new IceCreamMaker();
+obj.super = 100;
+obj.milk = 300;
+obj.make();
+
+state-less
+var obj = new IceCreamMaker();
+obj.make(100, 300);
+------------------------------
+class -> render({return();})
+function () {return<div></div>}
+------------------------------
+onClick = {this.doClick} (this不能省略)
