@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', "Microsoft YaHei", STHeiti, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+
+        // Welcome 元件的程式寫在這:
+        class Welcome extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <h1>{this.props.name} -- {this.props.order} &nbsp;
+                        <button className="btn btn-outline-danger"
+                            onClick={() => {this.props.onDelete(this.props.order)}}
+                        >
+                            &times;
+                        </button></h1>
+                    </div>
+                )
+            }
+        }
+
+
+
+        class App extends React.Component{
+            state = {
+                expertList: [
+                    {id: 1, name: "Jeter"},
+                    {id: 2, name: "Messi"},
+                    {id: 3, name: "Jordan"}
+                ]
+            }
+            render() {
+                return (
+                    <React.Fragment>
+                        <button className="btn btn-outline-success"
+                                onClick={this.doClick}
+                        >
+                            Transfer first item to upper case
+                        </button>
+                        {this.state.expertList.map(
+                            (expert, order) => 
+                            <Welcome 
+                                name={expert.name} 
+                                key={expert.id} 
+                                id={expert.id} 
+                                onDelete={this.doDelete}
+                                order={order}
+                            />
+                        )}
+                    </React.Fragment>
+                )
+            }
+            doClick = () => {
+                if (this.state.expertList.length <= 0) 
+                return;
+                let newState = {...this.state};
+                newState.expertList[0].name = newState.expertList[0].name.toUpperCase();
+                // newState.expertList.splice(1, 1);
+                this.setState(newState);
+                // this.doDelete(3);
+            }
+            doDelete = (order) => {
+                // find order by id
+                // let th = -1;
+                // for (let i = 0; i < this.state.expertList.length; i++) {
+                //     if (this.state.expertList[i].id == id) {
+                //     th = i;
+                //     break;
+                //     }
+                // }
+                // if (th < 0) {
+                //     alert("Not found");
+                //     return
+                // }
+            
+                // alert("delete #" + id);
+                let newState = {...this.state};
+                // newState.expertList.splice(th,1)
+                // newState.expertList = 
+                // newState.expertList.filter(expert => expert.id != id);
+                newState.expertList.splice(order, 1);
+                this.setState(newState);
+
+            } 
+        } // end of App
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+
+    </script>
+
+</body>
+
+</html>

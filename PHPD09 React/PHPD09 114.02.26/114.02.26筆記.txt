@@ -1,0 +1,131 @@
+1.Lab_form 修改表單資料問題
+(加入change方法)
+userNameTextBoxChangeHandler = () => {
+                // console.log(Date());
+                // console.log(event.target.value);
+                var newState = {
+                    userName: event.target.value
+                }
+                this.setState(newState);
+            }
+
+2.Lab_ChangeData 改變資料問題
+...語法可以新增新的物件並展開
+
+如果直接改資料
+this.state.location.x = 111;
+this.setState({}); 
+(這兩段程式碼React會警告，因為擔心this.setState沒有加上去)
+
+3.陣列印出資料 (map方法加上箭頭函式) -> 一行搞定
+
+一個App元件只能傳回一個內容而不是多個內容
+<React.Fragment> -> 不用包裹標籤
+
+子階
+// 畫面
+
+父階
+// 資料存放
+state = {
+    [
+        {}
+        {}
+        {}
+    ]
+}
+
+// 畫面
+render() {
+    return (
+        <React.Fragment>
+        按鈕及資料呈現的UI
+        </React.Fragment>
+    )
+}
+
+// 按鈕功能
+
+// 最後是React render
+-------------------------------------
+render() {
+                return (
+                    <div>
+                        <h1>{this.props.name} &nbsp;
+                        <button class="btn btn-outline-danger"
+                            onClick={this.deleteButtonClickHandler(2)}
+                        >
+                            &times;
+                        </button></h1>
+                    </div>
+                )
+            }
+
+onClick 改成 onClick={()=> {alert(this.props.id)}}
+
+父階有資料，子階有按鈕
+父階告訴子階幾號，子階告訴父階幾號要刪除
+
+onClick={() => {this.props.onDelete(this.props.id)}} 
+點按鈕呼叫onDelete方法並告知刪除物件的編號
+-------------------------------------刪除功能方法一 
+doDelete = (id) => {
+    // find order by id
+    let th = -1;
+    for (let i = 0; i < this.state.expertList.length; i++) {
+        if (this.state.expertList[i].id == id) {
+            th = i;
+            break;
+        }
+    }
+    if (th < 0) {
+        alert("Not found");
+        return
+    }
+ 
+    let newState = {...this.state};
+    newState.expertList.splice(th, 1);
+    this.setState(newState);
+}
+-------------------------------------刪除功能方法二
+doDelete = (id) => {
+    let newState = {...this.state};
+    newState.expertList = this.state.expertList.filter( x => x.id != id );
+    this.setState(newState);
+}
+-------------------------------------刪除功能方法三(根據order來刪除)
+render() {
+    return (
+        <div>
+            <h1>{this.props.name} -- {this.props.order} &nbsp;
+            <button className="btn btn-outline-danger"
+                onClick={ () => { this.props.onDelete(this.props.order) } }
+            >
+                &times;
+            </button></h1>
+        </div>
+    )
+}
+</button>
+{ this.state.expertList.map(
+    (expert, order) =>
+        <Welcome
+            name={expert.name}
+            key={expert.id}
+            id={expert.id}
+            onDelete={this.doDelete}
+            order={order}
+        />
+)}
+doDelete = (order) => {
+    let newState = {...this.state};
+    newState.expertList.splice(order, 1);
+    this.setState(newState);
+}
+-------------------------------------以上都是類別方法，以下是函式方法的部分
+// var lab = React.useState(100);
+        // console.log(lab);
+        // let count = lab[0];
+        // let setCount = lab[1];
+
+換成解構賦值的方式 -> let [count, setCount] = React.useState(100);
