@@ -1,0 +1,60 @@
+setCount用法 : 一個是告訴資料，另一個是告訴function　
+setCount()適合單純把計算結果傳給它　
+
+這是用箭頭函式
+setCount(c=> {console.log("Lab1", c); return c + 1;});
+setCount(c=> {console.log("Lab2", c); return c + 1;});
+
+React.useEffect(後續效應) 傳一個箭頭函式加陣列，如果陣列值改變，
+執行箭頭函式
+
+var workResult = React.useMemo(() => {
+          return longTimeWork(data1)
+        }, [data1]);
+
+記住data1 和 根據data1算出的結果
+useMemo記住longTimeWork的結果並包成一個function
+-------------------------------------------
+function GrandFather(props) {
+        let [secret, setSecret] = React.useState("work harder or work smarter");
+        return (
+          <React.Fragment>
+          <heirloom.Provider value={secret}>
+            <Father />
+          </heirloom.Provider>
+          </React.Fragment>
+        );
+      }
+在react.fragment範圍內使用seret (grandFather透過
+屬性將secret傳給父親，父親在用屬性傳給Me)
+
+或宣告全域變數並透過react.createContext直接傳給Me
+-------------------------------------------
+下載react route第五版
+在app.js按照路由來匯入元件
+(看路由路徑來判斷放入什麼元件)
+
+exact(路由完全正確才會載入)
+
+<Route path="/member/edit/:who" component={MemberEdit} />
+:who可以是任意數值
+*這是元件的程式碼
+ return (<div>Edit Member:{this.props.match.params.who}</div>);
+
+在各元件中插入超連結，與定義的路由進行互動
+
+-------------------------------------------
+匯入匯出 
+*myMain.js
+import {x,y as yy} from "./myToolBox.js"
+alert("x = "+ x);
+alert("y = "+ yy);
+*myToolBox.js
+export var x = 100;
+export var y = 200;
+*index.html
+<script type="module" src="./myMain.js"></script>
+
+export default不能用變數
+export default預設匯出，匯入後不需要加大括號
+default可以再匯入時任意命名
