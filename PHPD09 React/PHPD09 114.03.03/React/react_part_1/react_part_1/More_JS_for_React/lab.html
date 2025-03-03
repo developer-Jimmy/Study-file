@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="report"></div>
+    <script>
+        // var x = 100;
+        // var y = x;
+        // x = 200;
+        // report.innerText = `y= ${y}`;
+        // var objX = {
+        //     data: 100
+        // }
+        // var objY = objX;
+        // objX.data = 200;
+        // report.innerText = `objY = ${objY.data}`;
+        // var objX = {
+        //     data: 100
+        // }
+        // var objY = {...objX};
+        // objX.data = 200;
+        // report.innerText = `objY.data = ${objY.data}`;
+
+        var data = 100;
+        var price = 200;
+        var obj = {
+            data: data,
+            price: price
+        };
+        report.innerText = JSON.stringify(obj);
+
+        
+        // var data = 100;
+        // var price = 200;
+        // var obj = {data, price}
+        // report.innerText = JSON.stringify(obj);
+    </script>
+    
+</body>
+</html>

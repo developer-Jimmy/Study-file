@@ -1,0 +1,381 @@
+var x = 100;
+var y = x;
+x = 200;
+report.innerText = `y = ${y}`;   // 100
+ 
+var objX = {
+    data: 100
+}
+var objY = objX;  //    671990
+objX.data = 200;
+report.innerText = `objY.data = ${objY.data}`;
+ 
+var objX = {
+    data: 100
+}
+var objY = {...objX};
+objX.data = 200;
+report.innerText = `objY.data = ${objY.data}`;
+ 
+var data = 100;
+var price = 200;
+var obj = {
+    data: data,
+    price: price
+};
+report.innerText = JSON.stringify(obj);
+ 
+var data = 111;
+var price = 222;
+var obj = {data, price}
+report.innerText = JSON.stringify(obj);
+
+-------------------------------------------
+create-react-app counter-app
+ 
+cd counter-app
+ 
+npm start
+ 
+Ctrl + C
+ 
+npm install bootstrap@4
+ 
+src/index.js:
+ 
+import "bootstrap/dist/css/bootstrap.min.css";
+ 
+
+ import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+//import App from './App';
+import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Counter from "./components/counter.jsx";
+// imrc, cc
+ 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Counter />
+  </React.StrictMode>
+);
+ 
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+-------------------------------------------
+import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        count: 0
+    }
+    styles = {
+        fontSize: "12em",
+        fontStyle: "italic"
+    }
+    render() {
+        return (
+        <div>
+            <span style={this.styles}  className="badge badge-primary m-2">{this.formatCount()}</span>
+            <button className="btn btn-outline-success">Increment</button>
+        </div>);
+    }
+    formatCount() {
+        var { count } = this.state;
+        return (count === 0) ? "Zero" : count;
+    }
+ 
+}
+ 
+export default Counter;
+
+-------------------------------------------子階counter設定state formatCount
+
+import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        count: 10
+    }
+    render() {
+        let classes = "badge m-2 ";
+        classes += (this.state.count === 0) ? "badge-warning" : "badge-primary";
+ 
+        return (
+        <div>
+            <span className={classes}>{this.formatCount()}</span>
+            <button className="btn btn-outline-success">Increment</button>
+        </div>);
+    }
+    formatCount() {
+        var { count } = this.state;
+        return (count === 0) ? "Zero" : count;
+    }
+ 
+}
+ 
+export default Counter;
+
+-------------------------------------------子階counter設定state getBadgeClasses formatCount
+import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        count: 0
+    }
+    render() {
+        return (
+        <div>
+            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+            <button className="btn btn-outline-success">Increment</button>
+        </div>);
+    }
+    getBadgeClasses() {
+        let classes = "badge m-2 ";
+        classes += (this.state.count === 0) ? "badge-warning" : "badge-primary";
+        return classes;
+    }
+ 
+    formatCount() {
+        var { count } = this.state;
+        return (count === 0) ? "Zero" : count;
+    }
+ 
+}
+ 
+export default Counter;
+ 
+-------------------------------------------子階counter設定state Increment getBadgeClasses formatCount
+
+ import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        count: 0
+    }
+    render() {
+        return (
+        <div>
+            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+            <button className="btn btn-outline-success"
+                onClick={this.handleIncrment}
+                >Increment
+            </button>
+        </div>);
+    }
+ 
+    handleIncrment = () => {
+        this.setState({
+            count: this.state.count + 1
+        })
+    }
+ 
+    getBadgeClasses() {
+        let classes = "badge m-2 ";
+        classes += (this.state.count === 0) ? "badge-warning" : "badge-primary";
+        return classes;
+    }
+ 
+    formatCount() {
+        var { count } = this.state;
+        return (count === 0) ? "Zero" : count;
+    }
+ 
+}
+ 
+export default Counter;
+-------------------------------------------
+ 製作一個counters元件，可以匯入多個counter元件，在把counters渲染在index.js
+
+ 父階透過屬性的{this.handleAddOne}方法告訴子階
+
+-------------------------------------------
+counters要傳出id等值，讓handleIncrment可以接收 (父階負責管理資料)
+
+import React, { Component } from 'react';
+import Counter from './counter.jsx';
+ 
+class Counters extends Component {
+    state = {
+        counters: [
+            {id: 1, value: 1},
+            {id: 2, value: 0},
+            {id: 3, value: 0},
+            {id: 4, value: 0}
+        ]
+    }
+    render() {
+        return (
+            <div>
+            {
+                this.state.counters.map(
+                    c => <Counter
+                            key={c.id}
+                            value={c.value}
+                            id={c.id}
+                            data={c}
+                            onAddOne={this.handleAddOne}
+                        />
+                )
+            }
+            </div>
+        );
+    }
+    handleAddOne = (id) => {
+        alert(id);
+    }
+}
+ 
+export default Counters;
+
+import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        count: this.props.data.value
+    }
+    render() {
+        return (
+        <div>
+            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+            <button className="btn btn-outline-success"
+                onClick={this.handleIncrment}
+                >Increment
+            </button>
+        </div>);
+    }
+ 
+    handleIncrment = () => {
+        var _this = this;
+        _this.state.count++;
+        this.setState({});
+        this.props.onAddOne(this.props.data.id);
+        // this.props.onAddOne(this.props.id);
+       
+        // this.state.count = this.state.count + 1;
+        // this.setState({});
+ 
+        //let newState = {...this.state};
+        //newState.count++;
+        //this.setState(newState);
+ 
+        // this.setState({
+        //     count: this.state.count + 1
+        // })
+    }
+ 
+    getBadgeClasses() {
+        let classes = "badge m-2 ";
+        classes += (this.state.count === 0) ? "badge-warning" : "badge-primary";
+        return classes;
+    }
+ 
+    formatCount() {
+        var { count } = this.state;
+        return (count === 0) ? "Zero" : count;
+    }
+ 
+}
+ 
+export default Counter;
+ 
+-------------------------------------------
+import React, { Component } from 'react';
+import Counter from './counter.jsx';
+ 
+class Counters extends Component {
+    state = {
+        counters: [
+            {id: 1, value: 1},
+            {id: 2, value: 0},
+            {id: 3, value: 0},
+            {id: 4, value: 0}
+        ]
+    }
+    render() {
+        return (
+            <div>
+            {
+                this.state.counters.map(
+                    c => <Counter
+                            key={c.id}
+                            value={c.value}
+                            id={c.id}
+                            data={c}
+                            onAddOne={this.handleAddOne}
+                        />
+                )
+            }
+            </div>
+        );
+    }
+    handleAddOne = (id) => {
+        var _this = this;
+        _this.state.counters.forEach( (c) => {
+            if (c.id === id) {
+                c.value++;
+            }
+        })
+        this.setState(_this);
+        console.log(this.state.counters);
+    }
+}
+ 
+export default Counters;
+
+import React, { Component } from 'react';
+ 
+class Counter extends Component {
+    state = {
+        // count: this.props.data.value
+    }
+    render() {
+        return (
+        <div>
+            <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+            <button className="btn btn-outline-success"
+                onClick={this.handleIncrment}
+                >Increment
+            </button>
+        </div>);
+    }
+ 
+    handleIncrment = () => {
+        this.props.onAddOne(this.props.data.id);
+       
+        //var _this = this;
+        //_this.state.count++;
+        //this.setState({});
+        //this.props.onAddOne(this.props.data.id);
+        // this.props.onAddOne(this.props.id);
+       
+        // this.state.count = this.state.count + 1;
+        // this.setState({});
+ 
+        //let newState = {...this.state};
+        //newState.count++;
+        //this.setState(newState);
+ 
+        // this.setState({
+        //     count: this.state.count + 1
+        // })
+    }
+ 
+    getBadgeClasses() {
+        let classes = "badge m-2 ";
+        classes += (this.props.value === 0) ? "badge-warning" : "badge-primary";
+        return classes;
+    }
+ 
+    formatCount() {
+        // var { count } = this.state;
+        return (this.props.value === 0) ? "Zero" : this.props.value;
+    }
+ 
+}
+ 
+export default Counter;
