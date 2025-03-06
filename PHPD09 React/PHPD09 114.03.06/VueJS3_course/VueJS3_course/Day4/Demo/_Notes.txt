@@ -1,0 +1,21 @@
+vuex.png download from:
+https://vuex.vuejs.org/#what-is-a-state-management-pattern
+
+
+VueJS_LifeCycle.png download from:
+https://vuejs.org/guide/essentials/lifecycle.html#lifecycle-diagram
+
+
+路由表多個參數的作法
+
+路由表: 
+  {
+    path: '/Todo/Edit/:id/:id2',
+    name: 'TodoEdit',
+    component: TodoEdit
+  }
+
+讀取參數值：
+console.log(this.$route.params.id, this.$route.params.id2);
+
+

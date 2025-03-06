@@ -1,0 +1,106 @@
+MVC
+
+M VM V 
+CSR
+
+SSR
+
+(
+    data() {
+        return {yourCompData}
+    },
+    methods: {
+        eventHandlerName = function() {
+
+        }
+    },
+    computed: {
+
+    },
+    watch: {
+
+    }
+)
+
+
+                        甲      乙
+prod
+id          qty
+1           100
+              --------->100
+              ----------------->100
+                        -1
+                                -2
+              <----------99 update prod qty = 99 where id = 1 and qty = 100
+              <-----------------98
+                                 update prod set qty = 98 where id = 1 and qty = 100
+              ------------------99  select ....
+                                 update prod set qty = 97 where id = 1 and qty = 99
+            97 <-----------------
+-------------
+
+
+
+                        甲      乙      丁
+prod
+id          qty
+1           100
+              --------->100
+              ----------------->100
+                        -1
+                                -2
+
+            lock pid = 1
+                                lock pid = 1 ... wait
+              ---------->100
+            99 <--------- -1
+               ------------------------> 99
+            unlock pid = 1 
+
+            lock pid = 1 by 乙
+
+
+            lock pid = 1
+                --------------> 99
+            97 <-------- -2
+            unlock pid = 1
+
+
+
+              <----------99 update prod qty = 99 where id = 1 and qty = 100
+              <-----------------98
+                                 update prod set qty = 98 where id = 1 and qty = 100
+              ------------------99  select ....
+                                 update prod set qty = 97 where id = 1 and qty = 99
+            97 <-----------------
+-------------
+
+=====================================
+{{express}}
+v-bind:htmlPropName="express"
+:htmlPropName="express"
+<input v-model="varName" />
+<li v-for="單項 in 集合">...</li>
+v-on:eventName="eventHandlerName(param)"
+@eventName="eventHandlerName(param)"
+v-model.number
+v-if
+v-else
+v-lazy
+v-html
+
+元件 就是一小塊UI 可以結合資料與畫面
+
+設定lazy的話，進行下一步動作才會更新資料
+
+勾選框來更新陣列資料，如[2, 4, 6] 勾選台北為2 勾選台中為4 勾選台南為6 等等
+
+圓鈕在html以name來分類
+
+v-model 認 value
+
+<select id="city" v-model="city" name="city" class="form-control">
+    <option v-for="aCity in cityList" v-bind:value="aCity.id">{{aCity.text}}</option>
+</select>
+(直接選定物件，不用綁定id)
+        

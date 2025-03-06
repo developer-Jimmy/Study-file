@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+<form id="lab">
+    <input v-model.number="price1" type="text" placeholder="" class="form-control input-md">
+    <input v-model.number="price2" type="text" placeholder="" class="form-control input-md">
+    <h3>{{price1 + price2}}</h3>
+</form>
+
+<script>
+
+  const { createApp } = Vue
+  
+  var labApp = createApp({
+      data() {
+          return {
+            price1: 1,
+            price2: 2
+          }
+      }
+  }).mount('#lab')
+
+</script>
+
+</body>
+</html>

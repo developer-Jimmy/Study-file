@@ -1,0 +1,62 @@
+# 建議安裝的軟體
+
+
+1.  Visual Studio Code
+
+
+1.1 以瀏覽器連結到:
+    https://code.visualstudio.com/
+
+
+1.2 下載並執行安裝程式，
+    安裝位置與選項都按照預設值即可
+
+    <Note> Windows 10 系統的使用者建議額外勾選下列兩個選項:
+    - 將「以Code開啟」動作加入Windows檔案總管檔案的操作功功能表中
+    - 將「以Code開啟」動作加入Windows檔案總管目錄的操作功功能表中
+
+
+
+
+2.  在 Visual Studio Code 安裝 Live Server
+
+
+2.1 點按 VS Code 左邊側邊工具的第五個(方形那個)圖示，
+    輸入關鍵字，例如: Live
+
+
+2.2 點按: Live Server 
+
+    <Note>
+    認明紫色電波放送圖案與作者Ritwick Dey，
+    再加上超過四千萬次的下載數字，
+    應該肯定不會裝錯了
+
+
+2.3 點按 Install / 安裝按鈕
+
+
+
+
+3.  安裝 Node.js
+
+
+3.1 以瀏覽器連到 https://nodejs.org
+
+
+3.2 下載 LTS 版的安裝程式
+
+
+3.3 執行安裝程式（各安裝選項依預設值即可）
+
+
+
+
+課程檔案下載網址：
+https://reurl.cc/Eje94a
+
+檔名：VueJS3_course.zip
+
+
+錢達智
+wolfgang.chien@gmail.com

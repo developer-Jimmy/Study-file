@@ -1,0 +1,287 @@
+Lab: Yes/No -- Vue CLI 實作練習: Component、Axios + Route
+
+
+
+1.  安裝 Vue CLI
+
+
+1.1 滑鼠右鍵點按 VueCLI 資料夾 | Open in Integrated Terminal 
+
+
+1.2 在終端機視窗輸入:
+    vue --version
+
+    <Note>
+    如果出現類似下列的版本資訊，表示已安裝好 Vue CLI 了
+    可跳過稍後的步驟 1.3:
+    @vue/cli 5.0.8
+
+
+1.3 在終端機視窗輸入，安裝 Vue CLI:
+    npm install -g @vue/cli
+
+
+
+
+2.  建立 Vue.js 專案
+
+
+2.1 在終端機視窗輸入:
+    vue create yes-no-route
+
+
+2.2 以上下鍵切換到:
+    Manually select features:
+    按下鍵盤<Enter>鍵
+    以上下鍵切換，以空白鍵加選 Router 選項, 按下鍵盤<Enter>鍵
+    後續選項都是直接按 Enter 鍵同意預設值 (例如 Vue.js 選 3.x 那項)
+
+
+2.3 等候專案資料夾 yes-no-route 建立完成
+
+
+2.4 輸入 exit <enter> 關閉終端機視窗
+
+
+
+
+3.  啟動開發伺服器
+
+
+3.1 滑鼠右鍵點按 yes-no-route 新資料夾 | Open in Integrated Termainal
+
+
+3.2 在終端機視窗輸入:
+    npm run serve
+
+    <Note>
+    如果瀏覽器沒有自動啟動，請手動在瀏覽器輸入:
+    http://localhost:8080/
+
+
+
+
+4.  靜態檔案與資源
+
+
+4.1 新增一個檔案 src/components/YesNoComponent.vue
+    內容如下:
+
+<template lang="">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                        <h1>無所不問、無所不答</h1>
+                </div>
+            </div>
+        </div>
+
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="question">請輸入問題:</label>
+                    <div class="col-md-4">
+                        <input id="question" name="question" type="text" placeholder="" class="form-control input-md">
+                        <span class="help-block">問題請以問號結尾</span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h2>Yes</h2>
+                <img src="../assets/logo.png">
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'YesNo'
+}
+</script>
+
+<style lang="">
+    
+</style>
+
+
+4.2 修改 src/views/HomeView.vue，新的內容如下:
+
+<template>
+  <YesNo />
+</template>
+
+<script>
+import YesNo from '../components/YesNoComponent.vue'
+
+export default {
+  name: 'App',
+  components: {
+      YesNo
+  }
+}
+</script>
+
+<style>
+
+</style>
+
+
+4.3 在瀏覽器檢視 http://localhost:8080/
+
+    <Note>
+    請留意上述 <img> 的 src 如何引用圖片
+
+    <Note>
+    請問 .vue 元件檔，內容分為哪三個部分?
+
+    <Note>
+    App 元件 如何使用 YesNoComponent 元件?
+
+
+4.4 滑鼠點按終端機視窗，按下 Ctrl + C 終止伺服器
+
+
+4.5 在終端機視窗，輸入:
+    npm install bootstrap-vue bootstrap@3
+
+
+4.6 修改 src/main.js，新的內容如下:
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+createApp(App).use(router).mount('#app')
+
+
+
+4.7 在終端機視窗，輸入:    
+    npm run serve
+
+
+4.8 以瀏覽器檢視:
+    http://localhost:8080/
+
+
+
+
+5.  安裝與使用 Axios
+
+
+5.1 滑鼠點按終端機視窗，按下 Ctrl + C 終止伺服器
+
+
+5.2 在終端機視窗，輸入:
+    npm install axios vue-axios
+
+
+5.3 修改 src/main.js，新的內容如下:
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+var app = createApp(App);
+app.use(router);
+app.use(VueAxios, axios)
+app.mount('#app');
+
+
+5.4 在終端機視窗，輸入:    
+    npm run serve
+
+
+5.5 以瀏覽器檢視:
+    http://localhost:8080/
+
+
+5.6 修改 src/components/YesNoComponent.vue，新的內容如下
+
+<template lang="">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <div class="page-header">
+                        <h1>無所不問、無所不答</h1>
+                </div>
+            </div>
+        </div>
+
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="question">請輸入問題:</label>
+                    <div class="col-md-4">
+                        <input id="question" name="question" 
+                            v-model="question" v-on:input="questionChanged()"
+                            type="text" placeholder="" class="form-control input-md">
+                        <span class="help-block">問題請以問號結尾</span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <h2>{{answer}}</h2>
+                <img v-bind:src="image">
+            </div>
+        </div>
+
+    </div>
+</template>
+
+<script>
+
+export default {
+    name: 'YesNo',
+    data: function () {
+        return {
+            question: "",
+            answer: "",
+            image: ""
+        }
+    },
+    methods: {
+        questionChanged: async function () {
+            let question = this.question;
+            if (question.indexOf("?") >= 0) {
+                const response = await this.axios.get("https://yesno.wtf/api");
+                this.answer = response.data.answer;
+                this.image = response.data.image;
+            }
+        }
+    }        
+}
+</script>
+
+<style lang="">
+    
+</style>
+
+
+5.7 以瀏覽器檢視:
+    http://localhost:8080/
+

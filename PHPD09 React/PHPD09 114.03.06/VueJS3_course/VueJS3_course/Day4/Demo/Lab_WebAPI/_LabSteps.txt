@@ -1,0 +1,47 @@
+Lab: 以 Node.js 建構 Web API
+
+
+0.  啟動 Web API 伺服器
+
+
+0.1 滑鼠右鍵點按 Lab_WebAPI | Open in Integrated Terminal
+
+
+0.2 在終端機視窗輸入：
+    npm install
+
+
+0.3 繼續在終端機視窗輸入:
+    node app.js
+    或者
+    npm start
+
+
+0.4 啟動瀏覽器，連接到:
+    http://localhost:3000
+
+
+0.5 在瀏覽器連接 http://localhost
+	  試用本系統各項增查修刪功能
+
+    <Note>
+    考量到簡化教室環境，
+    目前的 Web API Sever 直接以讀寫
+    檔案的方式而非存取資料庫。 
+
+
+0.6	Re: 歸零，重新開始
+
+    (1) 刪除（或變更檔名）index.html
+
+    (2) 將 index_0.html 重新命名為 index.html
+
+    (3) 瀏覽器重新連接
+        http://localhost:3000
+
+    <Note>
+    好了，現在，index.html 主要的程式都去除了。
+    請針對前端這部分，以 Vue.js 實作出相同的功能
+
+
+

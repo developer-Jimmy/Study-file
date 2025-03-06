@@ -1,0 +1,197 @@
+============================================================
+Pinia (1/5, setup):
+npm install pinia
+
+
+
+
+============================================================
+Pinia (2/5), src/store/piniaStore.js:
+
+import { defineStore } from 'pinia'
+
+export const useUserNameStore = defineStore('userName', {
+  state: () => {
+    return { userName: "Guest" }
+  },
+  actions: {
+    login(userInfo) {
+        if (!userInfo.password) {
+            return;
+        }
+        this.userName = userInfo.userName;
+    }
+  }
+})
+
+
+
+
+============================================================
+Pinia (3/5), src/main.js:
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import { createPinia } from 'pinia';
+const pinia = createPinia();
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+var app = createApp(App);
+app.use(store);
+app.use(router);
+app.use(VueAxios, axios)
+app.use(pinia);
+app.mount('#app');
+
+
+
+
+============================================================
+Pinia (4/5), src/components/NavMenu.vue
+
+<template>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">{{userNameStore.userName}}</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse"
+                        aria-label="Toggle navigation"
+                        @click="toggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+                     v-bind:class="{show: isExpanded}">
+                    <ul class="navbar-nav flex-grow">
+                        <li class="nav-item">
+                            <router-link to="/">Home</router-link>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <router-link to="/about">About</router-link>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <router-link to="/Todo/Index">待辦事項</router-link>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <router-link to="/Member/Login">登入</router-link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</template>
+
+<script>
+    import { useUserNameStore } from '@/store/piniaStore.js';
+
+    export default {
+        name: "NavMenu",
+        data() {
+            return {
+                isExpanded: false,
+                userNameStore: useUserNameStore()
+            }
+        },
+        methods: {
+            collapse() {
+                this.isExpanded = false;
+            },
+
+            toggle() {
+                this.isExpanded = !this.isExpanded;
+            }
+        }
+    }
+</script>
+
+<style>
+    a.navbar-brand {
+        white-space: normal;
+        text-align: center;
+        word-break: break-all;
+    }
+
+    html {
+        font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+        html {
+            font-size: 16px;
+        }
+    }
+
+    .box-shadow {
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    }
+</style>
+
+
+============================================================
+Pinia (5/5), src/components/MemberLogin.vue
+
+<template lang="">
+    <div class="container" style="text-align: left;">
+    
+        <h1>待辦事項清單 - 新增</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form >
+                    <div class="form-group">
+                        <label class="control-label" for="userName">帳號</label>
+                        <input class="form-control" type="text" id="userName" 
+                            name="userName" value="" v-model="userName" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="password">密碼</label>
+                        <input class="form-control" type="password" id="password" 
+                            name="password" value="" v-model="password" />
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="確定" v-on:click="doOkButtonClick" class="btn btn-outline-primary" /> | 
+                        <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                    </div>
+                    <div>{{userNameStore.userName}}</div>
+                </form>
+            </div>
+        </div>
+    
+    </div>
+</template>
+<script>
+
+import { useUserNameStore } from '@/store/piniaStore.js';
+
+export default {
+    data() {
+        return {
+            userName: "",
+            password: "",
+            userNameStore: useUserNameStore()
+        }
+    },
+    methods: {
+        doOkButtonClick: function () {
+            let userInfo = {
+                userName: this.userName,
+                password: this.password
+            }
+            console.log(userInfo);
+            this.userNameStore.login(userInfo);
+        }
+    }
+}
+</script>
+<style lang="">
+    
+</style>

@@ -1,0 +1,417 @@
+Lab: 使用 WebPack 打包網站檔案
+
+
+
+
+1.  安裝 WebPack 與專案架構
+
+
+1.1 滑鼠右鍵 Lab_WebPack | Open in Integrated Terminal 
+
+    <Note>
+    目前 Lab_WebPack 只有一個檔案: _LabSteps.txt
+    也就是你正在閱讀的檔案
+
+
+1.2 在終端機視窗輸入:
+    npm init -y
+
+    <Note>
+    Lab_WebPack 多出一個檔案，檔名: package.json
+    請先看一下檔案內容。
+  
+
+1.3 在終端機視窗繼續輸入下列指令，安裝 WebPack:
+    npm install webpack webpack-cli --save-dev
+
+    <Note>
+    多出一個資料夾，名稱: node_modules
+
+    <Question>
+    請問 --save-dev 的作用是什麼?
+
+    <Qestion>
+    開啟 package.json，觀察是否多出 devDependencies 屬性?
+
+
+1.4 在 Lab_WebPack 資料夾，建立下列兩個子資料夾:
+    src
+    dist
+
+
+1.5 在 src 資料夾新增檔案，檔名: index.html，內容如下:
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lab</title>
+    </head>
+    <body>
+        <div id="debug">...</div>
+        <script src="index.js"></script>
+    </body>
+    </html>
+
+
+1.6 在 src 資料夾新增檔案，檔名: index.js，內容如下:
+    debug.innerText = "OK";
+
+
+
+
+2.  使用 WebPack 打包網站
+
+
+2.1 在終端機視窗輸入:
+    npx webpack
+
+
+2.2 檢視 dist 資料夾，是否多出一個名為 main.js 的檔案?
+    請檢視一下檔案內容。
+
+    <Note>
+    出現下列警告，暫時先不管它，我們等一下再解決這個問題。
+    Set 'mode' option to 'development' or 'production'
+
+    <Note>
+    index.html 怎麼沒有一併打包?
+
+
+2.3 在終端機視窗輸入:
+    npm install html-webpack-plugin --save-dev
+
+
+2.4 在 Lab_WebPack 資料夾建立檔案，檔名: webpack.config.js
+    內容如下:
+
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+    module.exports = {
+      plugins: [
+        new HtmlWebpackPlugin()
+      ]
+    };
+
+
+2.5 在終端機視窗輸入:
+    npx webpack
+
+
+2.6 檢視 dist 資料夾，是否多出一個名為 index.html 的檔案?
+    請檢視一下檔案內容，雖然內容不是 src 的那個，
+    但是，請留意 dist/index.html 的內容有引用 main.js
+
+    <Note>
+    index.html 出現在 dist 了，
+    但是要怎麼用我們自己的 index.html 呢?
+
+
+2.7 webpack.config.js 修改成這樣:
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    plugins: [
+        new HtmlWebpackPlugin({
+          hash: true,
+          title: 'Lab_WebPack App',
+          header: 'Lab_WebPack Title',
+          metaDesc: 'Lab_WebPack Description',
+          template: './src/index.html',
+          filename: 'index.html',
+          inject: 'body'
+        })
+    ],
+    mode: 'development',
+    output: {
+      clean: true
+    }
+};
+
+
+2.8 src/index.html 的內容改成這樣:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="<%= htmlWebpackPlugin.options.metaDesc %>" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1><%= htmlWebpackPlugin.options.header %></h1>
+    <div id="debug">...</div>
+    
+</body>
+</html>
+
+
+2.9 在終端機視窗輸入:
+    npx webpack
+
+
+2.a 檢視 dist 資料夾以下兩個檔案的內容:
+    - index.html
+    - main.js
+
+    <Note>
+    在瀏覽器試用一下 index.html，確認畫面功能正常。
+
+
+
+
+3.  使用 WebPack 開發者伺服器
+
+
+3.1 在終端機視窗輸入:
+    npm install webpack-dev-server --save-dev
+
+
+3.2 修改 webpack.config.js，內容如下:
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  plugins: [
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'Lab_WebPack App',
+      header: 'Lab_WebPack Title',
+      metaDesc: 'Lab_WebPack Description',
+      template: './src/index.html',
+      filename: 'index.html',
+      inject: 'body'
+    })
+  ],
+  mode: 'development',
+  output: {
+    clean: true
+  },
+  devServer: {
+    open: true
+  }
+};
+
+
+3.3 修改 package.json，將 scripts 屬性改成這樣:
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development"
+  },
+
+
+3.4 在終端機視窗，輸入:
+    npm run dev
+
+    <Note>
+    一切正常的話，會自動啟動瀏覽器，並且連結
+    http://localhost:8080/
+
+
+3.5 瀏覽器畫面不要關閉，
+    手動修改 src/index.html 的內容，
+    例如加一個頁尾:
+    <hr />
+    <div>Contact info...</div>
+
+    <Note>
+    src/index.html 存檔的那一刻，
+    dist 的內容會重新 build
+    此外，瀏覽器的畫面也隨之自動更新
+
+
+3.6 滑鼠游標在終端機視窗點一下，
+    按下 Ctrl + C 組合鍵，
+    按下「y」同意終止伺服器
+
+
+
+
+4.  以 WebPack 打包 CSS 樣式
+
+
+4.1 修改 Lab_WebPack/src/index.html，
+    加入下列這行到 </head> 的前一行:
+    <link rel="stylesheet" href="./css/style.css" >
+
+
+4.2 在  Lab_WebPack/src 資料庫，建立 css 子資料夾
+    在 css 子資料夾建立 style.css 檔，內容如下:
+
+body {
+    background-color:darkolivegreen;
+    color: whitesmoke;
+}
+
+
+4.3 在終端機視窗，輸入:
+    npm run dev
+
+    <Note>
+    美術樣式沒有生效，WebPack 似乎不了解 CSS...
+
+
+4.3 Ctrl + C 終止伺服器。
+    在終端機視窗，輸入:
+    npm install css-loader style-loader --save-dev
+
+
+4.4 修改 Lab_WebPack/src/index.html，
+    將 </head> 前一行的 <link> 整個去除。
+
+
+4.5 修改 Lab_WebPack/src/index.js，新的內容如下:
+    import './css/style.css';
+    $("#debug").text("OK");
+
+    <Note> 
+    誒，不是，等一下，JavaScript 也懂 CSS 嗎?
+    所以，我們剛才有找幫手: css-loader、style-loader
+
+
+4.6 修改 webpack.config.js，新的內容如下:
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  module: {
+		rules: [
+			{
+				test: /.css$/,
+				use: [
+					'style-loader',
+					'css-loader'
+				]
+			}
+		]
+	},
+  plugins: [
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'Lab_WebPack App',
+      header: 'Lab_WebPack Title',
+      metaDesc: 'Lab_WebPack Description',
+      template: './src/index.html',
+      filename: 'index.html',
+      inject: 'body'
+    })
+  ],
+  mode: 'development',
+  output: {
+    clean: true
+  },
+  devServer: {
+    open: true
+  }
+};
+
+
+    <Note>
+    多加了 module 屬性，並且以 rules 訂下規則:
+    若找到 .css 結尾的檔案，依序執行: 
+    css-loader、style-loader
+    (順序是由後往前)
+
+
+4.7 在終端機視窗，輸入:
+    npm run dev
+
+    <Note>
+    這次美術樣式正常了 ^o^
+    
+    <Note>
+    請看一下 dist/index.html 的 <head> 區塊
+    是否內含 <style>...</style> 樣式內容
+
+
+
+
+5.  WebPack 整合 jQuery
+
+
+5.1 在終端機視窗，輸入:
+    npm install --save jquery
+
+
+5.2 修改 src/index.js，新的檔案內容如下:
+    import './css/style.css';
+    import 'jquery';
+
+    $("#debug").text("OK");
+
+
+5.3 修改 src/index.html，
+    去掉 CDN 引用 jQuery 的那一行 <script>
+
+
+5.4 修改 webpack.config.js，新的檔案內容如下:
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+var webpack = require('webpack');
+
+module.exports = {
+  entry: './src/index.js',
+  module: {
+		rules: [
+			{
+				test: /.css$/,
+				use: [
+					'style-loader',
+					'css-loader'
+				]
+			}
+		]
+	},
+  plugins: [
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'Lab_WebPack App',
+      header: 'Lab_WebPack Title',
+      metaDesc: 'Lab_WebPack Description',
+      template: './src/index.html',
+      filename: 'index.html',
+      inject: 'body'
+    }),
+    new webpack.ProvidePlugin({ 
+			$: 'jquery',
+			jQuery: 'jquery'
+		})
+  ],
+  mode: 'development',
+  output: {
+    clean: true
+  },
+  devServer: {
+    open: true
+  }
+};
+
+
+    <Note> 
+    plugins 陣列加入一個 ProvidePlugin，
+    利用它來載入打包 jQuery
+
+
+5.5 在終端機視窗，輸入:
+    npm run dev
+
+    <Note>
+    網頁程式運作依然正常
+
+
+5.6 Ctrl + C 終止伺服器，
+    在終端機視窗，輸入:
+    npm run build
+
+    <Note>
+    請開啟 dist/main.js 並搜尋 jQuery 字樣
+
+

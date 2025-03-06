@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/typescript">
+        class CAnimal {
+            private _weight: number = 0;
+
+            get weight(): number {
+                return this._weight;
+            }
+            set weight(weightValue: number) {
+                if (weightValue > 0) {
+                    this._weight = weightValue;
+                }
+            }
+
+            constructor(weightValue: number = 1) {
+                this.weight = weightValue;
+            }
+
+            makeSound(): void {
+                alert("Animal: ...");
+            }
+        }
+
+        class CDog extends CAnimal {
+            makeSound(): void {
+                // super.makeSound();
+                alert("Dog barking!");
+            }	
+        }
+
+        let obj = new CDog(3);
+        obj.makeSound();
+    </script>
+
+<script src="https://rawgit.com/Microsoft/TypeScript/master/lib/typescriptServices.js"></script>
+<script src="https://rawgit.com/basarat/typescript-script/master/transpiler.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+
+0.  https://yesno.wtf 
+    這個網站會隨機出現 Yes/No 文字與圖片
+
+    https://yesno.wtf/api
+    則是隨機提供 JSON 格式的 Yes/No 文字與圖檔檔名
+
+
+1.  先依序觀察 HTML 資料夾各 HTML 檔的 JavaScript 寫法
+
+
+2.  依照 VueCLI/_LabSteps.txt 的說明進行體驗練習
+
