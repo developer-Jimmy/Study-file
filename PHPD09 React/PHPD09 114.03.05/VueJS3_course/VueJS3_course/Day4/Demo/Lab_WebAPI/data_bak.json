@@ -1,0 +1,7 @@
+[
+    {"newsId":1,"ymd":"2017-05-01","title":"News A"},
+    {"newsId":2,"ymd":"2017-05-02","title":"News B"},
+    {"newsId":3,"ymd":"2017-05-03","title":"News C"},
+    {"newsId":4,"ymd":"2017-05-04","title":"News D"},
+    {"newsId":5,"ymd":"2017-05-05","title":"News E"}
+]

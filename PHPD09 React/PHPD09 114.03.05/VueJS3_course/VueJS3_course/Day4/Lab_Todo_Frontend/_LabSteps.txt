@@ -1,0 +1,1317 @@
+Lab: Todo list 專案前端實作
+
+
+1.  請先完成 Lab_Todo_Backend 專案
+    並且保持 3000 連接埠的那個伺服器正常運作，
+    本專案會界接其資料
+
+
+
+
+2.  建立 todo-app 專案
+
+
+2.1 滑鼠右鍵 Lab_Todo_Frontend | Open in Integrated Termainal
+    在終端機視窗輸入:
+    vue create todo-app
+
+
+2.2 以上下鍵切換到:
+    Manually select features:
+    按下鍵盤<Enter>鍵
+
+
+2.3 以上下鍵切換，以空白鍵加選下列選項
+    - Router
+    - Vuex 
+    按下鍵盤<Enter>鍵
+
+
+2.4 版本選 3.x, 按下鍵盤<Enter>鍵
+    後續選項都是直接按 Enter 鍵同意預設值
+
+
+2.5 等候專案資料夾 todo-app 建立完成
+
+
+2.6 輸入 exit <enter> 關閉終端機視窗
+
+
+
+
+3.  啟動開發伺服器
+
+
+3.1 滑鼠右鍵點按新增出來的 todo-app 資料夾 | Open in Integrated Termainal
+
+
+3.2 在終端機視窗輸入:
+    npm run serve
+
+    <Note>
+    如果瀏覽器沒有自動啟動，請手動在瀏覽器輸入:
+    http://localhost:8080/
+
+
+3.3 在終端機視窗，以 Ctrl + C 結束伺服器程式
+
+
+
+
+4.  靜態檔案與資源
+
+
+4.1 在終端機視窗，輸入:
+    npm install bootstrap-vue bootstrap@4
+
+
+4.2 在終端機視窗，繼續輸入:
+    npm install axios vue-axios
+
+
+4.3 修改 src/main.js，新的內容如下:
+
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+
+// 匯入靜態檔案與其他程式資源(例如 axios)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+var app = createApp(App);
+app.use(store);
+app.use(router);
+// 掛入 axios 以擴充 app 的功能，
+// 後續元件得以直接使用 axios 功能不另行註冊登記 
+app.use(VueAxios, axios);
+app.mount('#app');
+
+
+4.4 在終端機視窗輸入:
+    npm run serve
+
+    <Note>
+    如果瀏覽器沒有自動啟動，請手動在瀏覽器輸入:
+    http://localhost:8080/
+
+
+
+
+5.  設定導覽列與路由
+
+
+5.1 在 src/components 資料夾，新增檔案，
+    檔名: NavMenu.vue
+    檔案內容如下:
+
+<template>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand">Vue.JS</a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target=".navbar-collapse"
+                        aria-label="Toggle navigation"
+                        @click="toggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
+                     v-bind:class="{show: isExpanded}">
+                    <ul class="navbar-nav flex-grow">
+                        <li class="nav-item">
+                            <router-link to="/">Home</router-link>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <router-link to="/about">About</router-link>
+                        </li>
+                        <li class="nav-item ml-2">
+                            <router-link to="/Todo/Index">待辦事項</router-link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+</template>
+
+<script>
+    export default {
+        name: "NavMenu",
+        data() {
+            return {
+                isExpanded: false
+            }
+        },
+        methods: {
+            collapse() {
+                this.isExpanded = false;
+            },
+
+            toggle() {
+                this.isExpanded = !this.isExpanded;
+            }
+        }
+    }
+</script>
+
+<style>
+    a.navbar-brand {
+        white-space: normal;
+        text-align: center;
+        word-break: break-all;
+    }
+
+    html {
+        font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+        html {
+            font-size: 16px;
+        }
+    }
+
+    .box-shadow {
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    }
+</style>
+
+
+5.2 修改 src/App.vue，新的內容如下:
+
+<template>
+  <div id="app">
+    <nav-menu></nav-menu>
+    <router-view />
+  </div>
+</template>
+
+<script>
+import NavMenu from './components/NavMenu.vue';
+
+export default {
+  name: 'App',
+  components: {
+      NavMenu
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+}
+</style>
+
+    <Note> 主要變動: 加入導覽列（匯入、宣告、應用）
+
+
+5.3 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/
+
+    <Note>
+    網站上方的導覽列應該已換成 Bootstrap 製作的導覽列
+
+
+5.4 在 src/components 新增檔案，
+    檔名: TodoIndex.vue
+    內容:
+
+<template lang="">
+    <div>
+        <h1>Todo Index</h1>
+    </div>
+</template>
+<script>
+export default {
+    name: "TodoIndex"
+}
+</script>
+<style lang="">
+    
+</style>
+
+
+5.5 修改 src/router/index.js，新的內容如下
+
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import TodoIndex from '../components/TodoIndex.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/Todo/Index',
+    name: 'TodoIndex',
+    component: TodoIndex
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
+
+    <Note>
+    主要變動: 加入 /Todo/Index 的路由定義
+
+
+5.6 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/
+
+
+
+
+6   實作資料清單畫面
+
+
+6.1 編輯 todo-app/src/components/TodoIndex.vue，新的內容如下:
+
+<template>
+<div class="container">
+
+    <h1>
+        待辦事項清單
+        <a href="/Todo/Create" class="btn btn-outline-success btn-md float-right">
+            新增
+        </a>
+    </h1>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    項目名稱
+                </th>
+                <th>
+                    是否已完工
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Job A
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled"
+                        type="checkbox" />
+                </td>
+                <td>
+                    <span class="float-right">
+                        <a href="/Todo/Edit/1" class="btn btn-outline-primary btn-sm">編輯</a> |
+                        <a href="/Todo/Delete/1" class="btn btn-outline-danger btn-sm">刪除</a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+
+</div>
+</template>
+
+<script>
+    export default {
+        name: "TodoIndex"
+    }
+</script>
+
+
+    <Note>
+    主要變動: 將網頁/美術人員製作的HTML內容帶進來我們的專案
+
+
+6.2 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+
+6.3 編輯 todo-app/src/components/TodoIndex.vue，
+    針對 <script> 改成下列內容:
+
+<script>
+    export default {
+        name: "TodoIndex",
+        data() {
+            return {
+                todoItemList: [
+                    { "TodoItemId": 1, "Name": "Job X", "IsComplete": false },
+                    { "TodoItemId": 2, "Name": "Job Y", "IsComplete": true  },
+                    { "TodoItemId": 3, "Name": "Job Z", "IsComplete": false }
+                ]
+            }
+        }
+    }
+</script>
+
+    <Note>
+    暫時先使用模擬資料，稍後再換成來自後端的內容
+
+
+6.4 編輯 todo-app/src/components/TodoIndex.vue，
+    針對 <template> 改成下列內容:
+
+<template>
+    <div class="container">
+        <h1>
+            待辦事項清單
+            <router-link to="/Todo/Create" class="btn btn-outline-success btn-md float-right">新增</router-link>
+        </h1>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        項目名稱
+                    </th>
+                    <th>
+                        是否已完工
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="todoItem of todoItemList" v-bind:key="todoItem.todoItemId">
+                    <td>
+                        {{ todoItem.Name }}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled"
+                               type="checkbox" v-model="todoItem.IsComplete" />
+                    </td>
+                    <td>
+                        <span class="float-right">
+                            <router-link :to="{ path: '/Todo/Edit/' + todoItem.TodoItemId }" class="btn btn-outline-primary btn-sm">編輯</router-link> | 
+                            <router-link :to="{ path: '/Todo/Delete/' + todoItem.TodoItemId }" class="btn btn-outline-danger btn-sm">刪除</router-link>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+    <Note>
+    主要變動: 將模擬資料帶入網頁/美術人員製作的HTML
+    請留意各 <td></td> 的寫法與變化
+
+
+6.5 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+
+6.6 編輯 todo-app/src/components/TodoIndex.vue，新的內容如下:
+
+<template>
+    <div class="container">
+        <h1>
+            待辦事項清單
+            <router-link to="/Todo/Create" class="btn btn-outline-success btn-md float-right">新增</router-link>
+        </h1>
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        項目名稱
+                    </th>
+                    <th>
+                        是否已完工
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="todoItem of todoItemList" v-bind:key="todoItem.todoItemId">
+                    <td>
+                        {{ todoItem.Name }}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled"
+                               type="checkbox" v-model="todoItem.IsComplete" />
+                    </td>
+                    <td>
+                        <span class="float-right">
+                            <router-link :to="{ path: '/Todo/Edit/' + todoItem.TodoItemId }" class="btn btn-outline-primary btn-sm">編輯</router-link> | 
+                            <router-link :to="{ path: '/Todo/Delete/' + todoItem.TodoItemId }" class="btn btn-outline-danger btn-sm">刪除</router-link>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    
+    export default {
+        name: "TodoIndex",
+        data() {
+            return {
+                todoItemList: []
+            }
+        },
+        methods: {
+            async getTodoItemList() {
+                const response = await this.axios.get('http://localhost:3000/api/todoitem');
+                this.todoItemList = response.data;
+            }
+        },
+        mounted() {
+            this.getTodoItemList();
+        }
+    }
+</script>
+
+
+    <Note>
+    將模擬資料改成真正來自後端的資料
+
+
+6.7 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+
+
+
+7   實作資料新增畫面
+
+
+7.1 在 src/components 新增檔案，
+    檔名: TodoCreate.vue
+    內容:
+
+<template lang="">
+<div class="container" style="text-align: left;">
+
+    <h1>待辦事項清單 - 新增</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form action="/Todo/Create" method="post">
+                
+                <div class="form-group">
+                    <label class="control-label" for="Name">項目名稱</label>
+                    <input class="form-control" type="text" id="Name" 
+                        name="Name" value="" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="IsComplete" 
+                            name="IsComplete" value="1" /> 是否已完工
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="確定" class="btn btn-outline-primary" /> | 
+                    <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</template>
+<script>
+export default {
+    name: "TodoCreate"
+}
+</script>
+
+    <Note>
+    主要變動: 將網頁/美術人員製作的HTML內容帶進來我們的專案
+
+
+7.2 修改 src/router/index.js，新的內容如下
+
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import TodoIndex from '../components/TodoIndex.vue';
+import TodoCreate from '../components/TodoCreate.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/Todo/Index',
+    name: 'TodoIndex',
+    component: TodoIndex
+  },
+  {
+    path: '/Todo/Create',
+    name: 'TodoCreate',
+    component: TodoCreate
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
+
+
+    <Note>
+    主要變動: 加入 /Todo/Create 的路由定義
+
+
+7.3 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/
+    http://localhost:8080/Todo/Create
+
+
+7.4 編輯 todo-app/src/components/TodoCreate.vue，新的內容如下:
+
+<template lang="">
+<div class="container" style="text-align: left;">
+
+    <h1>待辦事項清單 - 新增</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form >
+                
+                <div class="form-group">
+                    <label class="control-label" for="Name">項目名稱</label>
+                    <input class="form-control" type="text" id="Name" 
+                        name="Name" value="" v-model="todoItemName" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" id="IsComplete" 
+                            name="IsComplete" v-model="todoItemIsComplete" /> 是否已完工
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="button" value="確定" v-on:click="doOkButtonClick" class="btn btn-outline-primary" /> | 
+                    <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</template>
+<script>
+export default {
+    name: "TodoCreate",
+    data() {
+        return {
+            todoItemName: "test",
+            todoItemIsComplete: true
+        }
+    },
+    methods: {
+        doOkButtonClick() {
+            
+            var dataToServer = {
+                Name: this.todoItemName,
+                IsComplete: this.todoItemIsComplete,
+            };
+
+            console.log(dataToServer);
+
+        }
+    }
+
+
+
+}
+</script>
+
+
+    <Note>
+    主要變動:
+    設定表單與資料的雙向繫結
+    開始設計「確定」按鈕的事件處理函式，雖然目前只是檢視/確認使用者輸入的資料
+
+
+7.5 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Create
+
+    <Note>
+    輸入資料後，點按「確定」，在瀏覽器的主控台視窗觀察資料內容
+
+
+7.6 編輯 todo-app/src/components/TodoCreate.vue，新的內容如下:
+
+<template lang="">
+    <div class="container" style="text-align: left;">
+    
+        <h1>待辦事項清單 - 新增</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form >
+                    
+                    <div class="form-group">
+                        <label class="control-label" for="Name">項目名稱</label>
+                        <input class="form-control" type="text" id="Name" 
+                            name="Name" value="" v-model="todoItemName" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" id="IsComplete" 
+                                name="IsComplete" v-model="todoItemIsComplete" /> 是否已完工
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="確定" v-on:click="doOkButtonClick" class="btn btn-outline-primary" /> | 
+                        <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    
+    </div>
+    </template>
+    
+<script>
+
+export default {
+    name: "TodoCreate",
+    data() {
+        return {
+            todoItemName: "",
+            todoItemIsComplete: false
+        }
+    },
+    methods: {
+        async doOkButtonClick() {
+            
+            var dataToServer = {
+                Name: this.todoItemName,
+                IsComplete: this.todoItemIsComplete,
+            };
+
+            // console.log(dataToServer);
+            await this.axios.post(
+                "http://localhost:3000/api/todoitem",
+                JSON.stringify(dataToServer),
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+            this.$router.replace('/Todo/Index');
+        }
+    }
+
+}
+</script>
+
+    <Note>
+    主要變動:
+    完成「確定」按鈕的事件處理函式: 將確認過的資料 post 到後端 Web API
+
+
+7.7 在瀏覽器連結下列網址，測試資料可否正常新增:
+    http://localhost:8080/Todo/Create
+
+
+
+8   實作資料修改畫面
+
+
+8.1 在 src/components 新增檔案，
+    檔名: TodoEdit.vue
+    內容:
+
+<template lang="">
+<div class="container" style="text-align: left">
+
+    <h1>待辦事項清單 - 修改</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form action="/Todo/Edit" method="post">
+                
+                <input type="hidden" id="TodoItemId" 
+                    name="TodoItemId" value="1" />
+                <div class="form-group">
+                    <label class="control-label" for="Name">項目名稱</label>
+                    <input class="form-control" type="text" 
+                    id="Name" name="Name" value="Job A" />
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" 
+                        id="IsComplete" name="IsComplete" 
+                        value="true" /> 是否已完工
+                    </label>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="確定" class="btn btn-outline-primary" /> | 
+                    <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</template>
+<script>
+export default {
+    
+}
+</script>
+<style lang="">
+    
+</style>
+
+    <Note>
+    主要變動: 將網頁/美術人員製作的HTML內容帶進來我們的專案
+
+
+8.2 修改 src/router/index.js，新的內容如下
+
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import TodoIndex from '../components/TodoIndex.vue';
+import TodoCreate from '../components/TodoCreate.vue';
+import TodoEdit from '../components/TodoEdit.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/Todo/Index',
+    name: 'TodoIndex',
+    component: TodoIndex
+  },
+  {
+    path: '/Todo/Create',
+    name: 'TodoCreate',
+    component: TodoCreate
+  },
+  {
+    path: '/Todo/Edit/:id?',
+    name: 'TodoEdit',
+    component: TodoEdit
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
+
+    <Note>
+    主要變動: 加入 /Todo/Edit 的路由定義，請留意網址有註記 :id 預留參數變化
+
+
+8.3 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/
+    http://localhost:8080/Todo/Edit/1
+
+
+8.4 編輯 todo-app/src/components/TodoEdit.vue，新的內容如下:
+
+<template>
+    <div class="container" style="text-align: left;">
+
+        <h1>待辦事項清單 - 修改</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form action="/Todo/Edit" method="post">
+                    <div class="form-group">
+                        <label class="control-label" for="Name">項目名稱</label>
+                        <input class="form-control" type="text" id="Name"
+                               v-model="todoItemName" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox"
+                                   v-model="todoItemIsComplete" /> 是否已完工
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="確定" class="btn btn-outline-primary" /> |
+                        <router-link to="/Todo/Index" class="btn btn-outline-info">取消</router-link>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</template>
+<script>
+    
+    export default {
+        name: "TodoEdit",
+        data() {
+            return {
+                todoItemId: 0,
+                todoItemName: "",
+                todoItemIsComplete: false
+            }
+        },
+        methods: {
+            async getTodoItem() {
+                // console.log(this.$route.params.id);
+                const response = await this.axios.get(
+                    'http://localhost:3000/api/todoitem/' + this.$route.params.id
+                );
+                this.todoItemId = response.data.TodoItemId;
+                this.todoItemName = response.data.Name;
+                this.todoItemIsComplete = response.data.IsComplete;
+            }
+        },
+        mounted() {
+            this.getTodoItem();
+        }
+
+    }
+</script>
+<style lang="">
+    
+</style>
+
+    <Note>
+    主要變動:
+    從後端撈取特定一筆的資料 (根據 this.$route.params.id )
+    設定資料與表單控制項的雙向繫結
+
+
+8.5 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+    <Note>
+    點按任一筆的「編輯」，確試資料是否正確顯示
+
+
+8.6 編輯 todo-app/src/components/TodoEdit.vue，新的內容如下:
+
+<template>
+    <div class="container" style="text-align: left;">
+
+        <h1>待辦事項清單 - 修改</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form>
+                    <div class="form-group">
+                        <label class="control-label" for="Name">項目名稱</label>
+                        <input class="form-control" type="text" id="Name"
+                               v-model="todoItemName" />
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox"
+                                   v-model="todoItemIsComplete" /> 是否已完工
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" v-on:click="doOkButtonClick" value="確定" class="btn btn-outline-primary" /> |
+                        <router-link to="/Todo/Index" class="btn btn-outline-info">取消</router-link>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</template>
+<script>
+    
+    export default {
+        name: "TodoEdit",
+        data() {
+            return {
+                todoItemId: 0,
+                todoItemName: "",
+                todoItemIsComplete: false
+            }
+        },
+        methods: {
+            async getTodoItem() {
+                // console.log(this.$route.params.id);
+                const response = await this.axios.get(
+                    'http://localhost:3000/api/todoitem/' + this.$route.params.id
+                );
+                this.todoItemId = response.data.TodoItemId;
+                this.todoItemName = response.data.Name;
+                this.todoItemIsComplete = response.data.IsComplete;
+            },
+            async doOkButtonClick() {
+                var dataToServer = {
+                    TodoItemId: this.todoItemId,
+                    Name: this.todoItemName,
+                    IsComplete: this.todoItemIsComplete,
+                };
+
+                await this.axios.put(
+                    "http://localhost:3000/api/todoitem/" + this.todoItemId,
+                    JSON.stringify(dataToServer),
+                    { headers: { 'Content-Type': 'application/json' } }
+                );
+                
+                this.$router.replace('/Todo/Index');
+            }
+        },
+        mounted() {
+            this.getTodoItem();
+        }
+
+    }
+</script>
+<style lang="">
+    
+</style>
+
+    <Note>
+    主要變動:
+    「確定」按鈕的事件處理函式: 將資料 put 到後端 Web API 請求修改
+
+
+8.7 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+    <Note>
+    點按任一筆的「編輯」，確試資料是否可以修改
+
+
+
+
+9   實作資料刪除畫面
+
+
+9.1 在 src/components 新增檔案，
+    檔名: TodoDelete.vue
+    內容:
+
+<template lang="">
+<div class="container" style="text-align:left;">
+
+    <h1>待辦事項清單 - 刪除</h1>
+
+    <hr />
+    <div>
+        <dl class="row">
+            <dt class = "col-sm-2">
+                項目名稱
+            </dt>
+            <dd class = "col-sm-10">
+                Job A
+            </dd>
+            <dt class = "col-sm-2">
+                是否已完工
+            </dt>
+            <dd class = "col-sm-10">
+                <input class="check-box" disabled="disabled" 
+                type="checkbox" />
+            </dd>
+        </dl>
+        
+        <hr>
+        <h3>確定要刪除這筆資料嗎?</h3>
+
+        <form>
+            <input type="hidden" id="TodoItemId" name="TodoItemId" 
+                value="1" 
+            />
+            <input type="button" value="確定" class="btn btn-outline-danger" /> |
+            <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+        </form>
+    </div>
+
+</div>
+</template>
+<script>
+export default {
+    
+}
+</script>
+
+    <Note>
+    主要變動: 將網頁/美術人員製作的HTML內容帶進來我們的專案
+
+
+9.2 修改 src/router/index.js，新的內容如下
+
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import TodoIndex from '../components/TodoIndex.vue';
+import TodoCreate from '../components/TodoCreate.vue';
+import TodoEdit from '../components/TodoEdit.vue';
+import TodoDelete from '../components/TodoDelete.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/Todo/Index',
+    name: 'TodoIndex',
+    component: TodoIndex
+  },
+  {
+    path: '/Todo/Create',
+    name: 'TodoCreate',
+    component: TodoCreate
+  },
+  {
+    path: '/Todo/Edit/:id?',
+    name: 'TodoEdit',
+    component: TodoEdit
+  },
+  {
+    path: '/Todo/Delete/:id?',
+    name: 'TodoDelete',
+    component: TodoDelete
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
+
+    <Note> 
+    主要變動: 加入 /Todo/Delete 的路由定義
+
+
+9.3 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/
+    http://localhost:8080/Todo/Delete/3
+
+
+9.4 編輯 todo-app/src/components/TodoDelete.vue，新的內容如下:
+
+<template lang="">
+    <div class="container" style="text-align:left;">
+    
+        <h1>待辦事項清單 - 刪除</h1>
+    
+        <hr />
+        <div>
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    項目名稱
+                </dt>
+                <dd class = "col-sm-10">
+                    {{ todoItemName }}
+                </dd>
+                <dt class = "col-sm-2">
+                    是否已完工
+                </dt>
+                <dd class = "col-sm-10">
+                    <input class="check-box" disabled="disabled" 
+                    type="checkbox" v-model="todoItemIsComplete" />
+                </dd>
+            </dl>
+            
+            <hr>
+            <h3>確定要刪除這筆資料嗎?</h3>
+    
+            <form>
+                <input type="hidden" id="TodoItemId" name="TodoItemId" 
+                    value="1" 
+                />
+                <input type="button" value="確定" class="btn btn-outline-danger" /> |
+                <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+            </form>
+        </div>
+    
+    </div>
+</template>
+<script>
+
+    export default {
+        name: "TodoDelete",
+        data() {
+            return {
+                todoItemId: 0,
+                todoItemName: "",
+                todoItemIsComplete: false
+            }
+        },
+        methods: {
+            async getTodoItem() {
+                const response = await this.axios.get(
+                    'http://localhost:3000/api/todoitem/' + this.$route.params.id
+                );
+                this.todoItemId = response.data.TodoItemId;
+                this.todoItemName = response.data.Name;
+                this.todoItemIsComplete = response.data.IsComplete;
+            }
+        },
+        mounted() {
+            this.getTodoItem();
+        }
+    }
+</script>
+
+    <Note>
+    主要變動:
+    從後端撈取特定一筆的資料 (根據 this.$route.params.id ) 並且顯示於畫面
+    
+
+9.5 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+    <Note>
+    點按任一筆的「刪除」，確試資料是否正確顯示
+
+
+9.6 編輯 todo-app/src/components/TodoDelete.vue，新的內容如下:
+
+<template lang="">
+    <div class="container" style="text-align:left;">
+    
+        <h1>待辦事項清單 - 刪除</h1>
+    
+        <hr />
+        <div>
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    項目名稱
+                </dt>
+                <dd class = "col-sm-10">
+                    {{ todoItemName }}
+                </dd>
+                <dt class = "col-sm-2">
+                    是否已完工
+                </dt>
+                <dd class = "col-sm-10">
+                    <input class="check-box" disabled="disabled" 
+                    type="checkbox" v-model="todoItemIsComplete" />
+                </dd>
+            </dl>
+            
+            <hr>
+            <h3>確定要刪除這筆資料嗎?</h3>
+    
+            <form>
+                <input type="hidden" id="TodoItemId" name="TodoItemId" 
+                    value="1" 
+                />
+                <input type="button" v-on:click="doOkButtonClick" value="確定" class="btn btn-outline-danger" /> |
+                <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+            </form>
+        </div>
+    
+    </div>
+</template>
+<script>
+
+    export default {
+        name: "TodoDelete",
+        data() {
+            return {
+                todoItemId: 0,
+                todoItemName: "",
+                todoItemIsComplete: false
+            }
+        },
+        methods: {
+            async getTodoItem() {
+                const response = await this.axios.get(
+                    'http://localhost:3000/api/todoitem/' + this.$route.params.id
+                );
+                this.todoItemId = response.data.TodoItemId;
+                this.todoItemName = response.data.Name;
+                this.todoItemIsComplete = response.data.IsComplete;
+            },
+            async doOkButtonClick() {
+                await this.axios.delete(
+                    "http://localhost:3000/api/todoitem/" + this.todoItemId 
+                );
+                this.$router.replace('/Todo/Index');
+            }
+        },
+        mounted() {
+            this.getTodoItem();
+        }
+    }
+</script>
+
+    <Note>
+    主要變動:
+    「確定」按鈕的事件處理函式:
+    送出 HTTP delete 請求到後端 Web API 請求刪除
+
+
+9.7 在瀏覽器連結下列網址，觀察作品的進度:
+    http://localhost:8080/Todo/Index
+
+    <Note>
+    點按任一筆的「刪除」，確試資料是否可以刪除
+
+

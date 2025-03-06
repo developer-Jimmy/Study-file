@@ -1,0 +1,581 @@
+src/App.js
+
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import TodoIndex from './components/TodoIndex.jsx';
+import TodoCreate from './components/TodoCreate.jsx';
+import "bootstrap/dist/css/bootstrap.min.css";
+ 
+class App extends Component {
+  state = {  }
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" component={TodoIndex} exact />
+          <Route path="/todo/index" component={TodoIndex} />
+          <Route path="/todo/create" component={TodoCreate} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
+}
+ 
+export default App;
+
+========================
+
+src/components/TodoCreate.jsx
+
+import React, { Component } from 'react';
+import axios from 'axios';
+ 
+class TodoCreate extends Component {
+    state = {
+        todoItem: {
+            "todoTableId":1,
+            "title":"",
+            "isComplete":0
+        }
+ 
+    }
+    render() {
+        return (
+ 
+            <div className="container">
+ 
+            <h1>待辦事項清單 - 新增</h1>
+            <hr />
+            <div className="row">
+                <div className="col-md-4">
+                    <form>
+                       
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="titleId">項目名稱</label>
+                            <input className="form-control" type="text" id="titleId"
+                                value={this.state.todoItem.title}
+                                onChange={this.titleChange}
+                            />
+                        </div>
+                        <div className="form-group form-check">
+                            <label className="form-check-label">
+                                <input className="form-check-input"
+                                    type="checkbox"
+                                    checked={this.state.todoItem.isComplete}
+                                    onChange={this.isCompleteChange}
+                                /> 是否已完工
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <input type="button" value="確定" className="btn btn-outline-primary"
+                                onClick={this.okButtonClick}
+                            /> |
+                            <a href="/Todo/Index" className="btn btn-outline-info">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+ 
+ 
+            </div>
+ 
+        );
+    }
+ 
+    titleChange = (e) => {
+        let _this = this;
+        _this.state.todoItem.title = e.target.value;
+        this.setState({});
+    }
+    isCompleteChange = (e) => {
+        let _this = this;
+        _this.state.todoItem.isComplete = (e.target.checked) ? 1 : 0;
+        this.setState({});
+    }
+    okButtonClick = async () => {
+        let dataToServer = {
+            title: this.state.todoItem.title,
+            isComplete: this.state.todoItem.isComplete
+        }
+        // console.log(dataToServer);
+        await axios.post(
+            "http://localhost:8000/todo/create",
+            JSON.stringify(dataToServer),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        // console.log("OK 5");
+        // window.location = "http://localhost:3000/todo/index";
+        window.location = "/todo/index";
+    }
+}
+ 
+export default TodoCreate;
+
+========================
+app.js
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import TodoIndex from './components/TodoIndex.jsx';
+import TodoCreate from './components/TodoCreate.jsx';
+import TodoEdit from './components/TodoEdit.jsx';
+import "bootstrap/dist/css/bootstrap.min.css";
+ 
+class App extends Component {
+  state = {  }
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" component={TodoIndex} exact />
+          <Route path="/todo/index" component={TodoIndex} />
+          <Route path="/todo/create" component={TodoCreate} />
+          <Route path="/todo/edit/:id" component={TodoEdit} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
+}
+ 
+export default App;
+========================
+TodoIndex.js
+import React, { Component } from 'react';
+import axiox from 'axios';
+ 
+class TodoIndex extends Component {
+    state = {
+        todoList: [
+            // {"todoTableId":11,"title":"Job A","isComplete":1},
+            // {"todoTableId":22,"title":"Job B","isComplete":0},
+            // {"todoTableId":33,"title":"Job C","isComplete":1}
+        ]
+    }
+    render() {
+        return (
+ 
+            <div className="container">
+ 
+            <h1>
+                待辦事項清單
+                <a href="/Todo/Create" className="btn btn-outline-success btn-md float-right">
+                    新增
+                </a>
+            </h1>
+ 
+            <table className="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            項目名稱
+                        </th>
+                        <th>
+                            是否已完工
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    this.state.todoList.map( function (item) {
+                        return (
+                            <tr key={item.todoTableId}>
+                                <td>
+                                    {item.title}
+                                </td>
+                                <td>
+                                    <input className="check-box" disabled="disabled"
+                                        type="checkbox" checked={item.isComplete} />
+                                </td>
+                                <td>
+                                    <span className="float-right">
+                                        <a href={`/Todo/Edit/${item.todoTableId}`} className="btn btn-outline-primary btn-sm">編輯</a> |
+                                        <a href="/Todo/Delete/1" className="btn btn-outline-danger btn-sm">刪除</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        )
+                    })                    
+                }
+ 
+                </tbody>
+            </table>
+ 
+ 
+ 
+            </div>
+ 
+        );  // end of return
+    }  // end of render()
+ 
+    async componentDidMount() {
+        console.log("Lab: componentDidMount");
+        var result = await axiox.get("http://localhost:8000/todo/list");
+        var _this = this;
+        _this.state.todoList = result.data;
+        this.setState({});
+    }
+}
+ 
+export default TodoIndex;
+========================
+import React, { Component } from 'react';
+ 
+class TodoEdit extends Component {
+    state = {  }
+    render() {
+        return (
+ 
+            <div class="container">
+ 
+ 
+            <h1>待辦事項清單 - 修改 {this.props.match.params.id} </h1>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form action="/Todo/Edit" method="post">
+                       
+                        <input type="hidden" id="TodoItemId"
+                            name="TodoItemId" value="1" />
+                        <div class="form-group">
+                            <label class="control-label" for="Name">項目名稱</label>
+                            <input class="form-control" type="text"
+                            id="Name" name="Name" value="Job A" />
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="checkbox"
+                                id="IsComplete" name="IsComplete"
+                                value="true" /> 是否已完工
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="確定" class="btn btn-outline-primary" /> |
+                            <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+ 
+ 
+            </div>
+ 
+        );
+    }
+}
+ 
+export default TodoEdit;
+========================
+src/components/TodoEdit.jsx
+import React, { Component } from 'react';
+import axios from 'axios';
+ 
+class TodoEdit extends Component {
+    state = {
+        todoItem: {"todoTableId":3,"title":"Job Z","isComplete":1}
+    }
+    render() {
+        return (
+ 
+            <div className="container">
+ 
+ 
+            <h1>待辦事項清單 - 修改 </h1>
+            <hr />
+            <div className="row">
+                <div className="col-md-4">
+                    <form action="/Todo/Edit" method="post">
+                       
+                        <input type="hidden" id="TodoItemId"
+                            name="TodoItemId" value="1" />
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="Name">項目名稱</label>
+                            <input className="form-control" type="text" id="Name"
+                            onChange={this.titleChange}
+                            value={this.state.todoItem.title} />
+                        </div>
+                        <div className="form-group form-check">
+                            <label className="form-check-label">
+                                <input className="form-check-input" type="checkbox"
+                                    onChange={this.isCompleteChange}
+                                    checked={this.state.todoItem.isComplete}
+                                /> 是否已完工
+                            </label>
+                        </div>
+                        <div className="form-group">
+                            <input type="button" value="確定"
+                                className="btn btn-outline-primary"
+                                onClick={this.okButtonClick}
+                             /> |
+                            <a href="/Todo/Index" className="btn btn-outline-info">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+ 
+ 
+            </div>
+ 
+        );
+    }
+    async componentDidMount() {
+        var url = `http://localhost:8000/todo/item/${this.props.match.params.id}`;
+        // console.log(url);
+        var result = await axios.get(url);
+        // console.log(result);
+        var _this = this;
+        _this.state.todoItem = result.data;
+        this.setState({});
+    }
+    titleChange = (e) => {
+        let _this = this;
+        _this.state.todoItem.title = e.target.value;
+        this.setState({});
+    }
+    isCompleteChange = (e) => {
+        let _this = this;
+        _this.state.todoItem.isComplete = (e.target.checked) ? 1 : 0;
+        this.setState({});
+    }
+    okButtonClick = async () => {
+        var dataToSever = {
+            todoTableId: this.state.todoItem.todoTableId,
+            title: this.state.todoItem.title,
+            isComplete: this.state.todoItem.isComplete
+        }
+        // console.log(dataToSever);
+        await axios.put("http://localhost:8000/todo/item",
+            JSON.stringify(dataToSever),
+            {
+                headers: {
+                    "Content-type": "application/json"
+                }
+            }
+        )
+        // console.log("OK");
+        window.location = "/todo/index";
+    }
+}
+ 
+export default TodoEdit;
+
+
+========================
+TodoDelete.jsx
+import React, { Component } from 'react';
+import axios from 'axios';
+ 
+class TodoDelete extends Component {
+    state = {
+        todoItem: {"todoTableId":3,"title":"Job Z","isComplete":1}
+    }
+    render() {
+        return (
+ 
+            <div className="container">
+ 
+ 
+            <h1>待辦事項清單 - 刪除</h1>
+ 
+            <hr />
+            <div>
+                <dl className="row">
+                    <dt className="col-sm-2">
+                        項目名稱
+                    </dt>
+                    <dd className="col-sm-10">
+                        {this.state.todoItem.title}
+                    </dd>
+                    <dt className="col-sm-2">
+                        是否已完工
+                    </dt>
+                    <dd className="col-sm-10">
+                        <input className="check-box" disabled="disabled"
+                        type="checkbox" checked={this.state.todoItem.isComplete} />
+                    </dd>
+                </dl>
+               
+                <hr />
+                <h3>確定要刪除這筆資料嗎?</h3>
+ 
+                <form action="/Todo/Delete" method="post">
+                    <input type="hidden" id="TodoItemId" name="TodoItemId"
+                        value="1"
+                    />
+                    <input type="button"
+                        value="確定"
+                        className="btn btn-outline-danger"
+                        onClick={this.okButtonClick}
+                        /> |
+                    <a href="/Todo/Index" className="btn btn-outline-info">取消</a>
+                </form>
+            </div>
+ 
+ 
+ 
+            </div>
+        );
+    }
+    async componentDidMount() {
+        var url = `http://localhost:8000/todo/item/${this.props.match.params.id}`;
+        // console.log(url);
+        var result = await axios.get(url);
+        // console.log(result);
+        var _this = this;
+        _this.state.todoItem = result.data;
+        this.setState({});
+    }
+    okButtonClick = async () => {
+        await axios.delete("http://localhost:8000/todo/delete/" + this.state.todoItem.todoTableId)
+        // console.log("OK 2");
+        window.location = "/todo/index";
+    }
+ 
+}
+ 
+export default TodoDelete;
+
+========================
+src/App.js:
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import TodoIndex from './components/TodoIndex.jsx';
+import TodoCreate from './components/TodoCreate.jsx';
+import TodoEdit from './components/TodoEdit.jsx';
+import TodoDelete from './components/TodoDelete.jsx';
+import "bootstrap/dist/css/bootstrap.min.css";
+ 
+class App extends Component {
+  state = {  }
+  render() {
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" component={TodoIndex} exact />
+          <Route path="/todo/index" component={TodoIndex} />
+          <Route path="/todo/create" component={TodoCreate} />
+          <Route path="/todo/edit/:id" component={TodoEdit} />
+          <Route path="/todo/delete/:id" component={TodoDelete} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
+}
+ 
+export default App;
+========================
+src/components/TodoIndex.jsx:
+import React, { Component } from 'react';
+import axiox from 'axios';
+ 
+class TodoIndex extends Component {
+    state = {
+        todoList: [
+            // {"todoTableId":11,"title":"Job A","isComplete":1},
+            // {"todoTableId":22,"title":"Job B","isComplete":0},
+            // {"todoTableId":33,"title":"Job C","isComplete":1}
+        ]
+    }
+    render() {
+        return (
+ 
+            <div className="container">
+ 
+            <h1>
+                待辦事項清單
+                <a href="/Todo/Create" className="btn btn-outline-success btn-md float-right">
+                    新增
+                </a>
+            </h1>
+ 
+            <table className="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            項目名稱
+                        </th>
+                        <th>
+                            是否已完工
+                        </th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    this.state.todoList.map( function (item) {
+                        return (
+                            <tr key={item.todoTableId}>
+                                <td>
+                                    {item.title}
+                                </td>
+                                <td>
+                                    <input className="check-box" disabled="disabled"
+                                        type="checkbox" checked={item.isComplete} />
+                                </td>
+                                <td>
+                                    <span className="float-right">
+                                        <a href={`/Todo/Edit/${item.todoTableId}`} className="btn btn-outline-primary btn-sm">編輯</a> |
+                                        <a href={`/Todo/Delete/${item.todoTableId}`} className="btn btn-outline-danger btn-sm">刪除</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        )
+                    })                    
+                }
+ 
+                </tbody>
+            </table>
+ 
+ 
+ 
+            </div>
+ 
+        );  // end of return
+    }  // end of render()
+ 
+    async componentDidMount() {
+        console.log("Lab: componentDidMount");
+        var result = await axiox.get("http://localhost:8000/todo/list");
+        var _this = this;
+        _this.state.todoList = result.data;
+        this.setState({});
+    }
+}
+ 
+export default TodoIndex;
+
+========================Vue.js
+npm install -g @vue/cli
+vue create hello-vue-cli
+
+
+(
+    data() {
+        return {yourCompData}
+    },
+    methods: {
+        eventHandlerName = function () {
+
+        }
+    }
+
+
+)
+{{express}}
+v-bind:htmlPropName="express"
+:htmlPropName="express"
+<input v-model="varName" />
+<li v-for="單項 in 集合">...</li>
+v-on:eventName="eventHandlerName(param)"
+@eventName="eventHandlerName(param)"
+v-if
+v-else
+
+
+========================Vue.js
+
+安裝 Vue.js 與 vue-router
+新建一個 HTML 檔案，檔名: route.html

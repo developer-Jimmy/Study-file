@@ -1,0 +1,253 @@
+Lab: Todo list 專案後端實作（以 Node.js 建構 Web API Sever）
+
+
+1.  建立專案
+
+
+1.1 滑鼠右鍵 Lab_Todo_Backend 資料夾 | Open in Integrated Terminal，
+    輸入下列指令:
+    npm init -y
+
+    <Note>
+    Lab_Todo_Backend 資料夾會多出一個 package.json 檔案
+
+
+1.2 繼續輸入下列指令，安裝伺服器程式所需的模組:
+
+npm install express
+npm install body-parser
+npm install cors
+
+
+
+
+2.  初步建立 Web Server
+
+
+2.1 滑鼠右鍵 Lab_Todo_Backend 資料夾 | New File
+    檔名: app.js
+
+
+2.2 編寫 app.js 的檔案內容如下:
+
+// 以 Express 建立 Web 伺服器
+var express = require("express");
+var app = express();
+
+// 以 body-parser 模組協助 Express 解析表單與JSON資料
+var bodyParser = require('body-parser');
+app.use( bodyParser.json() );
+app.use( bodyParser.urlencoded({extended: false}) );
+
+// 開放跨域使用
+var cors = require("cors");
+app.use( cors() );
+
+// 一切就緒，開始接受用戶端連線
+app.listen(3000);
+console.log("Web伺服器就緒，開始接受用戶端連線.");
+console.log("「Ctrl + C」可結束伺服器程式.");
+
+app.get("/", function (request, response) {
+    response.send("Hello! This is a Web Server.");
+})
+
+
+2.3 存檔之後，在終端機視窗輸入下列指令以啟動伺服器程式:
+node app.js
+
+
+2.4	啟動瀏覽器，連接:
+	http://localhost:3000/
+
+	<Note> 一切順利的話，應該會看到:
+	Hello! This is a Web Server.
+
+
+
+
+3.	完成資料調閱功能
+
+
+3.1	滑鼠右鍵 Lab_Todo_Backend 資料夾 | New File
+    檔名: data.json
+	檔案內容如下:
+
+[
+    { "TodoItemId": 1, "Name": "Job A", "IsComplete": false },
+    { "TodoItemId": 2, "Name": "Job B", "IsComplete": true  },
+    { "TodoItemId": 3, "Name": "Job C", "IsComplete": false }
+]
+
+
+3.2	在 app.js 檔案結尾處，加寫下列程式:
+
+var fs = require("fs");
+var dataFileName = "./data.json";
+
+app.get("/api/todoitem", function (request, response) {
+	var data = fs.readFileSync(dataFileName);
+	var todoList = JSON.parse(data);
+    response.set('Content-Type', 'application/json');
+	response.send( JSON.stringify(todoList) );
+})
+
+
+3.3	在終端機視窗，以 Ctrl + C 結束伺服器程式，
+	重新執行 node app.js 啟動 Web Server，
+	再以瀏覽器連接:
+	http://localhost:3000/api/todoitem
+
+	<Note> 一切順利的話，應該會看到下列 JSON 資料:
+	[
+		{ "TodoItemId": 1, "Name": "Job A", "IsComplete": false },
+		{ "TodoItemId": 2, "Name": "Job B", "IsComplete": true  },
+		{ "TodoItemId": 3, "Name": "Job C", "IsComplete": false }
+	]
+
+
+3.4	在 app.js 檔案結尾處，加寫下列程式:
+
+app.get("/api/todoitem/:id", function (request, response) {
+	var data = fs.readFileSync(dataFileName);
+	var todoList = JSON.parse(data);
+
+	var targetIndex = -1;
+	for (let i = 0; i < todoList.length; i++) {
+		if (todoList[i].TodoItemId.toString() == request.params.id.toString()) {
+			targetIndex = i;
+			break;
+		}
+	}
+    if ( targetIndex < 0 ) {
+        response.send("not found");
+        return;
+    }
+
+	response.set('Content-Type', 'application/json');
+    response.send( JSON.stringify(todoList[targetIndex]) );
+})
+
+
+3.5	在終端機視窗，以 Ctrl + C 結束伺服器程式，
+	重新執行 node app.js 啟動 Web Server，
+	再以瀏覽器連接:
+	http://localhost:3000/api/todoitem/1
+
+	<Note> 一切順利的話，應該會看到單一筆的 JSON 資料
+
+
+
+
+4.	完成資料新增功能
+
+
+4.1	在 app.js 檔案結尾處，加寫下列程式:
+
+app.post("/api/todoitem", function (request, response) {
+	var data = fs.readFileSync(dataFileName);
+	var todoList = JSON.parse(data);
+	var item = {
+		"TodoItemId": new Date().getTime(),
+		"Name": request.body.Name,
+		"IsComplete": request.body.IsComplete
+	};
+	todoList.push(item);
+	fs.writeFileSync("./data.json", JSON.stringify(todoList, null, "\t"));
+	response.send("row inserted.");
+})
+
+
+4.2	在終端機視窗，以 Ctrl + C 結束伺服器程式，
+	重新執行 node app.js 啟動 Web Server
+
+
+4.3	啟動 Postman，新增一個 HTTP Request，
+    操作提示與重點:
+    - HTTP 方法的下拉式選單: POST
+    - 網址: http://localhost:3000/api/todoitem
+    - Body / raw / 選 json
+    - 內容: { "Name": "Job D", "IsComplete": false }
+    <Send>
+
+
+4.4	開啟 data.json，觀察 Job D 是否列入檔案內容。
+
+
+
+
+5.	完成資料修改功能:
+
+
+5.1	在 app.js 檔案結尾處，加寫下列程式:
+
+app.put("/api/todoitem/:id", function (request, response) {
+	var data = fs.readFileSync(dataFileName);
+	var todoList = JSON.parse(data);
+	for (let i = 0; i < todoList.length; i++) {
+		if (todoList[i].TodoItemId == request.params.id) {
+			todoList[i].Name = request.body.Name;
+			todoList[i].IsComplete = request.body.IsComplete;
+			break;
+		}
+	}
+	fs.writeFileSync("./data.json", JSON.stringify(todoList, null, "\t"));	
+	response.send("row updated."); 
+})
+
+
+5.2	在終端機視窗，以 Ctrl + C 結束伺服器程式，
+	重新執行 node app.js 啟動 Web Server
+
+
+5.3	啟動 Postman，新增一個 HTTP Request，
+    操作提示與重點:
+    - HTTP 方法的下拉式選單: PUT
+    - 網址: http://localhost:3000/api/todoitem/1
+    - Body / raw / 選 json
+    - 內容: { "Name": "Job 2A", "IsComplete": true }
+    <Send>
+
+
+5.4	開啟 data.json，觀察原 Job A 的資料是否已變更。
+
+
+6.	完成資料刪除功能:
+
+
+6.1	在 app.js 檔案結尾處，加寫下列程式:
+
+app.delete("/api/todoitem/:id", function (request, response) {
+	var data = fs.readFileSync(dataFileName);
+	var todoList = JSON.parse(data);
+
+	var deleteIndex = -1;
+	for (let i = 0; i < todoList.length; i++) {
+		if (todoList[i].TodoItemId.toString() == request.params.id.toString()) {
+			deleteIndex = i;
+			break;
+		}
+	}
+    if ( deleteIndex < 0 ) {
+        response.send("not found");
+        return;
+    }
+
+    todoList.splice(deleteIndex, 1);
+    fs.writeFileSync("./data.json", JSON.stringify(todoList, null, "\t"));	
+    response.send("row deleted.");
+})
+
+
+6.2	在終端機視窗，以 Ctrl + C 結束伺服器程式，
+	重新執行 node app.js 啟動 Web Server
+
+
+6.3	啟動 Postman，新增一個 HTTP Request，
+    操作提示與重點:
+    - HTTP 方法的下拉式選單: DELETE
+    - 網址: http://localhost:3000/api/todoitem/3
+    <Send>
+
+
+6.4	開啟 data.json，觀察原 Job C 的資料是否消失。

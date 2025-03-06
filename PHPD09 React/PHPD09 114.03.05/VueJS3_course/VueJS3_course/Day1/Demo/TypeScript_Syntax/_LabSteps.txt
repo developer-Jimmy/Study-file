@@ -1,0 +1,381 @@
+Demo & Lab: TypeScript 語法入門
+
+
+【建議練習環境與操作程序】
+
+1.  以瀏覽器造訪 https://www.typescriptlang.org/
+
+2.  點按功能表的 Playground 選項
+
+3.  在左邊的文字區塊輸入 TypeScript 程式
+
+4.  點按「Run」執行程式
+
+
+
+
+// --------------------------------------------------
+// 100 變數的資料型態: 字串, 數字
+// 
+// 請預測下列 A, B, C, D 分別得到什麼結果?
+
+let aNumber: number = 100;
+let aString: string = "100";
+
+   let test: string = aNumber + aString;             // A
+// let test: number = aNumber + aString;             // B
+// let test: number = aNumber + Number(aString);     // C
+// let test: string = aNumber.toString() + aString;  // D
+
+console.log(test.toString());
+
+
+
+
+// --------------------------------------------------
+// 110 陣列
+
+let names: string[] = ["Lin", "Jeter", "Messi"];
+console.log(names.join(","));
+
+
+
+
+// --------------------------------------------------
+// 120 元組 (Turple)
+
+let data: [string, number] = ["Lin", 7];
+console.log(data.join(","));
+
+
+
+
+// --------------------------------------------------
+// 130 列舉型態
+//     <Note> 除了上述型態，另外還有 any 與 void 型態。
+
+enum BloodType {
+	A  = 1,
+	B  = 2,
+	AB = 4,
+	O  = 8
+}
+
+let patientBloodType: BloodType = BloodType.B;
+
+console.log(patientBloodType.toString());
+
+
+
+
+// --------------------------------------------------
+// 140 定義函式與呼叫函式
+
+let myName: string = "TypeScript";
+
+function hello (who: string) {
+	return "Hello! " + who;
+}
+
+console.log(hello(myName));
+
+
+
+
+// --------------------------------------------------
+// 150 變數有效範圍(一)
+let myName: string = "TypeScript";
+
+function hello(who: string) {
+	alert(myName);
+	var myName: string = "Lin";
+	// let myName: string = "Lin";
+	alert(myName);
+	return "Hello! " + who;
+}
+
+console.log(hello(myName));
+console.log(myName);
+
+
+
+
+// --------------------------------------------------
+// 160 變數有效範圍(二) -- 閉包(closure)
+
+var nextNumber = (function () {
+	let lastNumber = 0;
+	return function() {
+		lastNumber++;
+		return lastNumber;
+	}
+})();
+
+var number = 0;
+number = nextNumber();
+number = nextNumber();
+number = nextNumber();
+
+console.log( number.toString() );
+
+
+
+
+// --------------------------------------------------
+// 200 定義類別(一) -- class, new
+
+class CAnimal {
+	makeSound(): void {
+		alert("Animal: ...");
+	}
+}
+
+let obj = new CAnimal();
+obj.makeSound();
+
+
+
+
+// --------------------------------------------------
+// 210 定義類別(二) -- private, property(get, set)
+
+class CAnimal {
+	private _weight: number = 0;
+
+	get weight(): number {
+		return this._weight;
+	}
+	set weight(weightValue: number) {
+		if (weightValue > 0) {
+			this._weight = weightValue;
+		}
+	}
+
+	makeSound(): void {
+		alert("Animal: ...");
+	}
+}
+
+let obj = new CAnimal();
+obj.weight = 100;
+obj.weight = -3;
+alert(obj.weight.toString());
+
+
+
+
+// --------------------------------------------------
+// 220 定義類別(三) -- constructor
+
+class CAnimal {
+	private _weight: number = 0;
+
+	get weight(): number {
+		return this._weight;
+	}
+	set weight(weightValue: number) {
+		if (weightValue > 0) {
+			this._weight = weightValue;
+		}
+	}
+
+	constructor(weightValue: number = 1) {
+		this.weight = weightValue;
+	}
+
+	makeSound(): void {
+		alert("Animal: ...");
+	}
+}
+
+// let obj = new CAnimal();
+let obj = new CAnimal(3);
+alert(obj.weight.toString());
+
+
+
+
+// --------------------------------------------------
+// 230 定義類別(四) -- extends, super
+
+class CAnimal {
+	private _weight: number = 0;
+
+	get weight(): number {
+		return this._weight;
+	}
+	set weight(weightValue: number) {
+		if (weightValue > 0) {
+			this._weight = weightValue;
+		}
+	}
+
+	constructor(weightValue: number = 1) {
+		this.weight = weightValue;
+	}
+
+	makeSound(): void {
+		alert("Animal: ...");
+	}
+}
+
+class CDog extends CAnimal {
+	makeSound(): void {
+		// super.makeSound();
+		alert("Dog barking!");
+	}	
+}
+
+let obj = new CDog(3);
+obj.makeSound();
+
+
+
+
+// --------------------------------------------------
+// 240 定義類別(五) -- extends, super()
+
+class CAnimal {
+	private _weight: number = 0;
+
+	get weight(): number {
+		return this._weight;
+	}
+	set weight(weightValue: number) {
+		if (weightValue > 0) {
+			this._weight = weightValue;
+		}
+	}
+
+	constructor(weightValue: number = 1) {
+		this.weight = weightValue;
+	}
+
+	makeSound(): void {
+		alert("Animal: ...");
+	}
+}
+
+class CDog extends CAnimal {
+	constructor(public location: string = "Earth", weightValue: number) {
+		super(weightValue);
+	}
+
+	makeSound(): void {
+		// super.makeSound();
+		alert("Dog barking!");
+	}	
+}
+
+// let obj = new CDog(null, 3);
+let obj = new CDog(undefined, 3);
+alert(obj.weight);
+alert(obj.location);
+
+
+
+
+// --------------------------------------------------
+// 300 界面(interface)(一) -- interface, implements
+
+interface IDrive {
+	speed: number;
+	addSpeed(value: number): void;
+}
+
+class CCar implements IDrive {
+	speed: number = 0;
+	stop(): void {
+		this.speed = 0;
+	}
+	addSpeed(increment: number): void {
+		this.speed += increment;
+	}
+}
+
+let obj = new CCar();
+obj.addSpeed(1);
+obj.addSpeed(1); 
+alert(obj.speed);
+
+
+
+
+// --------------------------------------------------
+// 310 界面(interface)(二) -- 不同的物件，相同的界面
+
+interface IDrive {
+	speed: number;
+	addSpeed(value: number): void;
+}
+
+class CCar implements IDrive {
+	speed: number = 0;
+	stop(): void {
+		this.speed = 0;
+	}
+	addSpeed(increment: number): void {
+		this.speed += increment;
+	}
+}
+
+
+class CGame implements IDrive {
+	speed: number = 0;
+	addSpeed(increment: number): void {
+		this.speed += (increment * 10);
+	}
+	powerOff(): void {
+		this.speed = 0;
+	}
+}
+
+let obj = new CGame();
+obj.addSpeed(1);
+obj.addSpeed(1); 
+alert(obj.speed);
+
+
+
+
+// --------------------------------------------------
+// 320 界面(interface)(三) -- 請留意 play() 的寫法
+
+interface IDrive {
+	speed: number;
+	addSpeed(value: number): void;
+}
+
+class CCar implements IDrive {
+	speed: number = 0;
+	stop(): void {
+		this.speed = 0;
+	}
+	addSpeed(increment: number): void {
+		this.speed += increment;
+	}
+}
+
+
+class CGame implements IDrive {
+	speed: number = 0;
+	addSpeed(increment: number): void {
+		this.speed += (increment * 10);
+	}
+	powerOff(): void {
+		this.speed = 0;
+	}
+}
+
+function play(device: IDrive) {
+	device.addSpeed(1);
+	device.addSpeed(2);
+	alert(device.speed);
+}
+
+let objCar = new CCar();
+play(objCar);
+
+let objGame = new CGame();
+play(objGame);
+

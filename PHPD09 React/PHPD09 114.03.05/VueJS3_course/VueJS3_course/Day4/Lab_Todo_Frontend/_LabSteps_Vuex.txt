@@ -1,0 +1,230 @@
+Lab: Todo list 專案前端實作
+
+
+1.  請先依序完成下列兩個專案
+    - Lab_Todo_Backend
+    - Lab_Todo_Frontend 
+
+    並且保持 3000 連接埠的那個伺服器正常運作，
+    Lab_Todo_Frontend 專案會界接其資料
+
+
+
+
+2.  設定與讀取 Vuex 儲存的狀態資料
+
+
+2.1 編輯 todo-app/src/store/index.js，新的內容如下:
+
+import { createStore } from 'vuex'
+
+export default createStore({
+  state: {
+    userName: "Guest"
+  },
+  getters: {
+    helloUser: function (state) {
+      return "Hello! " + state.userName;
+    }
+  },
+  mutations: {
+  },
+  actions: {
+  },
+  modules: {
+  }
+})
+
+
+2.2 編輯 todo-app/src/components/NavMenu.vue，
+    找到下列這行:
+    <a class="navbar-brand">Vue.JS</a>
+    修改成:
+    <a class="navbar-brand">{{$store.state.userName}}</a>
+
+
+2.3 以瀏覽器連接:
+    http://localhost:8080/
+
+    
+2.4 接下來，將上述步驟 2.4 那行，改成:
+    <a class="navbar-brand">{{$store.getters.helloUser}}</a>
+    
+    再以瀏覽器觀看作品:
+    http://localhost:8080/
+
+
+2.5 請問:
+    (a) 如何設定狀態資訊?
+    (b) 如何讀取狀態資訊?
+
+
+
+
+3   改變 Vuex 儲存的狀態資料
+
+
+3.1 編輯 todo-app/src/store/index.js，新的內容如下:
+
+import { createStore } from 'vuex'
+
+export default createStore({
+  state: {
+    userName: "Guest"
+  },
+  getters: {
+    helloUser: function (state) {
+      return "Hello! " + state.userName;
+    }
+  },
+  mutations: {
+    updateUser(state, userName) {
+      state.userName = userName
+    }
+  },
+  actions: {
+    login(context, userInfo) {
+      if (!userInfo.password) {
+        return;
+      }
+      context.commit('updateUser', userInfo.userName);
+    }
+  },
+  modules: {
+  }
+})
+
+<Note>
+看起來，資料修改分為兩階段進行，
+先 actions，再 mutations
+
+
+3.2 在 todo-app/src/components，建立新檔案:
+    檔名: MemberLogin.vue
+    內容如下:
+
+<template lang="">
+<div class="container" style="text-align: left;">
+
+    <h1>待辦事項清單 - 新增</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form >
+                <div class="form-group">
+                    <label class="control-label" for="userName">帳號</label>
+                    <input class="form-control" type="text" id="userName" 
+                        name="userName" value="" v-model="userName" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="password">密碼</label>
+                    <input class="form-control" type="password" id="password" 
+                        name="password" value="" v-model="password" />
+                </div>
+                <div class="form-group">
+                    <input type="button" value="確定" v-on:click="doOkButtonClick" class="btn btn-outline-primary" /> | 
+                    <a href="/Todo/Index" class="btn btn-outline-info">取消</a>
+                </div>
+                <div>{{$store.state.userName}}</div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</template>
+<script>
+
+export default {
+    data() {
+        return {
+            userName: "",
+            password: ""
+        }
+    },
+    methods: {
+        doOkButtonClick: function () {
+            let userInfo = {
+                userName: this.userName,
+                password: this.password
+            }
+            console.log(userInfo);
+            this.$store.dispatch('login', userInfo);
+        }
+    }
+}
+</script>
+<style lang="">
+    
+</style>
+
+
+3.3 修改 todo-app/src/router/index.js，新的內容如下:
+
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import TodoIndex from '../components/TodoIndex.vue';
+import TodoCreate from '../components/TodoCreate.vue';
+import TodoEdit from '../components/TodoEdit.vue';
+import TodoDelete from '../components/TodoDelete.vue';
+import MemberLogin from '../components/MemberLogin.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'about',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/Todo/Index',
+    name: 'TodoIndex',
+    component: TodoIndex
+  },
+  {
+    path: '/Todo/Create',
+    name: 'TodoCreate',
+    component: TodoCreate
+  },
+  {
+    path: '/Todo/Edit/:id?',
+    name: 'TodoEdit',
+    component: TodoEdit
+  },
+  {
+    path: '/Todo/Delete/:id?',
+    name: 'TodoDelete',
+    component: TodoDelete
+  },
+  {
+    path: '/Member/Login',
+    name: 'MemberLogin',
+    component: MemberLogin
+  }
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes
+})
+
+export default router
+
+
+3.4 修改 todo-app/src/component/NavMenu.vue，
+    加入下列內容到「待辦事項」的後面:
+    <li class="nav-item ml-2">
+        <router-link to="/Member/Login">登入</router-link>
+    </li>
+    
+
+3.5 以瀏覽器連接
+    http://localhost:8080/
+    點按「登入」，輸入帳號、密碼，點按「登入」，
+    觀看 Vuex 資料是否變更

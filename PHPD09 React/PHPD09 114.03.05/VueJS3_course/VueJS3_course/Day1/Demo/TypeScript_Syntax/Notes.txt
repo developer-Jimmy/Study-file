@@ -1,0 +1,19 @@
+Put TypeScript into HTML:
+https://github.com/basarat/typescript-script
+
+--------------------------------------------------
+
+// Using Interface as User Defined Type:
+interface IPlayer {
+	firstName: string;
+	lastName: string;
+};
+let p: IPlayer = { 
+    firstName: "Jeremy",
+    lastName: "Lin"
+}
+console.log(p.lastName);
+
+--------------------------------------------------
+
+

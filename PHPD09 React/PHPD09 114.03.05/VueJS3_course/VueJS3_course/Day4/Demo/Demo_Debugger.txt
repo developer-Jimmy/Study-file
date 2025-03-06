@@ -1,0 +1,45 @@
+#除錯器使用示範
+
+
+1. 以 VS Code 開啟 Vue3 專案資料夾
+   （例如 npm create vue@latest 建立的專案資料夾）
+
+
+2. 在 VS CODE 左方工具列(Activity Bar)點按: Run and Debug (Ctrl + Shift + D) 圖示
+
+
+3. 滑鼠點按: create a launch.json file
+
+
+4. 修改 .vscode/launch.json 內容如下:
+
+// .vscode/launch.json
+{
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+"version": "0.2.0",
+"configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Vue 3 Chrome",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMapPathOverrides": {
+            "webpack:///src/*": "${webRoot}/*"
+            },
+            "sourceMaps": true,
+        }
+    ]
+}
+
+
+4.  找個 .vue 檔案設定中斷點
+
+
+5.  npm run dev 啟動的開發者伺服器
+
+
+6. 再次在 VS CODE 左方工具列(Activity Bar)點按: Run and Debug (Ctrl + Shift + D) 圖示
+   點按 Vue 3 Chrome 旁邊的 > 圖示以啟動瀏覽器
